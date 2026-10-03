@@ -241,7 +241,7 @@
     if (left != null) when = left > 0 ? `<div class="small muted" style="font-size:15px">Ton examen pratique dans</div><div class="countdown">${left} jour${left > 1 ? 's' : ''}</div>`
       : left === 0 ? '<div class="countdown">C\'est le jour J</div>' : '<div class="countdown" style="font-size:34px">Examen passé</div>';
     const install = standalone() ? '' : `<div class="banner"><b>Installe l'appli sur ton écran d'accueil</b> pour ne pas perdre ta progression.
-      ${deferredPrompt ? '<button class="btn btn-light" id="inst" style="margin-top:10px;min-height:44px">Installer</button>' : isIOS() ? '<br>Safari : bouton Partager, puis « Sur l\'écran d\'accueil ».' : '<br>Menu du navigateur, puis « Ajouter à l\'écran d\'accueil ».'}</div>`;
+      ${deferredPrompt ? '<button class="btn btn-light" id="inst" style="margin-top:10px;min-height:44px">Installer</button>' : isIOS() ? '<br>Safari : bouton Partager, puis « Sur l\'écran d\'accueil ».' : '<br>Menu du navigateur (⋮), puis « Installer l\'application » (ou « Ajouter à l\'écran d\'accueil » selon le navigateur).'}</div>`;
     render(`
       <div class="row between"><div class="brand">Jour J</div><a class="icon-btn" href="#settings" aria-label="Réglages">${I.gear}</a></div>
       <div>${when}</div>

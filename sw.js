@@ -1,5 +1,5 @@
 // Cache hors-ligne. Change VERSION à chaque mise à jour pour que les téléphones récupèrent les nouveaux fichiers.
-const VERSION = 'jourj-v5';
+const VERSION = 'jourj-v6';
 const FILES = [
   './', 'index.html', 'app.css', 'app.js', 'data/questions.json', 'manifest.webmanifest',
   'mentions-legales.html', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'
