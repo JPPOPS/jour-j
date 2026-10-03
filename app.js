@@ -146,19 +146,21 @@
   // Chaque lecture a un numéro : les fins de lecture d'une ancienne phrase sont ignorées.
   // Sur certains Android, la fin de lecture est signalée trop tôt : on attend donc que la voix
   // ait réellement fini (speaking = false) ET une durée minimale selon la longueur du texte.
-  let sayToken = 0;
+  let sayToken = 0, lastCancel = 0;
   function say(text, onend) {
     const token = ++sayToken;
     if (!TTS) { if (onend) setTimeout(() => { if (token === sayToken) onend(); }, 300); return; }
     const txt = spoken(text);
-    const busy = speechSynthesis.speaking || speechSynthesis.pending;
-    if (busy) speechSynthesis.cancel();
+    if (speechSynthesis.speaking || speechSynthesis.pending) { lastCancel = Date.now(); speechSynthesis.cancel(); }
+    // Android : après un arrêt, il faut laisser un court délai avant de relancer la voix,
+    // sinon la nouvelle phrase est mal suivie (fin annoncée trop tôt).
+    const delay = Math.max(0, 400 - (Date.now() - lastCancel));
     const start = () => {
       if (token !== sayToken) return;
       const u = new SpeechSynthesisUtterance(txt);
       u.lang = 'fr-FR'; if (voice) u.voice = voice; u.rate = 1;
       window.__jourjUtterance = u; // évite que le navigateur supprime la phrase en cours de lecture
-      const t0 = Date.now(), minDur = txt.length * 35, maxDur = Math.max(30000, txt.length * 200);
+      const t0 = Date.now(), minDur = txt.length * 55, maxDur = Math.max(30000, txt.length * 200);
       let done = false;
       const finish = () => {
         if (done || token !== sayToken) return;
@@ -173,9 +175,9 @@
       u.onend = finish; u.onerror = finish;
       speechSynthesis.speak(u);
     };
-    if (busy) setTimeout(start, 150); else start();
+    if (delay) setTimeout(start, delay); else start();
   }
-  function hush() { sayToken++; if (TTS) speechSynthesis.cancel(); }
+  function hush() { sayToken++; if (TTS) { lastCancel = Date.now(); speechSynthesis.cancel(); } }
 
   // ---------- Navigation ----------
   let view = null;               // état de l'écran courant
@@ -463,58 +465,75 @@
   }
 
   // ---------- Écoute continue ----------
-  function stopListen() { if (listen) { clearInterval(listen.timer); listen.playing = false; } }
-  function listenQueue() {
-    const weak = CARDS.filter((c) => ['r', 'c'].includes(status(c.id)));
-    const rest = CARDS.filter((c) => !['r', 'c'].includes(status(c.id)));
-    return shuffle(weak).concat(shuffle(rest)).map((c) => c.id);
+  // Lecture dans l'ordre des fiches (01 → 00) : vérification, sécurité routière, premiers secours.
+  // Les parties neutralisées sont sautées. Le numéro de fiche est annoncé avant chaque question.
+  function stopListen() { if (listen) { clearTimeout(listen.timer); clearInterval(listen.timer); listen.playing = false; } }
+  function listenItems() {
+    const out = [];
+    FICHES.forEach((f) => {
+      const ids = FICHE_CARDS[f.numero], vcat = /intérieure/i.test(f.type) ? 'VI' : 'VE';
+      if (!f.neutralise_v) out.push({ num: f.numero, cat: vcat, q: f.verif_question, a: f.verif_reponse || 'Montre l\'élément ou réalise l\'action demandée.', card: ids.v });
+      if (!f.neutralise_sr) out.push({ num: f.numero, cat: 'SR', q: f.qser_question, a: f.qser_reponse, ctx: f.verif_question, card: ids.sr });
+      if (!f.neutralise_ps) out.push({ num: f.numero, cat: 'PS', q: f.ps_question, a: f.ps_reponse, card: ids.ps });
+    });
+    return out;
   }
   function vEcoute() {
     document.body.classList.add('is-dark');
-    if (!listen) listen = { q: listenQueue(), i: 0, phase: 'idle', count: 0, playing: false };
-    const c = BY_ID[listen.q[listen.i]];
+    if (!listen) { const items = listenItems(); listen = { items, i: Math.max(0, items.findIndex((x) => x.num === S.listenAt)), phase: 'idle', count: 0, playing: false }; }
+    const it = listen.items[listen.i];
+    const partsOfFiche = listen.items.filter((x) => x.num === it.num);
+    const pos = partsOfFiche.indexOf(it) + 1;
     const center = listen.phase === 'wait' ? `<div class="ring">${listen.count}</div><div style="text-align:center;color:#C9C5BC">secondes pour répondre dans ta tête</div>`
-      : listen.phase === 'answer' ? `<div class="answer" style="background:#2A2D35;border-color:#3A3E47;color:var(--ground)"><span class="label" style="color:var(--blue-m)">Réponse</span><div class="text">${esc(c.a)}</div></div>`
-      : listen.phase === 'idle' ? '<div style="text-align:center;color:#C9C5BC">Appuie sur lecture. Chaque question est lue, puis une pause, puis la réponse.</div>' : '';
+      : listen.phase === 'answer' ? `<div class="answer" style="background:#2A2D35;border-color:#3A3E47;color:var(--ground)"><span class="label" style="color:var(--blue-m)">Réponse</span><div class="text">${esc(it.a)}</div></div>`
+      : listen.phase === 'idle' ? '<div style="text-align:center;color:#C9C5BC">Choisis la fiche de départ puis appuie sur lecture. Chaque question est lue, puis une pause, puis la réponse.</div>' : '';
+    const fiches = FICHES.map((f) => f.numero);
     $app.classList.add('dark');
     render(`<div class="row"><a class="icon-btn" href="#home" aria-label="Retour">${I.back}</a><h1 style="font-size:22px;font-weight:800">Écoute continue</h1></div>
       <div class="warn">${I.warn}<span>Jamais en conduisant. À utiliser à pied ou dans les transports.</span></div>
       ${TTS ? '' : '<div class="banner" style="color:var(--ink)">La lecture vocale n\'est pas disponible sur ce navigateur.</div>'}
-      <div class="stack" style="margin-top:8px"><div class="small" style="font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--blue-m)">${CAT[c.cat]} · ${listen.i + 1} / ${listen.q.length}</div>
-      ${c.ctx ? `<div class="small" style="color:#C9C5BC">Après : ${esc(c.ctx)}</div>` : ''}
-      <div class="question">${esc(c.q)}</div></div>
+      <div class="stack" style="margin-top:8px"><div class="display" style="font-size:26px;font-weight:800">Fiche ${it.num} <span style="font-size:15px;color:#C9C5BC;font-family:var(--body);font-weight:400">· ${pos} / ${partsOfFiche.length}</span></div>
+      <div class="small" style="font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--blue-m)">${CAT[it.cat]}</div>
+      ${it.ctx ? `<div class="small" style="color:#C9C5BC">Après : ${esc(it.ctx)}</div>` : ''}
+      <div class="question">${esc(it.q)}</div></div>
       ${center}
       <div class="spacer stack" style="gap:18px">
-        <div class="player"><button class="icon-btn" id="pv" aria-label="Question précédente">${I.prev}</button>
-          <button class="big" id="pp" aria-label="${listen.playing ? 'Pause' : 'Lecture'}">${listen.playing ? I.pause : I.play}</button>
-          <button class="icon-btn" id="nx" aria-label="Question suivante">${I.next}</button></div>
-        <div class="row" style="justify-content:center;gap:8px"><label for="pz" class="small" style="color:#C9C5BC">Pause</label>
-          <select id="pz" class="input" style="width:auto;min-height:40px;background:#2A2D35;color:#fff;border-color:#3A3E47">${[3, 5, 8, 12].map((s) => `<option value="${s}" ${S.pause === s ? 'selected' : ''}>${s} s</option>`).join('')}</select></div>
-        <button class="btn btn-ghost" id="ko" style="color:var(--ground)">Je ne savais pas — à revoir</button></div>`);
-    $app.querySelector('#pp').addEventListener('click', () => { if (listen.playing) { stopListen(); hush(); listen.phase = 'idle'; vEcoute(); } else { listen.playing = true; playStep('question'); } });
-    $app.querySelector('#nx').addEventListener('click', () => moveListen(1));
-    $app.querySelector('#pv').addEventListener('click', () => moveListen(-1));
-    $app.querySelector('#pz').addEventListener('change', (e) => { S.pause = parseInt(e.target.value, 10); save(); });
-    $app.querySelector('#ko').addEventListener('click', (e) => { rate(c.id, 'rate'); e.target.textContent = 'Ajoutée à tes révisions'; e.target.disabled = true; });
-  }
-  function moveListen(d) {
-    clearInterval(listen.timer); hush();
-    listen.i = (listen.i + d + listen.q.length) % listen.q.length;
-    if (listen.playing) playStep('question'); else { listen.phase = 'idle'; vEcoute(); }
+        <div class="player"><button class="big" id="pp" aria-label="${listen.playing ? 'Pause' : 'Lecture'}">${listen.playing ? I.pause : I.play}</button></div>
+        ${listen.playing ? '' : `<div class="tiles">
+          <div class="field" style="gap:6px"><label for="fs" class="small" style="color:#C9C5BC;font-weight:400">Démarrer à la fiche</label>
+          <select id="fs" class="input" style="background:#2A2D35;color:#fff;border-color:#3A3E47">${fiches.map((n) => `<option value="${n}" ${n === it.num ? 'selected' : ''}>${n}</option>`).join('')}</select></div>
+          <div class="field" style="gap:6px"><label for="pz" class="small" style="color:#C9C5BC;font-weight:400">Temps pour répondre</label>
+          <select id="pz" class="input" style="background:#2A2D35;color:#fff;border-color:#3A3E47">${[3, 5, 8, 12].map((s) => `<option value="${s}" ${S.pause === s ? 'selected' : ''}>${s} s</option>`).join('')}</select></div></div>`}
+        <button class="btn btn-ghost" id="ko" style="color:var(--ground)" ${it.card ? '' : 'disabled'}>Je ne savais pas — à revoir</button></div>`);
+    $app.querySelector('#pp').addEventListener('click', () => {
+      if (listen.playing) { stopListen(); hush(); listen.phase = 'idle'; S.listenAt = it.num; save(); vEcoute(); }
+      else { listen.playing = true; playStep('question'); }
+    });
+    const fs = $app.querySelector('#fs');
+    if (fs) fs.addEventListener('change', () => { listen.i = listen.items.findIndex((x) => x.num === fs.value); listen.phase = 'idle'; S.listenAt = fs.value; save(); vEcoute(); });
+    const pz = $app.querySelector('#pz');
+    if (pz) pz.addEventListener('change', (e) => { S.pause = parseInt(e.target.value, 10); save(); });
+    $app.querySelector('#ko').addEventListener('click', (e) => { if (it.card) rate(it.card, 'rate'); e.target.textContent = 'Ajoutée à tes révisions'; e.target.disabled = true; });
   }
   function playStep(phase) {
     if (!listen.playing || location.hash !== '#ecoute') return;
-    const c = BY_ID[listen.q[listen.i]];
-    listen.phase = phase; clearInterval(listen.timer);
-    if (phase === 'question') { listen.phase = 'q'; vEcoute(); say(CAT[c.cat] + '. ' + c.q, () => playStep('wait')); }
-    else if (phase === 'wait') {
-      listen.count = S.pause || 5; vEcoute();
+    const it = listen.items[listen.i];
+    clearTimeout(listen.timer); clearInterval(listen.timer);
+    if (phase === 'question') {
+      listen.phase = 'q'; vEcoute();
+      say(`Fiche ${it.num === "00" ? "zéro zéro" : parseInt(it.num, 10)}. ${CAT[it.cat]}. ${it.q}`, () => playStep('wait'));
+    } else if (phase === 'wait') {
+      listen.phase = 'wait'; listen.count = S.pause || 5; vEcoute();
       listen.timer = setInterval(() => {
         listen.count--;
         if (listen.count <= 0) { clearInterval(listen.timer); playStep('answer'); } else { const r = $app.querySelector('.ring'); if (r) r.textContent = listen.count; }
       }, 1000);
     } else if (phase === 'answer') {
-      vEcoute(); say('Réponse : ' + c.a, () => { if (!listen.playing) return; listen.timer = setTimeout(() => { listen.i = (listen.i + 1) % listen.q.length; playStep('question'); }, 1200); });
+      listen.phase = 'answer'; vEcoute();
+      say('Réponse : ' + it.a, () => {
+        if (!listen.playing) return;
+        listen.timer = setTimeout(() => { listen.i = (listen.i + 1) % listen.items.length; S.listenAt = listen.items[listen.i].num; save(); playStep('question'); }, 1200);
+      });
     }
   }
 
