@@ -143,15 +143,39 @@
   function pickVoice() { if (!TTS) return; const v = speechSynthesis.getVoices(); voice = v.find((x) => /^fr(-|_)FR/i.test(x.lang)) || v.find((x) => /^fr/i.test(x.lang)) || null; }
   if (TTS) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
   const spoken = (t) => String(t).replace(/\n- /g, '. ').replace(/^- /, '').replace(/1ers? secours/gi, 'premiers secours');
+  // Chaque lecture a un numéro : les fins de lecture d'une ancienne phrase sont ignorées.
+  // Sur certains Android, la fin de lecture est signalée trop tôt : on attend donc que la voix
+  // ait réellement fini (speaking = false) ET une durée minimale selon la longueur du texte.
+  let sayToken = 0;
   function say(text, onend) {
-    if (!TTS) { if (onend) setTimeout(onend, 300); return; }
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(spoken(text));
-    u.lang = 'fr-FR'; if (voice) u.voice = voice; u.rate = 1;
-    if (onend) { u.onend = onend; u.onerror = onend; }
-    speechSynthesis.speak(u);
+    const token = ++sayToken;
+    if (!TTS) { if (onend) setTimeout(() => { if (token === sayToken) onend(); }, 300); return; }
+    const txt = spoken(text);
+    const busy = speechSynthesis.speaking || speechSynthesis.pending;
+    if (busy) speechSynthesis.cancel();
+    const start = () => {
+      if (token !== sayToken) return;
+      const u = new SpeechSynthesisUtterance(txt);
+      u.lang = 'fr-FR'; if (voice) u.voice = voice; u.rate = 1;
+      window.__jourjUtterance = u; // évite que le navigateur supprime la phrase en cours de lecture
+      const t0 = Date.now(), minDur = txt.length * 35, maxDur = Math.max(30000, txt.length * 200);
+      let done = false;
+      const finish = () => {
+        if (done || token !== sayToken) return;
+        const check = () => {
+          if (done || token !== sayToken) return;
+          const el = Date.now() - t0;
+          if (el < maxDur && (speechSynthesis.speaking || speechSynthesis.pending || el < minDur)) { setTimeout(check, 200); return; }
+          done = true; if (onend) onend();
+        };
+        check();
+      };
+      u.onend = finish; u.onerror = finish;
+      speechSynthesis.speak(u);
+    };
+    if (busy) setTimeout(start, 150); else start();
   }
-  function hush() { if (TTS) speechSynthesis.cancel(); }
+  function hush() { sayToken++; if (TTS) speechSynthesis.cancel(); }
 
   // ---------- Navigation ----------
   let view = null;               // état de l'écran courant
