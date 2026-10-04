@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vérifier, Informer, Faire — Fiche</title>
+<meta name="theme-color" content="#F4F1EA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fiches.css">
+<style>
+  .stage{background:#2B2F36;border-radius:20px;overflow:hidden;position:relative}
+  .stage svg{display:block;width:100%;height:auto}
+  .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .steps button{min-height:44px;border-radius:12px;border:1px solid var(--line2);background:var(--card);font-weight:700;font-size:13px;cursor:pointer;color:var(--ink2);padding:0 4px;line-height:1.1}
+  .steps button[aria-current="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .caption{min-height:96px;font-size:17px;line-height:1.45}
+  .caption b{font-family:var(--display);font-size:20px;display:block;margin-bottom:2px}
+  .ctrl{display:flex;gap:10px;align-items:center}
+  .key{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--soft)}
+  .key:last-child{border-bottom:0}
+  .key .n{flex-shrink:0;width:36px;height:36px;border-radius:18px;background:var(--blue);color:#fff;font-family:var(--display);font-weight:800;display:flex;align-items:center;justify-content:center}
+  .legend2{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--muted)}
+  .legend2 i{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+  ul.clean{margin:0;padding-left:20px;line-height:1.55}
+  ul.clean li{margin:4px 0}
+  .zonetag{font-family:'Atkinson Hyperlegible',sans-serif;font-weight:700;font-size:13px}
+</style>
+</head>
+<body>
+<main id="app" style="gap:18px">
+  <div class="row"><a class="icon-btn" href="./" id="backlink" aria-label="Retour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <div><div class="small muted" style="font-weight:700">Fiche · C1.8 Regarder autour de soi et avertir</div><h1 style="font-size:28px;font-weight:800;line-height:1.1">Vérifier, Informer, Faire</h1></div></div>
+
+  <p style="margin:0;font-size:17px;line-height:1.5">Avant de te déplacer sur le côté (démarrer, changer de voie, dépasser, tourner), tu suis toujours le même ordre : <b>Vérifier</b>, puis <b>Informer</b> quand c'est sûr, puis <b>Faire</b>. Regarde l'animation étape par étape.</p>
+
+  <div class="seg" id="scen" role="group" aria-label="Choisir la situation"><button data-sc="lane" aria-pressed="true">Changement de voie</button><button data-sc="turn" aria-pressed="false">Tourner à gauche</button></div>
+  <div class="stage" id="stage1" aria-label="Animation : changement de voie avec une moto qui passe des rétroviseurs à l'angle mort">
+    <svg id="scene" viewBox="0 0 360 480" role="img" aria-labelledby="capT">
+      <defs>
+        <pattern id="dash" width="6" height="40" patternUnits="userSpaceOnUse"><rect width="6" height="22" fill="#F4F1EA"/></pattern>
+        <radialGradient id="fade" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 0) scale(250)">
+          <stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset=".75" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </radialGradient>
+        <mask id="m"><circle id="maskc" cx="0" cy="0" r="250" fill="url(#fade)"/></mask>
+      </defs>
+      <rect width="360" height="480" fill="#3A3F47"/>
+      <rect x="0" y="0" width="70" height="480" fill="#5E8A12" opacity=".35"/>
+      <rect x="290" y="0" width="70" height="480" fill="#5E8A12" opacity=".35"/>
+      <rect x="70" y="0" width="4" height="480" fill="#F4F1EA"/>
+      <rect x="286" y="0" width="4" height="480" fill="#F4F1EA"/>
+      <g id="dashes"><rect x="177" y="-40" width="6" height="560" fill="url(#dash)"/></g>
+      <!-- zones de vision, centrées sur le conducteur -->
+      <g id="vision" mask="url(#m)">
+        <g id="rear"><path id="z_mirL" fill="#A8E0B5"/><path id="z_mirR" fill="#A8E0B5"/><path id="z_mirC" fill="#5CC27A"/></g>
+        <g id="blindL"><path id="z_blindL" fill="#E5484D"/></g>
+        <g id="blindR"><path id="z_blindR" fill="#E5484D"/></g>
+        <g id="fan">
+          <path id="z_perL" fill="#5CC27A"/><path id="z_perR" fill="#5CC27A"/>
+          <path id="z_cen" fill="#F2C230"/>
+        </g>
+        <!-- montants du pare-brise : fixes, ils restent avec la voiture quand la tête tourne -->
+        <path id="z_pilL" fill="#E5484D"/><path id="z_pilR" fill="#E5484D"/>
+      </g>
+      <!-- moto -->
+      <g id="moto">
+        <rect x="-7" y="-20" width="14" height="40" rx="7" fill="#16181D" stroke="#F4F1EA" stroke-width="2"/>
+        <circle cx="0" cy="-2" r="7" fill="#C2410C" stroke="#F4F1EA" stroke-width="2"/>
+        <circle id="ping" cx="0" cy="0" r="16" fill="none" stroke="#fff" stroke-width="3" opacity="0"/>
+      </g>
+      <g id="mtag" opacity="0" transform="translate(12 70)"><rect id="mtagbg" x="0" y="-14" width="250" height="28" rx="14" fill="#F4F1EA"/><text id="mtagt" class="zonetag" x="125" y="5" text-anchor="middle" fill="#16181D"></text></g>
+      <!-- voiture de l'élève (conduite à gauche) -->
+      <g id="car">
+        <rect x="-26" y="-50" width="52" height="100" rx="14" fill="#1F4FD1" stroke="#F4F1EA" stroke-width="2"/>
+        <rect x="-19" y="-30" width="38" height="20" rx="5" fill="#C9D6F7"/>
+        <rect x="-19" y="22" width="38" height="14" rx="4" fill="#C9D6F7"/>
+        <rect x="-33" y="-24" width="8" height="10" rx="3" fill="#1F4FD1" stroke="#F4F1EA" stroke-width="1.5"/>
+        <rect x="25" y="-24" width="8" height="10" rx="3" fill="#1F4FD1" stroke="#F4F1EA" stroke-width="1.5"/>
+        <circle id="bl1" cx="-22" cy="-46" r="6" fill="#FFB020" opacity="0"/>
+        <circle id="bl2" cx="-22" cy="46" r="6" fill="#FFB020" opacity="0"/>
+        <circle cx="-10" cy="-4" r="7" fill="#16181D" stroke="#F4F1EA" stroke-width="1.5"/>
+      </g>
+      <g id="badge"><rect x="12" y="12" width="168" height="34" rx="17" fill="#F4F1EA"/><text id="badgeT" x="96" y="34" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="15" fill="#16181D">Situation</text></g>
+      <g id="tick" opacity="0"><circle cx="330" cy="30" r="18" fill="#3E8E3A"/><path d="M321 30 l6 6 l12 -13" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g id="stopi" opacity="0"><circle cx="330" cy="30" r="18" fill="#C2410C"/><rect x="320" y="26" width="20" height="8" rx="2" fill="#fff"/></g>
+    </svg>
+  </div>
+  <div class="stage" id="stage2" hidden aria-label="Animation : tourner à gauche après un arrêt, une moto dépasse par la gauche">
+    <svg viewBox="0 0 360 480" role="img" aria-labelledby="capT">
+      <defs>
+        <radialGradient id="t_fade" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="scale(250)">
+          <stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset=".75" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </radialGradient>
+        <mask id="t_m"><circle cx="0" cy="0" r="250" fill="url(#t_fade)"/></mask>
+      </defs>
+      <rect width="360" height="480" fill="#46601C"/>
+      <rect x="70" y="0" width="220" height="480" fill="#3A3F47"/>
+      <rect x="0" y="90" width="360" height="110" fill="#3A3F47"/>
+      <g fill="#F4F1EA">
+        <rect x="177" y="214" width="6" height="22"/><rect x="177" y="254" width="6" height="22"/><rect x="177" y="294" width="6" height="22"/><rect x="177" y="334" width="6" height="22"/><rect x="177" y="374" width="6" height="22"/><rect x="177" y="414" width="6" height="22"/><rect x="177" y="454" width="6" height="22"/>
+        <rect x="177" y="0" width="6" height="22"/><rect x="177" y="40" width="6" height="22"/>
+        <rect x="0" y="142" width="22" height="6"/><rect x="40" y="142" width="22" height="6"/><rect x="300" y="142" width="22" height="6"/><rect x="340" y="142" width="22" height="6"/>
+      </g>
+      <g id="t_vision" mask="url(#t_m)">
+        <path id="t_z_mirL" fill="#A8E0B5"/><path id="t_z_mirR" fill="#A8E0B5"/><path id="t_z_mirC" fill="#5CC27A"/><path id="t_z_blindL" fill="#E5484D"/><path id="t_z_blindR" fill="#E5484D"/>
+        <g id="t_fan"><path id="t_z_perL" fill="#5CC27A"/><path id="t_z_perR" fill="#5CC27A"/><path id="t_z_cen" fill="#F2C230"/></g>
+        <path id="t_z_pilL" fill="#E5484D"/><path id="t_z_pilR" fill="#E5484D"/>
+      </g>
+      <g id="t_opp"><rect x="-24" y="-46" width="48" height="92" rx="13" fill="#9AA0A8" stroke="#F4F1EA" stroke-width="2"/><rect x="-17" y="-30" width="34" height="18" rx="5" fill="#D9DCE0"/><rect x="-17" y="20" width="34" height="12" rx="4" fill="#D9DCE0"/></g>
+      <g id="t_moto"><rect x="-7" y="-20" width="14" height="40" rx="7" fill="#16181D" stroke="#F4F1EA" stroke-width="2"/><circle cx="0" cy="-2" r="7" fill="#C2410C" stroke="#F4F1EA" stroke-width="2"/><circle id="t_ping" cx="0" cy="0" r="16" fill="none" stroke="#fff" stroke-width="3" opacity="0"/></g>
+      <g id="t_car">
+        <rect x="-26" y="-50" width="52" height="100" rx="14" fill="#1F4FD1" stroke="#F4F1EA" stroke-width="2"/>
+        <rect x="-19" y="-30" width="38" height="20" rx="5" fill="#C9D6F7"/><rect x="-19" y="22" width="38" height="14" rx="4" fill="#C9D6F7"/>
+        <rect x="-33" y="-24" width="8" height="10" rx="3" fill="#1F4FD1" stroke="#F4F1EA" stroke-width="1.5"/><rect x="25" y="-24" width="8" height="10" rx="3" fill="#1F4FD1" stroke="#F4F1EA" stroke-width="1.5"/>
+        <circle id="t_bl1" cx="-22" cy="-46" r="6" fill="#FFB020" opacity="0"/><circle id="t_bl2" cx="-22" cy="46" r="6" fill="#FFB020" opacity="0"/>
+        <circle cx="-10" cy="-4" r="7" fill="#16181D" stroke="#F4F1EA" stroke-width="1.5"/>
+      </g>
+      <g><rect x="12" y="12" width="168" height="34" rx="17" fill="#F4F1EA"/><text id="t_badgeT" x="96" y="34" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="15" fill="#16181D">Situation</text></g>
+      <g id="t_mtag" opacity="0" transform="translate(12 70)"><rect id="t_mtagbg" x="0" y="-14" width="250" height="28" rx="14" fill="#F4F1EA"/><text id="t_mtagt" class="zonetag" x="125" y="5" text-anchor="middle" fill="#16181D"></text></g>
+      <g id="t_tick" opacity="0"><circle cx="330" cy="30" r="18" fill="#3E8E3A"/><path d="M321 30 l6 6 l12 -13" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g id="t_stopi" opacity="0"><circle cx="330" cy="30" r="18" fill="#C2410C"/><rect x="320" y="26" width="20" height="8" rx="2" fill="#fff"/></g>
+    </svg>
+  </div>
+  <div class="legend2"><span><i style="background:#F2C230"></i>vision centrale</span><span><i style="background:#5CC27A"></i>vision périphérique et rétro intérieur</span><span><i style="background:#A8E0B5"></i>rétros extérieurs</span><span><i style="background:#E5484D"></i>angles morts et montants</span><span><i style="background:#9AA0A8"></i>véhicule d'en face</span></div>
+
+  <div class="caption" id="cap" aria-live="polite"><b id="capT">Situation</b><span id="capS"></span></div>
+  <div class="steps" id="steps"></div>
+  <div class="ctrl"><button class="btn btn-dark" id="play" style="flex:1">⏸ Pause</button><button class="btn btn-light" id="restart" style="width:auto;padding:0 18px">Recommencer</button></div>
+
+  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les 3 temps</h2>
+    <div class="key"><span class="n">V</span><div><b>Vérifier</b> — rétroviseur intérieur, rétroviseur du côté où je vais, puis coup d'œil vers l'épaule pour l'angle mort. Si ce n'est pas libre, j'attends et je revérifie.</div></div>
+    <div class="key"><span class="n">I</span><div><b>Informer</b> — seulement quand je suis sûr de pouvoir bouger : clignotant, en laissant aux autres le temps de le voir.</div></div>
+    <div class="key"><span class="n">F</span><div><b>Faire</b> — je réalise l'action (changer de voie, démarrer, tourner…) progressivement, puis j'annule le clignotant.</div></div>
+  </div>
+
+  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Pourquoi tourner la tête ?</h2>
+    <p style="margin:0 0 8px;line-height:1.5">Ta <b>vision centrale</b> est étroite : elle sert à lire les détails. Ta <b>vision périphérique</b> est large : elle ne voit pas les détails, mais elle <b>capte très bien le mouvement</b>.</p>
+    <p style="margin:0;line-height:1.5">Quand un véhicule sort de la zone des rétroviseurs, il passe derrière le montant de la voiture : c'est l'<b>angle mort</b>. En tournant la tête vers l'épaule, tu fais pivoter ta vision périphérique sur cette zone : si quelque chose bouge, tu le captes tout de suite. Inutile de fixer : un coup d'œil suffit.</p>
+  </div>
+
+  <div class="card"><h2 style="font-size:20px;margin-bottom:8px">Ce que voit le conducteur</h2>
+    <svg id="map" viewBox="0 0 320 320" role="img" aria-label="Vue de dessus : vision centrale en jaune vers l'avant, vision périphérique en vert sur les côtés avant, angles morts en rouge sur les côtés arrière et au niveau des montants du pare-brise, rétroviseurs en vert vers l'arrière" style="width:100%;height:auto;border-radius:12px;background:#F7F5F0"></svg>
+    <p class="small muted" style="margin:8px 0 0">Schéma de principe : les zones exactes dépendent du véhicule, du réglage des rétroviseurs et de la position du conducteur.</p>
+  </div>
+
+  <div class="card"><h2 style="font-size:20px;margin-bottom:8px">Les angles morts en hauteur</h2>
+    <svg viewBox="0 0 320 170" role="img" aria-label="Vue de côté : zone non visible juste devant et juste derrière la voiture, au ras du sol, où un enfant ou un obstacle bas peut être caché" style="width:100%;height:auto;border-radius:12px;background:#EAF2FB">
+      <rect y="140" width="320" height="30" fill="#B9B4A9"/>
+      <!-- zones cachées sous la ligne de regard -->
+      <polygon points="96,100 0,128 0,140 72,140 72,112" fill="#E5484D" opacity=".8"/>
+      <polygon points="246,100 320,112 320,140 268,140 268,110" fill="#E5484D" opacity=".8"/>
+      <line x1="150" y1="84" x2="0" y2="128.4" stroke="#F2C230" stroke-width="3" stroke-dasharray="6 4"/>
+      <line x1="150" y1="84" x2="320" y2="112.3" stroke="#F2C230" stroke-width="3" stroke-dasharray="6 4"/>
+      <!-- voiture de profil -->
+      <path d="M70 128 Q70 104 96 100 L120 72 Q130 62 150 62 L196 62 Q214 62 226 76 L246 100 Q268 104 270 128 Z" fill="#8FA7E8" stroke="#16181D" stroke-width="2"/>
+      <path d="M126 74 Q132 68 146 68 L170 68 L170 98 L110 98 Z" fill="#C9D6F7"/>
+      <path d="M176 68 L196 68 Q208 68 216 78 L232 98 L176 98 Z" fill="#C9D6F7"/>
+      <circle cx="150" cy="84" r="8" fill="#16181D"/>
+      <circle cx="108" cy="130" r="14" fill="#16181D"/><circle cx="234" cy="130" r="14" fill="#16181D"/>
+      <!-- obstacles bas -->
+      <path d="M30 140 L38 120 L46 140 Z" fill="#F08A24"/>
+      <circle cx="292" cy="120" r="6" fill="#16181D"/><rect x="287" y="125" width="10" height="15" rx="3" fill="#5E8A12"/>
+      <text x="30" y="160" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" font-weight="700" fill="#16181D">devant</text>
+      <text x="262" y="160" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" font-weight="700" fill="#16181D">derrière</text>
+    </svg>
+    <p class="small muted" style="margin:8px 0 0">Juste devant et juste derrière la voiture, au ras du sol, un enfant ou un obstacle bas peut être caché. Avant de démarrer ou de reculer, fais le tour du regard, voire le tour du véhicule.</p>
+  </div>
+
+  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Quand l'utiliser ?</h2>
+    <ul class="clean"><li>Au démarrage, en quittant le bord du trottoir</li><li>Pour changer de voie, dépasser et se rabattre</li><li>Pour tourner à droite : vélos et trottinettes qui remontent à ta droite</li><li>Pour tourner à gauche, <b>surtout après un arrêt</b> (quand tu attends que le véhicule d'en face passe) : un deux-roues ou une voiture peut être en train de te dépasser par la gauche</li><li>En sortie de giratoire</li><li>Sur une voie d'insertion</li><li>Pour s'arrêter ou se garer</li></ul></div>
+
+  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les pièges fréquents</h2>
+    <ul class="clean"><li>Mettre le clignotant avant d'avoir vérifié, ou <b>après</b> avoir commencé à bouger</li><li>Oublier l'angle mort : le rétroviseur ne montre pas tout</li><li>Vérifier, attendre longtemps, puis bouger sans revérifier</li><li>Tourner le volant en même temps que la tête</li><li>Oublier l'angle mort droit avant de tourner à droite</li><li>Oublier l'angle mort gauche avant de tourner à gauche après un arrêt : pendant l'attente, quelqu'un a pu commencer à te dépasser</li></ul></div>
+
+  <p class="footer">Fiche de révision. Elle complète les explications de ton enseignant.</p>
+</main>
+<script>
+(function () {
+  'use strict';
+  (function backlink() { // retour : liste des fiches ; ouverte depuis l'outil de l'enseignant (?o=1) : page précédente
+    const bl = document.getElementById('backlink');
+    bl.href = './'; bl.setAttribute('aria-label', 'Toutes les fiches');
+    if (new URLSearchParams(location.search).has('o')) bl.addEventListener('click', function (e) { if (history.length > 1) { e.preventDefault(); history.back(); } });
+  })();
+  const $ = (id) => document.getElementById(id);
+  const ease = (t) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const clamp = (v) => Math.max(0, Math.min(1, v));
+
+  // Secteur angulaire (0° = vers l'avant, sens horaire) depuis (0,0)
+  function sector(a1, a2, r) {
+    const p = (a) => [Math.sin(a * Math.PI / 180) * r, -Math.cos(a * Math.PI / 180) * r];
+    const [x1, y1] = p(a1), [x2, y2] = p(a2), large = (a2 - a1) > 180 ? 1 : 0;
+    return `M0 0 L${x1.toFixed(1)} ${y1.toFixed(1)} A${r} ${r} 0 ${large} 1 ${x2.toFixed(1)} ${y2.toFixed(1)} Z`;
+  }
+  // Zones (en degrés, par rapport à l'axe de la voiture)
+  const Z = {
+    cen: [-12, 12], perL: [-90, -12], perR: [12, 90], pilL: [-42, -32], pilR: [32, 42],
+    blindL: [-142, -90], blindR: [90, 142], mirR: [142, 180], mirC: [153, 207], mirL: [180, 218]
+  };
+  // Les rétros extérieurs partent des rétroviseurs eux-mêmes (position par rapport au conducteur)
+  const MIR = { mirL: { x: -19, y: -15 }, mirR: { x: 39, y: -15 } };
+  function drawZones(prefix, r) {
+    Object.entries(Z).forEach(([k, [a, b]]) => {
+      const el = $(prefix + k); if (!el) return;
+      el.setAttribute('d', sector(a, b, r));
+      if (MIR[k]) el.setAttribute('transform', `translate(${MIR[k].x} ${MIR[k].y})`);
+    });
+  }
+  drawZones('z_', 250);
+  drawZones('t_z_', 250);
+
+  // Schéma fixe « ce que voit le conducteur »
+  (function map() {
+    const ns = 'http://www.w3.org/2000/svg', svg = $('map');
+    svg.innerHTML = '<defs><radialGradient id="fd2" cx="0" cy="0" r="155" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset=".8" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><mask id="m2"><rect x="-170" y="-180" width="340" height="360" fill="url(#fd2)"/></mask></defs>';
+    const g = document.createElementNS(ns, 'g'); g.setAttribute('transform', 'translate(152 166)'); g.setAttribute('mask', 'url(#m2)');
+    const col = { cen: '#F2C230', perL: '#5CC27A', perR: '#5CC27A', pilL: '#E5484D', pilR: '#E5484D', blindL: '#E5484D', blindR: '#E5484D', mirC: '#5CC27A', mirL: '#A8E0B5', mirR: '#A8E0B5' };
+    const MM = { mirL: 'translate(-17 -12)', mirR: 'translate(33 -12)' };
+    ['mirL', 'mirR', 'mirC', 'blindL', 'blindR', 'perL', 'perR', 'pilL', 'pilR', 'cen'].forEach((k) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', sector(Z[k][0], Z[k][1], 160)); if (MM[k]) p.setAttribute('transform', MM[k]); p.setAttribute('fill', col[k]); p.setAttribute('opacity', '.8'); g.appendChild(p); });
+    svg.appendChild(g);
+    svg.insertAdjacentHTML('beforeend', '<g transform="translate(160 170)"><rect x="-28" y="-20" width="7" height="9" rx="2" fill="#1F4FD1" stroke="#16181D" stroke-width="1.5"/><rect x="21" y="-20" width="7" height="9" rx="2" fill="#1F4FD1" stroke="#16181D" stroke-width="1.5"/><rect x="-22" y="-42" width="44" height="84" rx="12" fill="#1F4FD1" stroke="#16181D" stroke-width="2"/><rect x="-16" y="-26" width="32" height="16" rx="4" fill="#C9D6F7"/><circle cx="-8" cy="-5" r="6" fill="#16181D"/></g>' +
+      ['<text x="160" y="40" text-anchor="middle">Vision centrale</text>', '<text x="54" y="112" text-anchor="middle">Vision</text><text x="54" y="126" text-anchor="middle">périphérique</text>', '<text x="266" y="112" text-anchor="middle">Vision</text><text x="266" y="126" text-anchor="middle">périphérique</text>', '<text x="50" y="228" text-anchor="middle">Angle mort</text>', '<text x="270" y="228" text-anchor="middle">Angle mort</text>', '<text x="160" y="312" text-anchor="middle">Rétro intérieur</text>', '<text x="62" y="292" text-anchor="middle">Rétro gauche</text>', '<text x="258" y="292" text-anchor="middle">Rétro droit</text>'].map((t) => t.replace(/<text /g, '<text font-family="Atkinson Hyperlegible, sans-serif" font-size="13" font-weight="700" fill="#16181D" ')).join(''));
+  })();
+
+  const DRV = { dx: -10, dy: -4 };
+  // Dans quelle zone se trouve la moto, vue du conducteur (avec la rotation de la tête)
+  function zoneOf(mx, my, cx, cy, head) {
+    const dx = mx - (cx + DRV.dx), dy = my - (cy + DRV.dy);
+    const a = Math.atan2(dx, -dy) * 180 / Math.PI; // 0 = avant
+    const inRange = (v, [lo, hi]) => { let x = v; while (x < lo) x += 360; while (x > lo + 360) x -= 360; return x <= hi; };
+    const rel = a - head;
+    if (inRange(a, Z.pilL) || inRange(a, Z.pilR)) return 'pil'; // les montants ne tournent pas avec la tête
+    if (inRange(rel, Z.cen)) return 'cen';
+    if (inRange(rel, Z.perL) || inRange(rel, Z.perR)) return 'per';
+    const from = (o) => Math.atan2(mx - (cx + DRV.dx + o.x), -(my - (cy + DRV.dy + o.y))) * 180 / Math.PI;
+    const inC = inRange(a, Z.mirC), inL = inRange(from(MIR.mirL), Z.mirL), inR = inRange(from(MIR.mirR), Z.mirR);
+    if (inC && inL) return 'mirCL';
+    if (inC && inR) return 'mirCR';
+    if (inC) return 'mirC';
+    if (inL) return 'mirL';
+    if (inR) return 'mirR';
+    return 'blind';
+  }
+  const TAG = { mirCL: 'rétros intérieur et gauche', mirCR: 'rétros intérieur et droit', mirC: 'rétro intérieur', mirL: 'rétro gauche', mirR: 'rétro droit', blind: 'angle mort', per: 'vision périphérique', cen: 'vision centrale', pil: 'derrière le montant' };
+  const ZONE_EL = { mirCL: ['z_mirC', 'z_mirL'], mirCR: ['z_mirC', 'z_mirR'], mirC: ['z_mirC'], mirL: ['z_mirL'], mirR: ['z_mirR'], blind: ['z_blindL'], per: ['z_perL'], cen: ['z_cen'], pil: ['z_pilL'] };
+  const ZIDS = ['z_mirC', 'z_mirL', 'z_mirR', 'z_blindL', 'z_blindR', 'z_perL', 'z_perR', 'z_pilL', 'z_pilR', 'z_cen'];
+
+  // Partie commune : zones, étiquette, clignotants, icônes (préfixe '' ou 't_')
+  function common(P, s, mx, my, cx, cy) {
+    ZIDS.forEach((id) => $(P + id).setAttribute('opacity', .22));
+    let zone = null;
+    if (s.focus && my > -40 && my < 500) {
+      zone = zoneOf(mx, my, cx, cy, s.head || 0);
+      if (s.keep) $(P + s.keep).setAttribute('opacity', .6);
+      (ZONE_EL[zone] || []).forEach((id) => $(P + id).setAttribute('opacity', .75));
+      const red = zone === 'blind' || zone === 'pil';
+      $(P + 'mtag').setAttribute('opacity', 1);
+      $(P + 'mtagt').textContent = 'Moto : ' + TAG[zone];
+      $(P + 'mtagbg').setAttribute('fill', red ? '#E5484D' : '#F4F1EA');
+      $(P + 'mtagt').setAttribute('fill', red ? '#fff' : '#16181D');
+    } else $(P + 'mtag').setAttribute('opacity', 0);
+    const now = performance.now();
+    $(P + 'ping').setAttribute('opacity', s.ping && Math.floor(now / 300) % 2 === 0 ? 1 : 0);
+    const on = s.blink && Math.floor(now / 380) % 2 === 0;
+    $(P + 'bl1').setAttribute('opacity', on ? 1 : 0); $(P + 'bl2').setAttribute('opacity', on ? 1 : 0);
+    $(P + 'tick').setAttribute('opacity', s.tick || 0); $(P + 'stopi').setAttribute('opacity', s.stop || 0);
+  }
+
+  // ---------- Scénario 1 : changement de voie ----------
+  const CAR_Y = 300;
+  const LANE = [
+    { d: 3200, t: 'Situation', k: 'Situation', s: 'Je roule sur la voie de droite et je veux passer à gauche. En jaune ce que je regarde, en vert ce que je perçois, en rouge ce que je ne vois pas.',
+      f: (p) => ({ moto: lerp(560, 480, p), car: 220, head: 0 }) },
+    { d: 3600, t: '1. Vérifier : les rétroviseurs', k: 'Rétros', s: 'Rétroviseur intérieur, puis rétroviseur gauche : la moto arrive, je la vois dans la zone des rétroviseurs.',
+      f: (p) => ({ moto: lerp(480, 420, p), car: 220, head: 0, focus: 1, keep: 'z_mirL' }) },
+    { d: 4200, t: 'La moto sort des rétros', k: 'Sortie rétro', s: 'La moto sort de la zone des rétroviseurs et passe derrière le montant gauche : elle entre dans l\'angle mort. Je ne la vois plus.',
+      f: (p) => ({ moto: lerp(420, 330, ease(p)), car: 220, head: 0, focus: 1, keep: 'z_mirL' }) },
+    { d: 4200, t: '1. Vérifier : l\'angle mort', k: 'Angle mort', s: 'Coup d\'œil vers l\'épaule gauche : ma vision périphérique pivote sur l\'angle mort et capte le mouvement de la moto. Pas libre : pas de clignotant, j\'attends.',
+      f: (p) => ({ moto: lerp(330, 318, p), car: 220, head: -90 * ease(Math.min(1, p * 2)), focus: 1, stop: p > .45 ? 1 : 0, ping: p > .45 }) },
+    { d: 3600, t: '1. Vérifier à nouveau', k: 'Libre', s: 'La moto me dépasse. Je revérifie rétroviseur et angle mort : c\'est libre, je suis sûr de pouvoir bouger.',
+      f: (p) => ({ moto: lerp(318, -60, ease(p)), car: 220, head: p < .5 ? lerp(-90, 0, ease(p * 2)) : (p < .75 ? 0 : -90 * ease((p - .75) * 4)), focus: 1, tick: p > .85 ? 1 : 0 }) },
+    { d: 2800, t: '2. Informer', k: 'Informer', s: 'Maintenant seulement, je mets le clignotant gauche, et je laisse aux autres le temps de le voir.',
+      f: (p) => ({ moto: -60, car: 220, head: lerp(-90, 0, ease(Math.min(1, p * 2))), blink: true, tick: 1 }) },
+    { d: 3400, t: '3. Faire', k: 'Faire', s: 'Je change de voie progressivement, puis j\'annule le clignotant.',
+      f: (p) => ({ moto: -60, car: lerp(220, 140, ease(p)), head: 0, blink: p < .85 }) }
+  ];
+  function drawLane(st, p) {
+    const s = st.f(p), mx = 140, my = s.moto;
+    $('car').setAttribute('transform', `translate(${s.car} ${CAR_Y})`);
+    $('vision').setAttribute('transform', `translate(${s.car + DRV.dx} ${CAR_Y + DRV.dy})`);
+    $('fan').setAttribute('transform', `rotate(${s.head || 0})`);
+    $('moto').setAttribute('transform', `translate(${mx} ${my})`);
+    common('', s, mx, my, s.car, CAR_Y);
+    $('badgeT').textContent = st.k;
+    $('dashes').setAttribute('transform', `translate(0 ${paused ? 0 : (performance.now() / 12) % 40})`);
+  }
+
+  // ---------- Scénario 2 : tourner à gauche après un arrêt ----------
+  const TX = 210, TY = 170, MX2 = 135;
+  // Trajectoire du virage : tout droit, quart de cercle, puis vers la gauche
+  function turnPath(p) {
+    const q = ease(p), C = { x: 160, y: 160 }, R = TX - C.x;
+    if (q < .1) return { x: TX, y: lerp(TY, C.y, q / .1), h: 0 };
+    if (q < .6) { const th = (q - .1) / .5 * Math.PI / 2; return { x: C.x + R * Math.cos(th), y: C.y - R * Math.sin(th), h: -th * 180 / Math.PI }; }
+    return { x: lerp(C.x, 34, (q - .6) / .4), y: C.y - R, h: -90 };
+  }
+  const TURN = [
+    { d: 3800, t: 'Situation', k: 'Situation', s: 'J\'ai fait mon VIF, clignotant gauche mis, et je me suis avancé au centre de l\'intersection. Je m\'arrête : la voiture d\'en face est prioritaire, je la laisse passer.',
+      f: (p) => ({ opp: lerp(-60, 600, p), moto: 700, head: 0, blink: true }) },
+    { d: 3600, t: 'Pendant l\'attente : les rétroviseurs', k: 'Rétros', s: 'J\'attends, mais je surveille mes rétroviseurs : une moto arrive derrière moi et se décale pour me dépasser par la gauche.',
+      f: (p) => ({ opp: 700, moto: lerp(640, 262, p), head: 0, blink: true, focus: 1, keep: 'z_mirL' }) },
+    { d: 4000, t: 'En face, c\'est libre… mais', k: 'Angle mort', s: 'La voie d\'en face est dégagée. Pourtant la moto sort des rétros et entre dans mon angle mort gauche. Si je tourne sans regarder, je lui coupe la route.',
+      f: (p) => ({ opp: 700, moto: lerp(262, 195, ease(p)), head: 0, blink: true, focus: 1, keep: 'z_mirL' }) },
+    { d: 4200, t: '1. Revérifier : l\'angle mort', k: 'Coup d\'œil', s: 'Avant de tourner, coup d\'œil vers l\'épaule gauche : ma vision périphérique capte la moto. Je ne bouge pas, je la laisse passer.',
+      f: (p) => ({ opp: 700, moto: lerp(195, 188, p), head: -90 * ease(Math.min(1, p * 2)), blink: true, focus: 1, stop: p > .45 ? 1 : 0, ping: p > .45 }) },
+    { d: 3800, t: 'Revérifier encore', k: 'Libre', s: 'La moto est passée. Rétroviseur, angle mort, en face : tout est libre. Je peux tourner.',
+      f: (p) => ({ opp: 700, moto: lerp(188, -60, ease(p)), head: p < .5 ? lerp(-90, 0, ease(p * 2)) : (p < .75 ? 0 : -90 * ease((p - .75) * 4)), blink: true, focus: 1, tick: p > .85 ? 1 : 0 }) },
+    { d: 4200, t: '3. Faire', k: 'Faire', s: 'Je tourne à gauche en coupant la voie d\'en face franchement, puis je m\'assure que le clignotant est bien annulé.',
+      f: (p) => ({ opp: 700, moto: -60, head: 0, blink: p < .8, car: turnPath(p), novision: true }) }
+  ];
+  function drawTurn(st, p) {
+    const s = st.f(p), c = s.car || { x: TX, y: TY, h: 0 }, mx = MX2, my = s.moto;
+    $('t_car').setAttribute('transform', `translate(${c.x.toFixed(1)} ${c.y.toFixed(1)}) rotate(${c.h.toFixed(1)})`);
+    $('t_vision').setAttribute('transform', `translate(${TX + DRV.dx} ${TY + DRV.dy})`);
+    $('t_vision').setAttribute('opacity', s.novision ? 0 : 1);
+    $('t_fan').setAttribute('transform', `rotate(${s.head || 0})`);
+    $('t_moto').setAttribute('transform', `translate(${mx} ${my})`);
+    $('t_opp').setAttribute('transform', `translate(130 ${s.opp}) rotate(180)`);
+    common('t_', s, mx, my, TX, TY);
+    $('t_badgeT').textContent = st.k;
+  }
+
+  const SC = { lane: { steps: LANE, draw: drawLane, stage: 'stage1' }, turn: { steps: TURN, draw: drawTurn, stage: 'stage2' } };
+  let cur = SC.lane, idx = 0, t0 = performance.now(), paused = false, pauseAt = 0;
+  const stepsEl = $('steps');
+  function buildSteps() {
+    stepsEl.innerHTML = '';
+    cur.steps.slice(1).forEach((st, i) => { const b = document.createElement('button'); b.textContent = st.k; b.addEventListener('click', () => go(i + 1)); stepsEl.appendChild(b); });
+  }
+  function go(i) { idx = i; t0 = performance.now(); if (paused) pauseAt = t0; }
+  function setScen(key) {
+    cur = SC[key];
+    Object.values(SC).forEach((c) => { $(c.stage).hidden = c !== cur; });
+    [...$('scen').children].forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.sc === key)));
+    buildSteps(); go(0);
+    try { history.replaceState(null, '', key === 'turn' ? '#gauche' : location.pathname + location.search); } catch (e) {}
+  }
+  $('scen').addEventListener('click', (e) => { const b = e.target.closest('button[data-sc]'); if (b) setScen(b.dataset.sc); });
+  function draw(p) {
+    const st = cur.steps[idx];
+    cur.draw(st, p);
+    $('capT').textContent = st.t; $('capS').textContent = st.s;
+    [...stepsEl.children].forEach((b, i) => b.setAttribute('aria-current', String(i + 1 === idx)));
+  }
+  function loop(now) {
+    if (!paused) { let p = (now - t0) / cur.steps[idx].d; if (p >= 1) { idx = (idx + 1) % cur.steps.length; t0 = now; p = 0; } draw(clamp(p)); }
+    else draw(clamp((pauseAt - t0) / cur.steps[idx].d));
+    requestAnimationFrame(loop);
+  }
+  $('play').addEventListener('click', () => {
+    if (paused) { t0 += performance.now() - pauseAt; paused = false; $('play').textContent = '⏸ Pause'; }
+    else { paused = true; pauseAt = performance.now(); $('play').textContent = '▶ Lecture'; }
+  });
+  $('restart').addEventListener('click', () => go(0));
+  buildSteps();
+  if (location.hash === '#gauche') setScen('turn');
+  window.addEventListener('hashchange', () => setScen(location.hash === '#gauche' ? 'turn' : 'lane'));
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { paused = true; pauseAt = performance.now(); $('play').textContent = '▶ Lecture'; }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

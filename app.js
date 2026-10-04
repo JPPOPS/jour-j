@@ -260,6 +260,7 @@
         <a class="tile" href="#ecoute">${I.phones}<div><b>Écoute continue</b><div class="small muted">Avec écouteurs</div></div></a>
       </div>
       <a class="btn btn-light" href="#biblio" style="justify-content:space-between">Toutes les questions ${I.chev}</a>
+      <a class="btn btn-light" href="fiches/" style="justify-content:space-between">Fiches animées (conduite) ${I.chev}</a>
       ${install}
       <p class="footer">${CARDS.length} questions uniques issues des 100 fiches officielles · <a href="mentions-legales.html">Mentions légales</a></p>`);
     $app.querySelector('#start').addEventListener('click', () => { session = { queue: buildSession(), i: 0, revealed: false }; sessionStats = { su: 0, hes: 0, rate: 0, cats: {} }; go('#session'); });

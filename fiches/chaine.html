@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chaîne cinématique — Fiche</title>
+<meta name="theme-color" content="#F4F1EA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fiches.css">
+<style>
+  .stage{background:#2B2F36;border-radius:20px;overflow:hidden;position:relative}
+  .stage svg{display:block;width:100%;height:auto}
+  .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .steps button{min-height:44px;border-radius:12px;border:1px solid var(--line2);background:var(--card);font-weight:700;font-size:13px;cursor:pointer;color:var(--ink2);padding:0 4px;line-height:1.1}
+  .steps button[aria-current="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .caption{min-height:120px;font-size:17px;line-height:1.45}
+  .caption b{font-family:var(--display);font-size:20px;display:block;margin-bottom:2px}
+  .ctrl{display:flex;gap:10px;align-items:center}
+  .key{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--soft)}
+  .key:last-child{border-bottom:0}
+  .key .n{flex-shrink:0;width:36px;height:36px;border-radius:18px;color:#fff;font-family:var(--display);font-weight:800;display:flex;align-items:center;justify-content:center}
+  ul.clean{margin:0;padding-left:20px;line-height:1.55}
+  ul.clean li{margin:4px 0}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .two>div{border-radius:14px;padding:12px;line-height:1.45;font-size:15px}
+  .lbl{font-family:'Atkinson Hyperlegible',sans-serif;font-weight:700}
+  .card svg{display:block;width:100%;height:auto}
+</style>
+</head>
+<body>
+<main id="app" style="gap:18px">
+  <div class="row"><a class="icon-btn" href="./" id="backlink" aria-label="Retour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <div><div class="small muted" style="font-weight:700">Fiche · C1.4 Démarrer et s'arrêter · C1.5 Doser · C1.6 Boîte</div><h1 style="font-size:28px;font-weight:800;line-height:1.1">La chaîne cinématique</h1></div></div>
+
+  <p style="margin:0;font-size:17px;line-height:1.5">Le moteur fait tourner les roues en passant par l'<b>embrayage</b> et la <b>boîte de vitesses</b>. Comprendre cette chaîne, c'est comprendre le point de patinage, le régime moteur, le frein moteur et la roue libre. Regarde l'animation étape par étape.</p>
+
+  <div class="stage" aria-label="Animation : moteur, embrayage, boîte de vitesses et roue, avec la pédale d'embrayage, l'accélérateur et le compte-tours">
+    <svg viewBox="0 0 360 400" role="img" aria-labelledby="capT">
+      <defs>
+        <pattern id="stripe" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><rect width="6" height="12" fill="#F4F1EA" opacity=".55"/></pattern>
+        <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="context-stroke"/></marker>
+      </defs>
+      <!-- étiquettes -->
+      <g class="lbl" font-size="12" fill="#F4F1EA" text-anchor="middle">
+        <text x="52" y="58">1 Moteur</text><text x="150" y="58">2 Embrayage</text><text x="222" y="58">3 Boîte</text><text x="306" y="58">4 Roue</text>
+      </g>
+      <!-- arbres (les rayures défilent = ça tourne) -->
+      <g id="sh1"><rect x="92" y="90" width="44" height="12" fill="#9AA0A8"/><rect id="sh1s" x="80" y="90" width="68" height="12" fill="url(#stripe)" clip-path="url(#c1)"/></g>
+      <clipPath id="c1"><rect x="92" y="90" width="44" height="12"/></clipPath>
+      <g id="sh2"><rect id="sh2r" x="156" y="90" width="38" height="12" fill="#9AA0A8"/><rect id="sh2s" x="144" y="90" width="62" height="12" fill="url(#stripe)" clip-path="url(#c2)"/></g>
+      <clipPath id="c2"><rect id="c2r" x="156" y="90" width="38" height="12"/></clipPath>
+      <g id="sh3"><rect x="250" y="90" width="20" height="12" fill="#9AA0A8"/><rect id="sh3s" x="238" y="90" width="44" height="12" fill="url(#stripe)" clip-path="url(#c3)"/></g>
+      <clipPath id="c3"><rect x="250" y="90" width="20" height="12"/></clipPath>
+      <!-- moteur -->
+      <rect x="12" y="66" width="80" height="60" rx="10" fill="#E8590C"/>
+      <g transform="translate(52 96)"><circle r="20" fill="#B8460A"/><g id="fanE"><rect x="-3" y="-18" width="6" height="36" rx="3" fill="#FFE2CC"/><rect x="-18" y="-3" width="36" height="6" rx="3" fill="#FFE2CC"/></g><circle r="5" fill="#E8590C"/></g>
+      <!-- embrayage : disque côté moteur + disque côté boîte -->
+      <g id="discA"><rect x="134" y="66" width="10" height="60" rx="4" fill="#5B8DEF"/><rect id="discAs" x="134" y="40" width="10" height="112" fill="url(#stripe)" clip-path="url(#cA)"/></g>
+      <clipPath id="cA"><rect x="134" y="66" width="10" height="60" rx="4"/></clipPath>
+      <g id="discB"><rect x="0" y="66" width="10" height="60" rx="4" fill="#5B8DEF"/><rect id="discBs" x="0" y="40" width="10" height="112" fill="url(#stripe)" clip-path="url(#cB)"/></g>
+      <clipPath id="cB"><rect id="cBr" x="0" y="66" width="10" height="60" rx="4"/></clipPath>
+      <g id="spark" opacity="0"><path d="M144 76 l6 -8 M144 96 l8 0 M144 116 l6 8" stroke="#FFD43B" stroke-width="3" stroke-linecap="round"/></g>
+      <!-- boîte -->
+      <rect x="194" y="70" width="56" height="52" rx="8" fill="#3E8E3A"/>
+      <g transform="translate(212 96)"><g id="gear"><circle r="11" fill="#A9DBA6"/><g fill="#A9DBA6"><rect x="-3" y="-16" width="6" height="32"/><rect x="-16" y="-3" width="32" height="6"/><rect x="-3" y="-16" width="6" height="32" transform="rotate(45)"/><rect x="-3" y="-16" width="6" height="32" transform="rotate(-45)"/></g><circle r="4" fill="#3E8E3A"/></g></g>
+      <rect x="226" y="84" width="20" height="24" rx="5" fill="#F4F1EA"/><text id="gearT" x="236" y="102" text-anchor="middle" class="lbl" font-size="16" fill="#16181D">N</text>
+      <!-- roue -->
+      <g transform="translate(306 96)"><circle r="38" fill="#16181D" stroke="#9AA0A8" stroke-width="3"/><circle r="22" fill="#5A5F6B"/><g id="wheel" stroke="#D9DCE0" stroke-width="4" stroke-linecap="round"><path d="M0 -20 V20 M-20 0 H20 M-14 -14 L14 14 M-14 14 L14 -14"/></g><circle r="5" fill="#D9DCE0"/><path id="brk" d="M-21 -21 A30 30 0 0 1 21 -21" stroke="#E5484D" stroke-width="9" fill="none" stroke-linecap="round" opacity="0"/></g>
+      <!-- sens de l'entraînement -->
+      <g id="flow" opacity="0"><line id="flowL" x1="30" y1="156" x2="330" y2="156" stroke="#FFB020" stroke-width="5" stroke-linecap="round" marker-end="url(#ah)"/></g>
+      <g id="cut" opacity="0"><circle cx="150" cy="156" r="11" fill="#E5484D"/><path d="M144 150 l12 12 M156 150 l-12 12" stroke="#fff" stroke-width="3" stroke-linecap="round"/></g>
+      <text id="flowT" x="180" y="186" text-anchor="middle" class="lbl" font-size="13" fill="#F4F1EA"></text>
+      <line x1="12" y1="204" x2="348" y2="204" stroke="#3E424B" stroke-width="2"/>
+      <!-- pédales (vue de côté, pivot en haut, conducteur à gauche) -->
+      <g class="lbl" font-size="12" fill="#F4F1EA" text-anchor="middle"><text x="40" y="226">Embrayage</text><text x="40" y="240" font-weight="400" opacity=".8">pied gauche</text><text x="110" y="226">Frein</text><text x="110" y="240" font-weight="400" opacity=".8">pied droit</text><text x="180" y="226">Accélérateur</text><text x="180" y="240" font-weight="400" opacity=".8">pied droit</text></g>
+      <g transform="translate(40 262)">
+        <path id="ppzone" d="" stroke="#FFD43B" stroke-width="10" fill="none" opacity=".55"/>
+        <path id="travC" stroke="#5A5F6B" stroke-width="2" fill="none" stroke-dasharray="3 4"/>
+        <g id="pedC"><rect x="-3" y="0" width="6" height="70" rx="3" fill="#D9DCE0"/><rect x="-13" y="64" width="26" height="12" rx="4" fill="#F4F1EA"/></g>
+        <circle r="6" fill="#9AA0A8"/>
+      </g>
+      <g transform="translate(110 262)">
+        <path id="travF" stroke="#5A5F6B" stroke-width="2" fill="none" stroke-dasharray="3 4"/>
+        <g id="pedF"><rect x="-3" y="0" width="6" height="70" rx="3" fill="#D9DCE0"/><rect x="-14" y="62" width="28" height="14" rx="4" fill="#E5484D"/></g>
+        <circle r="6" fill="#9AA0A8"/>
+      </g>
+      <g transform="translate(180 262)">
+        <path id="travA" stroke="#5A5F6B" stroke-width="2" fill="none" stroke-dasharray="3 4"/>
+        <g id="pedA"><rect x="-3" y="0" width="6" height="70" rx="3" fill="#D9DCE0"/><rect x="-10" y="60" width="20" height="16" rx="4" fill="#F4F1EA"/></g>
+        <circle r="6" fill="#9AA0A8"/>
+      </g>
+      <text x="52" y="388" text-anchor="middle" class="lbl" font-size="11" fill="#FFD43B">point de patinage</text>
+      <!-- compte-tours -->
+      <g transform="translate(290 300)">
+        <path id="arcs" fill="none"/>
+        <g id="ticks"></g>
+        <g id="needle"><path d="M-3 0 L0 -58 L3 0 Z" fill="#E5484D"/></g><circle r="7" fill="#F4F1EA"/>
+        <text y="26" text-anchor="middle" class="lbl" font-size="20" fill="#F4F1EA" id="rpmT">800</text>
+        <text y="42" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#F4F1EA" opacity=".8">tr/min</text>
+        <text y="-78" text-anchor="middle" class="lbl" font-size="12" fill="#F4F1EA">Compte-tours</text>
+      </g>
+      <text id="spdT" x="290" y="384" text-anchor="middle" class="lbl" font-size="15" fill="#F4F1EA">0 km/h</text>
+      <g id="stallB" opacity="0"><rect x="134" y="142" width="92" height="28" rx="14" fill="#E5484D"/><text x="180" y="161" text-anchor="middle" class="lbl" font-size="14" fill="#fff">Calé !</text></g>
+      <g><rect x="12" y="12" width="190" height="30" rx="15" fill="#F4F1EA"/><text id="badgeT" x="107" y="32" text-anchor="middle" class="lbl" font-size="14" fill="#16181D"></text></g>
+    </svg>
+  </div>
+
+  <div class="caption" id="cap" aria-live="polite"><b id="capT"></b><span id="capS"></span></div>
+  <div class="steps" id="steps"></div>
+  <div class="ctrl"><button class="btn btn-dark" id="play" style="flex:1">⏸ Pause</button><button class="btn btn-light" id="restart" style="width:auto;padding:0 18px">Recommencer</button></div>
+
+  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les 4 éléments</h2>
+    <div class="key"><span class="n" style="background:#E8590C">1</span><div><b>Le moteur</b> produit le mouvement. Dès qu'il est démarré, il tourne, même voiture arrêtée : c'est le <b>ralenti</b>.</div></div>
+    <div class="key"><span class="n" style="background:#5B8DEF">2</span><div><b>L'embrayage</b>, ce sont deux disques : l'un tourne avec le moteur, l'autre avec la boîte. Serrés, ils transmettent le mouvement ; écartés, rien ne passe.</div></div>
+    <div class="key"><span class="n" style="background:#3E8E3A">3</span><div><b>La boîte de vitesses</b> choisit le rapport : petit rapport = de la force, grand rapport = de la vitesse. Au <b>point mort</b>, elle ne transmet rien aux roues.</div></div>
+    <div class="key"><span class="n" style="background:#16181D">4</span><div><b>Les roues motrices</b> reçoivent le mouvement et font avancer la voiture.</div></div>
+  </div>
+
+  <div class="card" id="pedale"><h2 style="font-size:20px;margin-bottom:8px">La pédale d'embrayage : 3 positions</h2>
+    <svg viewBox="0 0 320 312" role="img" aria-label="Trois positions de la pédale d'embrayage : enfoncée, disques écartés ; à mi-course, disques qui se touchent ; relevée, disques serrés" id="three"></svg>
+    <p class="small muted" style="margin:8px 0 0">Au point de patinage, le <b>pied gauche ne bouge plus</b> : c'est le pied droit qui dose l'accélérateur. Ensuite, je relève doucement jusqu'au bout.</p>
+  </div>
+
+  <div class="card" id="regime"><h2 style="font-size:20px;margin-bottom:6px">Le régime moteur</h2>
+    <p style="margin:0 0 8px;line-height:1.5">C'est la vitesse de rotation du moteur, en <b>tours par minute</b>. Le compte-tours l'affiche, et <b>l'oreille</b> l'entend : plus le moteur tourne vite, plus il est aigu.</p>
+    <ul class="clean">
+      <li><b>Ralenti</b> : environ 800 tr/min, voiture arrêtée.</li>
+      <li><b>Trop bas</b> en roulant : le moteur broute, tremble, et peut caler. Je rétrograde.</li>
+      <li><b>Trop haut</b> : le moteur hurle et consomme. Je passe le rapport supérieur.</li>
+      <li>Repères pour monter les rapports : vers <b>2 000 à 2 500 tr/min</b> en essence, <b>1 500 à 2 000</b> en diesel. Ce sont des repères : chaque voiture est différente.</li>
+      <li>À la même vitesse, plus le rapport est petit, plus le régime est haut.</li>
+    </ul>
+  </div>
+
+  <div class="card" id="frein"><h2 style="font-size:20px;margin-bottom:8px">Frein moteur ou roue libre ?</h2>
+    <div class="two">
+      <div style="background:#E3E9FB"><b>Frein moteur</b><br>Pied levé de l'accélérateur, <b>vitesse engagée</b>, pédale d'embrayage relevée.<br>Les roues entraînent le moteur : la voiture <b>ralentit toute seule</b>.<br>Plus fort sur un petit rapport.</div>
+      <div style="background:#FDE8E8"><b>Roue libre</b><br>Pédale d'embrayage enfoncée, ou point mort, <b>en roulant</b>.<br>La chaîne est coupée : <b>plus de frein moteur</b>.<br>En descente, la voiture prend de la vitesse.</div>
+    </div>
+    <ul class="clean" style="margin-top:10px">
+      <li>Le frein moteur sert en descente, à l'approche d'un virage, d'une intersection, d'un ralentissement. Pour qu'il freine plus, je rétrograde.</li>
+      <li>J'enfonce l'embrayage seulement <b>juste avant l'arrêt</b>, quand le moteur commence à brouter.</li>
+      <li>Jamais de point mort pour « économiser » en descente.</li>
+    </ul>
+  </div>
+
+  <div class="card" id="ralentir"><h2 style="font-size:20px;margin-bottom:6px">Ralentir, rétrograder, s'arrêter</h2>
+    <div class="key"><span class="n" style="background:#5B8DEF">1</span><div><b>Je lève le pied</b> de l'accélérateur : le frein moteur commence à ralentir la voiture.</div></div>
+    <div class="key"><span class="n" style="background:#E5484D">2</span><div><b>Je freine</b> avec la pédale pour ajuster ma vitesse.</div></div>
+    <div class="key"><span class="n" style="background:#3E8E3A">3</span><div><b>Je rétrograde</b> quand ma vitesse convient au rapport inférieur : débrayer, rapport inférieur, embrayer doucement. Le régime remonte, le frein moteur est plus fort.</div></div>
+    <div class="key"><span class="n" style="background:#16181D">4</span><div><b>Pour m'arrêter</b>, c'est la pédale de frein. Je débraye juste avant l'arrêt, quand le moteur commence à brouter.</div></div>
+    <p class="small muted" style="margin:8px 0 0">Pour ralentir, le frein moteur, renforcé en rétrogradant, est mon frein principal. La pédale de frein ajuste la vitesse et assure l'arrêt. Rétrograder trop tôt, à une vitesse trop élevée, fait s'emballer le moteur et donne un à-coup.</p>
+  </div>
+
+  <div class="card" id="pieds"><h2 style="font-size:20px;margin-bottom:8px">Les pieds sur les pédales</h2>
+    <svg viewBox="0 0 320 200" role="img" aria-label="Trois pédales : embrayage à gauche pour le pied gauche, frein au milieu et accélérateur à droite pour le pied droit, qui pivote sur le talon">
+      <rect x="20" y="14" width="280" height="30" rx="8" fill="#D6D0C4"/>
+      <g fill="#3E424B"><rect x="64" y="44" width="6" height="40"/><rect x="157" y="44" width="6" height="40"/><rect x="250" y="44" width="6" height="30"/></g>
+      <rect x="38" y="80" width="58" height="56" rx="12" fill="#5B8DEF"/><rect x="131" y="80" width="58" height="56" rx="12" fill="#E5484D"/><rect x="230" y="70" width="46" height="76" rx="12" fill="#3E8E3A"/>
+      <g class="lbl" font-size="13" fill="#fff" text-anchor="middle"><text x="67" y="113">E</text><text x="160" y="113">F</text><text x="253" y="113">A</text></g>
+      <g class="lbl" font-size="12" fill="#16181D" text-anchor="middle"><text x="67" y="160">Embrayage</text><text x="160" y="160">Frein</text><text x="253" y="166">Accélérateur</text></g>
+      <path d="M150 182 Q206 166 244 182" stroke="#1F4FD1" stroke-width="4" fill="none" marker-start="url(#ah2)" marker-end="url(#ah2)"/>
+      <circle cx="197" cy="192" r="5" fill="none" stroke="#1F4FD1" stroke-width="3"/>
+      <defs><marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#1F4FD1"/></marker></defs>
+      <text x="67" y="186" text-anchor="middle" class="lbl" font-size="11" fill="#5A5F6B">pied gauche</text>
+      <text x="290" y="196" text-anchor="end" class="lbl" font-size="11" fill="#5A5F6B">pied droit</text>
+    </svg>
+    <ul class="clean" style="margin-top:8px">
+      <li><b>Pied gauche</b> : l'embrayage, et rien d'autre. Quand il ne sert pas, il se pose à gauche, pas sur la pédale.</li>
+      <li><b>Pied droit</b> : frein et accélérateur. Le talon reste posé au sol, à hauteur du frein, et le pied pivote de l'un à l'autre.</li>
+    </ul>
+  </div>
+
+  <div class="card" id="boite"><h2 style="font-size:20px;margin-bottom:8px">La grille de la boîte</h2>
+    <svg viewBox="0 0 320 190" role="img" aria-label="Grille en H : marche arrière, 1 et 3 et 5 en haut, 2 et 4 en bas, point mort au milieu">
+      <g stroke="#3E8E3A" stroke-width="14" stroke-linecap="round" fill="none">
+        <path d="M100 40 V150 M170 40 V150 M240 40 V150 M100 95 H240"/>
+      </g>
+      <path d="M40 40 V95 H100" stroke="#B9B4A9" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <g class="lbl" font-size="18" fill="#16181D" text-anchor="middle"><text x="40" y="26">R</text><text x="100" y="26">1</text><text x="170" y="26">3</text><text x="240" y="26">5</text><text x="100" y="178">2</text><text x="170" y="178">4</text><text x="240" y="178">6</text></g>
+      <circle cx="170" cy="95" r="12" fill="#16181D"/><text x="200" y="89" class="lbl" font-size="12" fill="#5A5F6B">point mort</text>
+    </svg>
+    <ul class="clean" style="margin-top:8px">
+      <li>La <b>marche arrière</b> change de place selon les voitures (en haut à gauche, en bas à gauche, en bas à droite) : le schéma est sur le pommeau.</li>
+      <li>Au point mort, le levier revient de lui-même dans l'axe du milieu (3-4).</li>
+      <li>Je le guide <b>sans le regarder</b>, les yeux restent sur la route.</li>
+    </ul>
+  </div>
+
+  <div class="card" id="auto"><h2 style="font-size:20px;margin-bottom:6px">Et en boîte automatique ?</h2>
+    <ul class="clean">
+      <li>Pas de pédale d'embrayage : la boîte s'en occupe. Le pied gauche ne sert pas.</li>
+      <li><b>P</b> parking, voiture arrêtée seulement · <b>R</b> marche arrière · <b>N</b> neutre, comme le point mort · <b>D</b> marche avant.</li>
+      <li>Je change de position <b>pied sur le frein</b>.</li>
+    </ul>
+  </div>
+
+  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les pièges fréquents</h2>
+    <ul class="clean"><li>Relâcher l'embrayage d'un coup : à-coup ou calage</li><li>Bouger le pied gauche au point de patinage au lieu de doser avec le pied droit</li><li>Garder le pied sur l'embrayage en roulant : roue libre et usure</li><li>Débrayer trop tôt avant de s'arrêter : plus de frein moteur</li><li>Rouler en sous-régime : le moteur broute</li><li>Freiner jusqu'à l'arrêt sans débrayer : calage</li><li>Rétrograder à une vitesse trop élevée : le moteur s'emballe</li><li>Regarder le levier de vitesses</li></ul></div>
+
+  <p class="footer">Fiche de révision. Elle complète les explications de ton enseignant.</p>
+</main>
+<script>
+(function () {
+  'use strict';
+  (function backlink() { // retour : liste des fiches ; ouverte depuis l'outil de l'enseignant (?o=1) : page précédente
+    const bl = document.getElementById('backlink');
+    bl.href = './'; bl.setAttribute('aria-label', 'Toutes les fiches');
+    if (new URLSearchParams(location.search).has('o')) bl.addEventListener('click', function (e) { if (history.length > 1) { e.preventDefault(); history.back(); } });
+  })();
+  const $ = (id) => document.getElementById(id);
+  const ease = (t) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const seg = (p, a, b) => Math.max(0, Math.min(1, (p - a) / (b - a)));
+  const R1 = 125, R2 = 65, R3 = 45; // tr/min par km/h en 1re, 2e, 3e
+
+  // ---- compte-tours : arcs et graduations (0 à 6000 tr/min sur 240°) ----
+  const ang = (rpm) => -120 + Math.min(rpm, 6000) / 6000 * 240;
+  function arc(a1, a2, r) {
+    const p = (a) => [Math.sin(a * Math.PI / 180) * r, -Math.cos(a * Math.PI / 180) * r];
+    const [x1, y1] = p(a1), [x2, y2] = p(a2);
+    return `M${x1.toFixed(1)} ${y1.toFixed(1)} A${r} ${r} 0 ${a2 - a1 > 180 ? 1 : 0} 1 ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+  }
+  (function gauge() {
+    const zones = [[0, 1000, '#FFB020'], [1000, 2500, '#3E8E3A'], [2500, 4500, '#5A5F6B'], [4500, 6000, '#E5484D']];
+    $('arcs').outerHTML = zones.map(([a, b, c]) => `<path d="${arc(ang(a), ang(b), 60)}" stroke="${c}" stroke-width="9" fill="none"/>`).join('');
+    let t = '';
+    for (let k = 0; k <= 6; k++) { const a = ang(k * 1000) * Math.PI / 180; t += `<text x="${(Math.sin(a) * 44).toFixed(1)}" y="${(-Math.cos(a) * 44 + 4).toFixed(1)}" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" font-weight="700" fill="#F4F1EA">${k}</text>`; }
+    $('ticks').innerHTML = t;
+  })();
+
+  // ---- pédales : angle relevée / enfoncée ----
+  const PED_UP = 18, PED_DOWN = -14; // le conducteur est à gauche : enfoncer pousse la pédale vers la droite
+  const pedAngle = (down) => lerp(PED_UP, PED_DOWN, down);
+  const ppt = (d, r) => { const a = pedAngle(d) * Math.PI / 180; return [(-Math.sin(a) * r).toFixed(1), (Math.cos(a) * r).toFixed(1)]; };
+  const arcP = (d1, d2, r) => { const [x1, y1] = ppt(d1, r), [x2, y2] = ppt(d2, r); return `M${x1} ${y1} A${r} ${r} 0 0 ${d2 > d1 ? 0 : 1} ${x2} ${y2}`; };
+  ['travC', 'travF', 'travA'].forEach((id) => $(id).setAttribute('d', arcP(0, 1, 74)));
+  $('ppzone').setAttribute('d', arcP(.38, .62, 74));
+
+  // ---- les étapes ----
+  // c : embrayage (0 = pédale enfoncée / débrayé, 1 = relevée / embrayé) · g : gaz (0-1)
+  // rpm : régime · v : km/h · b : rotation du disque côté boîte (tr/min équivalents) · flow : 'fwd' | 'back' | 'cut' | 'none'
+  const STEPS = [
+    { id: '', k: 'Le moteur tourne', d: 4200, t: 'Le moteur tourne', s: 'Moteur démarré, voiture arrêtée : il tourne au ralenti, environ 800 tr/min. Je suis au point mort : l\'embrayage transmet, mais la boîte ne transmet rien aux roues.',
+      f: (p) => ({ c: 1, g: 0, rpm: 800, v: 0, b: 800, gear: 'N', flow: 'none', ft: 'Point mort : rien ne va aux roues' }) },
+    { id: 'debrayer', k: 'Débrayer', d: 4600, t: 'Débrayer et passer la 1re', s: 'J\'enfonce la pédale d\'embrayage à fond : les deux disques s\'écartent, le moteur tourne seul. Le disque côté boîte s\'arrête : je peux passer la 1re sans craquer.',
+      f: (p) => { const c = 1 - ease(seg(p, 0, .35)); return { c, g: 0, rpm: 800, v: 0, b: 800 * c * c, gear: p > .6 ? '1' : 'N', flow: 'cut', ft: 'Pédale enfoncée : moteur et roues séparés' }; } },
+    { id: 'patinage', k: 'Point de patinage', d: 6200, t: 'Le point de patinage', s: 'Je relève doucement la pédale : les disques se touchent et frottent. Le moteur commence à entraîner la voiture, le régime baisse un peu et le bruit devient plus sourd. Le pied gauche s\'immobilise, le pied droit accélère légèrement.',
+      f: (p) => { const c = lerp(0, .5, ease(seg(p, 0, .35))), touch = seg(p, .33, 1); const g = .18 * seg(p, .4, .7);
+        const v = 6 * ease(touch); const rpm = p < .33 ? 800 : (p < .45 ? lerp(800, 700, seg(p, .33, .45)) : lerp(700, 1100, seg(p, .45, .8)));
+        return { c, g, rpm, v, b: v * R1, gear: '1', flow: touch > 0 ? 'slip' : 'cut', ft: touch > 0 ? 'Les disques frottent : une partie passe' : 'Disques encore écartés' }; } },
+    { id: 'embrayer', k: 'Embrayer', d: 4400, t: 'Embrayer', s: 'Une fois la voiture lancée, je finis de relever la pédale doucement. Les disques sont serrés : moteur, boîte et roues tournent ensemble.',
+      f: (p) => { const q = ease(p), v = lerp(6, 12, q); return { c: lerp(.5, 1, q), g: lerp(.18, .25, q), rpm: lerp(1100, 12 * R1, q), v, b: v * R1, gear: '1', flow: 'fwd', ft: 'Le moteur entraîne les roues' }; } },
+    { id: 'regime', k: 'Régime moteur', d: 7600, t: 'Le régime moteur', s: 'J\'accélère : le régime monte, la voiture prend de la vitesse. Vers 2 000 – 2 500 tr/min, je passe la 2e : débrayer, changer, embrayer. À la même vitesse, en 2e, le régime redescend.',
+      f: (p) => { let c = 1, g, rpm, v, gear = '1', flow = 'fwd', ft = 'Le moteur entraîne les roues';
+        if (p < .55) { const q = ease(seg(p, 0, .55)); rpm = lerp(1500, 3000, q); v = rpm / R1; g = lerp(.25, .7, q); }
+        else { v = 24; const sh = seg(p, .55, .9); g = sh < .5 ? 0 : .35; c = sh < .3 ? 1 - seg(sh, 0, .3) : (sh < .55 ? 0 : seg(sh, .55, 1)); gear = sh > .42 ? '2' : (sh > .3 ? 'N' : '1');
+          rpm = sh < .3 ? lerp(3000, 2600, seg(sh, 0, .3)) : lerp(2600, v * R2, seg(sh, .3, 1)); if (c < .9) { flow = 'cut'; ft = 'Changement de rapport : je débraye'; } }
+        return { c, g, rpm, v, b: gear === '1' ? v * R1 : (gear === '2' ? v * R2 : rpm * c), gear, flow, ft }; } },
+    { id: 'freinmoteur', k: 'Frein moteur', d: 5400, t: 'Le frein moteur', s: 'Je lève le pied de l\'accélérateur, la 2e reste engagée, pédale d\'embrayage relevée. Ce sont maintenant les roues qui entraînent le moteur : il freine la voiture, qui ralentit toute seule. C\'est mon frein principal pour ralentir. Plus le rapport est petit, plus il freine.',
+      f: (p) => { const v = lerp(24, 13, ease(p)); return { c: 1, g: 0, rpm: v * R2, v, b: v * R2, gear: '2', flow: 'back', ft: 'Les roues entraînent le moteur : il freine' }; } },
+    { id: 'retrograder', k: 'Rétrograder', d: 10000, t: 'Ralentir et rétrograder', s: 'En 3e à 45 km/h, je lève le pied : le frein moteur agit, mais en 3e il est faible. Je freine avec la pédale pour ajuster ma vitesse, puis je rétrograde en 2e : débrayer, 2e, embrayer doucement. Le régime remonte et le frein moteur devient plus fort.',
+      f: (p) => { let v, c = 1, g = 0, fb = 0, gear = '3', rpm, flow = 'back', ft;
+        if (p < .15) { const q = seg(p, 0, .15); v = lerp(45, 42, q); g = lerp(.3, 0, seg(q, 0, .3)); ft = 'Pied levé : frein moteur, faible en 3e'; }
+        else if (p < .42) { const q = seg(p, .15, .42); v = lerp(42, 28, ease(q)); fb = .45 * Math.min(1, q * 3); ft = 'Je freine : la pédale ajuste la vitesse'; }
+        else if (p < .64) { const q = seg(p, .42, .64); v = lerp(28, 26, q); fb = lerp(.45, 0, seg(q, 0, .4)); c = q < .25 ? 1 - seg(q, 0, .25) : (q < .5 ? 0 : seg(q, .5, 1)); gear = q < .3 ? '3' : (q < .42 ? 'N' : '2'); flow = c > .9 ? 'back' : 'cut'; ft = 'Je rétrograde : débrayer, 2e, embrayer'; }
+        else { const q = seg(p, .64, 1); v = lerp(26, 14, ease(q)); gear = '2'; ft = 'En 2e : le frein moteur est plus fort'; }
+        const geared = gear === '3' ? v * R3 : (gear === '2' ? v * R2 : 800);
+        rpm = c > .95 ? geared : lerp(800, geared, c);
+        return { c, g, fb, rpm, v, b: gear === 'N' ? rpm * c : geared, gear, flow, ft }; } },
+    { id: 'arret', k: 'S\'arrêter', d: 7000, t: 'S\'arrêter', s: 'Pour m\'arrêter, c\'est la pédale de frein. Je freine progressivement ; quand le moteur commence à brouter, je débraye pour ne pas caler. Je garde le pied sur le frein jusqu\'à l\'arrêt complet, puis je mets le point mort.',
+      f: (p) => { let v, c = 1, fb, gear = '2', flow = 'back', ft, rpm;
+        if (p < .28) { const q = seg(p, 0, .28); v = lerp(14, 11, q); fb = .4 * Math.min(1, q * 3); ft = 'Je freine progressivement'; }
+        else if (p < .38) { v = lerp(11, 10, seg(p, .28, .38)); fb = .4; c = 1 - seg(p, .28, .38); flow = 'cut'; ft = 'Le moteur broute : je débraye'; }
+        else { const q = seg(p, .38, .82); v = lerp(10, 0, ease(q)); fb = q < 1 ? .45 : .3; c = 0; flow = 'cut'; ft = v > 0 ? 'Je freine jusqu\'à l\'arrêt complet' : 'Arrêté : pied sur le frein, point mort'; if (p > .9) gear = 'N'; }
+        rpm = c > .95 ? v * R2 : lerp(800, v * R2, c);
+        return { c, g: 0, fb, rpm, v, b: gear === 'N' ? 0 : v * R2, gear, flow, ft }; } },
+    { id: 'rouelibre', k: 'Roue libre', d: 5400, t: 'La roue libre', s: 'Si j\'enfonce l\'embrayage (ou si je mets le point mort) en roulant, la chaîne est coupée. Le moteur retombe au ralenti, les roues tournent seules : plus de frein moteur. En descente, la voiture accélère. À éviter, sauf juste avant de s\'arrêter.',
+      f: (p) => { const c = 1 - ease(seg(p, 0, .2)), v = lerp(24, 22, p); return { c, g: 0, rpm: c > .5 ? v * R2 : lerp(v * R2, 800, seg(p, .1, .45)), v, b: v * R2, gear: '2', flow: 'cut', ft: 'Chaîne coupée : plus de frein moteur' }; } },
+    { id: 'calage', k: 'Calage', d: 4800, t: 'Le calage', s: 'En 1re, voiture arrêtée, je relâche l\'embrayage d\'un coup sans accélérer. Le moteur n\'a pas assez de force pour entraîner la voiture : le régime s\'effondre, la voiture fait un à-coup et le moteur s\'arrête.',
+      f: (p) => { const c = ease(seg(p, 0, .2)), drop = seg(p, .15, .45); const rpm = lerp(800, 0, drop); const v = p < .45 ? 3 * Math.sin(seg(p, .12, .45) * Math.PI) : 0;
+        return { c, g: 0, rpm, v, b: v * R1, gear: '1', flow: p < .45 ? 'fwd' : 'none', ft: p < .45 ? 'Embrayage relâché d\'un coup' : 'Moteur arrêté', stall: p > .45 }; } }
+  ];
+  const stepsEl = $('steps');
+  STEPS.slice(1).forEach((st, i) => { const b = document.createElement('button'); b.textContent = st.k; b.addEventListener('click', () => go(i + 1)); stepsEl.appendChild(b); });
+
+  let idx = 0, t0 = performance.now(), paused = false, pauseAt = 0, last = performance.now();
+  const ph = { e: 0, b: 0, w: 0 };
+  function go(i) { idx = i; t0 = performance.now(); if (paused) pauseAt = t0; }
+
+  function draw(p, dt) {
+    const st = STEPS[idx], s = st.f(Math.max(0, Math.min(1, p)));
+    // rotations (1 tour visuel par seconde pour 1000 tr/min)
+    if (!paused) { ph.e += s.rpm / 1000 * dt; ph.b += s.b / 1000 * dt; ph.w += s.v / 12 * dt; }
+    const gap = Math.max(0, (.5 - s.c) / .5) * 18; // écart des disques
+    const xB = 144 + gap;
+    $('discB').setAttribute('transform', `translate(${xB} 0)`);
+    $('cBr').setAttribute('x', 0);
+    $('sh2r').setAttribute('x', xB + 10); $('sh2r').setAttribute('width', 194 - xB - 10);
+    $('c2r').setAttribute('x', xB + 10); $('c2r').setAttribute('width', 194 - xB - 10);
+    $('fanE').setAttribute('transform', `rotate(${(ph.e * 360) % 360})`);
+    $('gear').setAttribute('transform', `rotate(${(ph.b * 360) % 360})`);
+    $('wheel').setAttribute('transform', `rotate(${(ph.w * 360) % 360})`);
+    $('sh1s').setAttribute('x', 80 + (ph.e * 12) % 12);
+    $('discAs').setAttribute('y', 40 + (ph.e * 14) % 14);
+    $('discBs').setAttribute('y', 40 + (ph.b * 14) % 14);
+    $('sh2s').setAttribute('x', 144 + gap + (ph.b * 12) % 12);
+    $('sh3s').setAttribute('x', 238 + (ph.w * 24) % 12);
+    $('gearT').textContent = s.gear;
+    const slip = s.flow === 'slip' && s.c > .45 && Math.abs(s.rpm - s.b) > 60;
+    $('spark').setAttribute('opacity', slip && Math.floor(performance.now() / 120) % 2 ? 1 : 0);
+    // sens d'entraînement
+    const fl = $('flowL');
+    if (s.flow === 'fwd' || s.flow === 'slip') { $('flow').setAttribute('opacity', 1); fl.setAttribute('x1', 30); fl.setAttribute('x2', 330); fl.setAttribute('stroke', '#FFB020'); }
+    else if (s.flow === 'back') { $('flow').setAttribute('opacity', 1); fl.setAttribute('x1', 330); fl.setAttribute('x2', 30); fl.setAttribute('stroke', '#5B8DEF'); }
+    else $('flow').setAttribute('opacity', 0);
+    $('cut').setAttribute('opacity', s.flow === 'cut' ? 1 : 0);
+    if (s.flow === 'none' && s.gear === 'N') { $('cut').setAttribute('opacity', 1); $('cut').setAttribute('transform', 'translate(72 0)'); } else $('cut').setAttribute('transform', '');
+    $('flowT').textContent = s.ft || '';
+    // pédales et compte-tours
+    $('pedC').setAttribute('transform', `rotate(${pedAngle(1 - s.c)})`);
+    $('pedA').setAttribute('transform', `rotate(${pedAngle(s.g)})`);
+    $('pedF').setAttribute('transform', `rotate(${pedAngle(s.fb || 0)})`);
+    $('brk').setAttribute('opacity', Math.min(1, (s.fb || 0) * 2));
+    const shake = s.rpm > 0 && s.rpm < 750 ? Math.sin(performance.now() / 30) * 3 : 0;
+    $('needle').setAttribute('transform', `rotate(${ang(Math.max(0, s.rpm)) + shake})`);
+    $('rpmT').textContent = String(Math.round(s.rpm / 50) * 50);
+    $('spdT').textContent = Math.round(s.v) + ' km/h';
+    $('stallB').setAttribute('opacity', s.stall ? 1 : 0);
+    $('badgeT').textContent = st.k;
+    $('capT').textContent = st.t; $('capS').textContent = st.s;
+    [...stepsEl.children].forEach((b, i) => b.setAttribute('aria-current', String(i + 1 === idx)));
+  }
+  function loop(now) {
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    if (!paused) { let p = (now - t0) / STEPS[idx].d; if (p >= 1) { idx = (idx + 1) % STEPS.length; t0 = now; p = 0; } draw(p, dt); }
+    else draw((pauseAt - t0) / STEPS[idx].d, 0);
+    requestAnimationFrame(loop);
+  }
+  $('play').addEventListener('click', () => {
+    if (paused) { t0 += performance.now() - pauseAt; paused = false; $('play').textContent = '⏸ Pause'; }
+    else { paused = true; pauseAt = performance.now(); $('play').textContent = '▶ Lecture'; }
+  });
+  $('restart').addEventListener('click', () => go(0));
+  function fromHash() {
+    const h = location.hash.replace('#', ''); if (!h) return;
+    const i = STEPS.findIndex((s) => s.id === h);
+    if (i > 0) go(i);
+    else if ($(h)) $(h).scrollIntoView();
+  }
+  window.addEventListener('hashchange', fromHash); fromHash();
+
+  // ---- schéma fixe : 3 positions de la pédale ----
+  (function three() {
+    const rows = [['Débrayé', 'pédale enfoncée', 1, 18, 'Disques écartés : rien ne passe'], ['Point de patinage', 'pédale à mi-course', .5, 0, 'Disques qui frottent : une partie passe'], ['Embrayé', 'pédale relevée', 0, -3, 'Disques serrés : tout passe']];
+    let h = '';
+    rows.forEach(([t, sub, down, gap, txt], i) => {
+      const y = 12 + i * 98, a = pedAngle(down);
+      h += `<g transform="translate(0 ${y})">
+        <text x="0" y="14" class="lbl" font-size="14" fill="#16181D">${t}</text><text x="0" y="30" font-family="Atkinson Hyperlegible, sans-serif" font-size="12" fill="#5A5F6B">${sub}</text>
+        <g transform="translate(34 40)"><g transform="rotate(${a}) scale(.5)"><rect x="-3" y="0" width="6" height="84" rx="3" fill="#3E424B"/><rect x="-14" y="78" width="28" height="12" rx="4" fill="#16181D"/></g><circle r="4" fill="#9AA0A8"/></g>
+        <rect x="96" y="42" width="56" height="30" rx="6" fill="#E8590C"/><rect x="152" y="54" width="24" height="6" fill="#9AA0A8"/>
+        <rect x="176" y="34" width="8" height="46" rx="3" fill="#5B8DEF"/><rect x="${187 + gap}" y="34" width="8" height="46" rx="3" fill="#5B8DEF"/><rect x="${195 + gap}" y="54" width="${40 - gap}" height="6" fill="#9AA0A8"/>
+        <rect x="235" y="44" width="30" height="26" rx="5" fill="#3E8E3A"/>
+        ${i === 1 ? '<path d="M184 36 l4 -6 M184 76 l4 6" stroke="#E8A000" stroke-width="2.5" stroke-linecap="round"/>' : ''}
+        <text x="96" y="94" font-family="Atkinson Hyperlegible, sans-serif" font-size="13" font-weight="700" fill="${i === 0 ? '#C2410C' : (i === 1 ? '#8A6100' : '#2F6B2C')}">${txt}</text></g>`;
+    });
+    $('three').innerHTML = h;
+  })();
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { paused = true; pauseAt = performance.now(); $('play').textContent = '▶ Lecture'; }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
