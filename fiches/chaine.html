@@ -26,17 +26,23 @@
   .two>div{border-radius:14px;padding:12px;line-height:1.45;font-size:15px}
   .lbl{font-family:'Atkinson Hyperlegible',sans-serif;font-weight:700}
   .card svg{display:block;width:100%;height:auto}
+  .chap{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .chap button{min-height:52px;border-radius:14px;border:1px solid var(--line2);background:var(--card);font-weight:800;font-size:15px;cursor:pointer;color:var(--ink2);line-height:1.15;padding:4px 8px}
+  .chap button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+  .steps.n2{grid-template-columns:1fr 1fr}
 </style>
 </head>
 <body>
 <main id="app" style="gap:18px">
   <div class="row"><a class="icon-btn" href="./" id="backlink" aria-label="Retour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
-    <div><div class="small muted" style="font-weight:700">Fiche · C1.4 Démarrer et s'arrêter · C1.5 Doser · C1.6 Boîte</div><h1 style="font-size:28px;font-weight:800;line-height:1.1">La chaîne cinématique</h1></div></div>
+    <div><div class="small muted" style="font-weight:700">Fiche · Comment la voiture avance</div><h1 style="font-size:28px;font-weight:800;line-height:1.1">Du moteur aux roues</h1></div></div>
 
-  <p style="margin:0;font-size:17px;line-height:1.5">Le moteur fait tourner les roues en passant par l'<b>embrayage</b> et la <b>boîte de vitesses</b>. Comprendre cette chaîne, c'est comprendre le point de patinage, le régime moteur, le frein moteur et la roue libre. Regarde l'animation étape par étape.</p>
+  <p style="margin:0;font-size:18px;line-height:1.5">Le moteur fait tourner les roues. Mais il passe par 2 étapes : l’<b>embrayage</b> et la <b>boîte de vitesses</b>. C’est la <b>chaîne cinématique</b>. L’animation est en <b>4 parties</b> : fais-les dans l’ordre.</p>
 
+  <div class="chap" id="chap" role="group" aria-label="Choisir une partie"></div>
+  <p id="chapI" style="margin:-6px 0 0;font-size:16px;line-height:1.4;color:var(--ink2)"></p>
   <div class="stage" aria-label="Animation : moteur, embrayage, boîte de vitesses et roue, avec la pédale d'embrayage, l'accélérateur et le compte-tours">
-    <svg viewBox="0 0 360 400" role="img" aria-labelledby="capT">
+    <svg id="scene" viewBox="0 0 360 400" role="img" aria-labelledby="capT">
       <defs>
         <pattern id="stripe" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><rect width="6" height="12" fill="#F4F1EA" opacity=".55"/></pattern>
         <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="context-stroke"/></marker>
@@ -73,18 +79,19 @@
       <text id="flowT" x="180" y="186" text-anchor="middle" class="lbl" font-size="13" fill="#F4F1EA"></text>
       <line x1="12" y1="204" x2="348" y2="204" stroke="#3E424B" stroke-width="2"/>
       <!-- pédales (vue de côté, pivot en haut, conducteur à gauche) -->
-      <g class="lbl" font-size="12" fill="#F4F1EA" text-anchor="middle"><text x="40" y="226">Embrayage</text><text x="40" y="240" font-weight="400" opacity=".8">pied gauche</text><text x="110" y="226">Frein</text><text x="110" y="240" font-weight="400" opacity=".8">pied droit</text><text x="180" y="226">Accélérateur</text><text x="180" y="240" font-weight="400" opacity=".8">pied droit</text></g>
+      <g class="lbl" font-size="12" fill="#F4F1EA" text-anchor="middle"><text x="40" y="226">Embrayage</text><text x="40" y="240" font-weight="400" opacity=".8">pied gauche</text><text x="180" y="226">Accélérateur</text><text x="180" y="240" font-weight="400" opacity=".8">pied droit</text></g>
       <g transform="translate(40 262)">
         <path id="ppzone" d="" stroke="#FFD43B" stroke-width="10" fill="none" opacity=".55"/>
         <path id="travC" stroke="#5A5F6B" stroke-width="2" fill="none" stroke-dasharray="3 4"/>
         <g id="pedC"><rect x="-3" y="0" width="6" height="70" rx="3" fill="#D9DCE0"/><rect x="-13" y="64" width="26" height="12" rx="4" fill="#F4F1EA"/></g>
         <circle r="6" fill="#9AA0A8"/>
       </g>
+      <g id="grpF"><g class="lbl" font-size="12" fill="#F4F1EA" text-anchor="middle"><text x="110" y="226">Frein</text><text x="110" y="240" font-weight="400" opacity=".8">pied droit</text></g>
       <g transform="translate(110 262)">
         <path id="travF" stroke="#5A5F6B" stroke-width="2" fill="none" stroke-dasharray="3 4"/>
         <g id="pedF"><rect x="-3" y="0" width="6" height="70" rx="3" fill="#D9DCE0"/><rect x="-14" y="62" width="28" height="14" rx="4" fill="#E5484D"/></g>
         <circle r="6" fill="#9AA0A8"/>
-      </g>
+      </g></g>
       <g transform="translate(180 262)">
         <path id="travA" stroke="#5A5F6B" stroke-width="2" fill="none" stroke-dasharray="3 4"/>
         <g id="pedA"><rect x="-3" y="0" width="6" height="70" rx="3" fill="#D9DCE0"/><rect x="-10" y="60" width="20" height="16" rx="4" fill="#F4F1EA"/></g>
@@ -109,48 +116,48 @@
   <div class="caption" id="cap" aria-live="polite"><b id="capT"></b><span id="capS"></span></div>
   <div class="steps" id="steps"></div>
   <div class="ctrl"><button class="btn btn-dark" id="play" style="flex:1">⏸ Pause</button><button class="btn btn-light" id="restart" style="width:auto;padding:0 18px">Recommencer</button></div>
+  <button class="btn btn-primary" id="nextChap"></button>
 
-  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les 4 éléments</h2>
-    <div class="key"><span class="n" style="background:#E8590C">1</span><div><b>Le moteur</b> produit le mouvement. Dès qu'il est démarré, il tourne, même voiture arrêtée : c'est le <b>ralenti</b>.</div></div>
-    <div class="key"><span class="n" style="background:#5B8DEF">2</span><div><b>L'embrayage</b>, ce sont deux disques : l'un tourne avec le moteur, l'autre avec la boîte. Serrés, ils transmettent le mouvement ; écartés, rien ne passe.</div></div>
-    <div class="key"><span class="n" style="background:#3E8E3A">3</span><div><b>La boîte de vitesses</b> choisit le rapport : petit rapport = de la force, grand rapport = de la vitesse. Au <b>point mort</b>, elle ne transmet rien aux roues.</div></div>
-    <div class="key"><span class="n" style="background:#16181D">4</span><div><b>Les roues motrices</b> reçoivent le mouvement et font avancer la voiture.</div></div>
+  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les 4 pièces</h2>
+    <div class="key"><span class="n" style="background:#E8590C">1</span><div><b>Le moteur</b> fait le mouvement. Il tourne dès qu’on le démarre, même voiture arrêtée.</div></div>
+    <div class="key"><span class="n" style="background:#5B8DEF">2</span><div><b>L’embrayage</b> : 2 disques. Collés, le mouvement passe. Séparés, rien ne passe.</div></div>
+    <div class="key"><span class="n" style="background:#3E8E3A">3</span><div><b>La boîte de vitesses</b> : 1re = de la force. 5e = de la vitesse. Point mort = rien ne passe.</div></div>
+    <div class="key"><span class="n" style="background:#16181D">4</span><div><b>Les roues</b> reçoivent le mouvement. La voiture avance.</div></div>
   </div>
 
-  <div class="card" id="pedale"><h2 style="font-size:20px;margin-bottom:8px">La pédale d'embrayage : 3 positions</h2>
+  <div class="card" id="pedale"><h2 style="font-size:20px;margin-bottom:8px">La pédale d’embrayage : 3 positions</h2>
     <svg viewBox="0 0 320 312" role="img" aria-label="Trois positions de la pédale d'embrayage : enfoncée, disques écartés ; à mi-course, disques qui se touchent ; relevée, disques serrés" id="three"></svg>
-    <p class="small muted" style="margin:8px 0 0">Au point de patinage, le <b>pied gauche ne bouge plus</b> : c'est le pied droit qui dose l'accélérateur. Ensuite, je relève doucement jusqu'au bout.</p>
+    <p class="small muted" style="margin:8px 0 0">Au point de patinage, le <b>pied gauche ne bouge plus</b>. C’est le pied droit qui accélère un peu. Ensuite, je relève doucement.</p>
   </div>
 
   <div class="card" id="regime"><h2 style="font-size:20px;margin-bottom:6px">Le régime moteur</h2>
-    <p style="margin:0 0 8px;line-height:1.5">C'est la vitesse de rotation du moteur, en <b>tours par minute</b>. Le compte-tours l'affiche, et <b>l'oreille</b> l'entend : plus le moteur tourne vite, plus il est aigu.</p>
+    <p style="margin:0 0 8px;line-height:1.5">C’est <b>la vitesse du moteur</b>. Le compte-tours la montre. Ton <b>oreille</b> l’entend : plus il tourne vite, plus il fait de bruit.</p>
     <ul class="clean">
-      <li><b>Ralenti</b> : environ 800 tr/min, voiture arrêtée.</li>
-      <li><b>Trop bas</b> en roulant : le moteur broute, tremble, et peut caler. Je rétrograde.</li>
-      <li><b>Trop haut</b> : le moteur hurle et consomme. Je passe le rapport supérieur.</li>
-      <li>Repères pour monter les rapports : vers <b>2 000 à 2 500 tr/min</b> en essence, <b>1 500 à 2 000</b> en diesel. Ce sont des repères : chaque voiture est différente.</li>
-      <li>À la même vitesse, plus le rapport est petit, plus le régime est haut.</li>
+      <li><b>Arrêté</b> : le moteur tourne doucement, environ 800 tours par minute.</li>
+      <li><b>Trop bas</b> : le moteur tremble et peut caler. Je descends une vitesse.</li>
+      <li><b>Trop haut</b> : le moteur crie. Je monte une vitesse.</li>
+      <li>Pour monter une vitesse : vers <b>2&nbsp;000 à 2&nbsp;500</b> tours en essence, <b>1&nbsp;500 à 2&nbsp;000</b> en diesel. Ça change un peu selon la voiture.</li>
     </ul>
   </div>
 
   <div class="card" id="frein"><h2 style="font-size:20px;margin-bottom:8px">Frein moteur ou roue libre ?</h2>
     <div class="two">
-      <div style="background:#E3E9FB"><b>Frein moteur</b><br>Pied levé de l'accélérateur, <b>vitesse engagée</b>, pédale d'embrayage relevée.<br>Les roues entraînent le moteur : la voiture <b>ralentit toute seule</b>.<br>Plus fort sur un petit rapport.</div>
-      <div style="background:#FDE8E8"><b>Roue libre</b><br>Pédale d'embrayage enfoncée, ou point mort, <b>en roulant</b>.<br>La chaîne est coupée : <b>plus de frein moteur</b>.<br>En descente, la voiture prend de la vitesse.</div>
+      <div style="background:#E3E9FB"><b>Frein moteur</b><br>Pied levé, une vitesse passée, embrayage relevé.<br>Le moteur retient la voiture : <b>elle ralentit toute seule</b>.<br>Plus fort en petite vitesse.</div>
+      <div style="background:#FDE8E8"><b>Roue libre</b><br>Embrayage enfoncé ou point mort, <b>en roulant</b>.<br>Plus rien ne retient : <b>la voiture file</b>.<br>En descente, elle accélère !</div>
     </div>
     <ul class="clean" style="margin-top:10px">
-      <li>Le frein moteur sert en descente, à l'approche d'un virage, d'une intersection, d'un ralentissement. Pour qu'il freine plus, je rétrograde.</li>
-      <li>J'enfonce l'embrayage seulement <b>juste avant l'arrêt</b>, quand le moteur commence à brouter.</li>
-      <li>Jamais de point mort pour « économiser » en descente.</li>
+      <li>Le frein moteur sert en descente, avant un virage, avant un carrefour. Pour qu’il freine plus, je descends une vitesse.</li>
+      <li>J’enfonce l’embrayage <b>juste avant de m’arrêter</b>, quand le moteur tremble.</li>
+      <li>Jamais de point mort en descente.</li>
     </ul>
   </div>
 
-  <div class="card" id="ralentir"><h2 style="font-size:20px;margin-bottom:6px">Ralentir, rétrograder, s'arrêter</h2>
-    <div class="key"><span class="n" style="background:#5B8DEF">1</span><div><b>Je lève le pied</b> de l'accélérateur : le frein moteur commence à ralentir la voiture.</div></div>
-    <div class="key"><span class="n" style="background:#E5484D">2</span><div><b>Je freine</b> avec la pédale pour ajuster ma vitesse.</div></div>
-    <div class="key"><span class="n" style="background:#3E8E3A">3</span><div><b>Je rétrograde</b> quand ma vitesse convient au rapport inférieur : débrayer, rapport inférieur, embrayer doucement. Le régime remonte, le frein moteur est plus fort.</div></div>
-    <div class="key"><span class="n" style="background:#16181D">4</span><div><b>Pour m'arrêter</b>, c'est la pédale de frein. Je débraye juste avant l'arrêt, quand le moteur commence à brouter.</div></div>
-    <p class="small muted" style="margin:8px 0 0">Pour ralentir, le frein moteur, renforcé en rétrogradant, est mon frein principal. La pédale de frein ajuste la vitesse et assure l'arrêt. Rétrograder trop tôt, à une vitesse trop élevée, fait s'emballer le moteur et donne un à-coup.</p>
+  <div class="card" id="ralentir"><h2 style="font-size:20px;margin-bottom:6px">Ralentir et s’arrêter</h2>
+    <div class="key"><span class="n" style="background:#5B8DEF">1</span><div><b>Je lève le pied</b> : le moteur commence à freiner.</div></div>
+    <div class="key"><span class="n" style="background:#E5484D">2</span><div><b>Je freine</b> avec la pédale pour régler ma vitesse.</div></div>
+    <div class="key"><span class="n" style="background:#3E8E3A">3</span><div><b>Je descends une vitesse</b> (je rétrograde) : embrayage, vitesse plus petite, je relâche doucement. Le moteur freine plus fort.</div></div>
+    <div class="key"><span class="n" style="background:#16181D">4</span><div><b>Pour m’arrêter</b>, c’est la pédale de frein. J’enfonce l’embrayage juste avant l’arrêt.</div></div>
+    <p class="small muted" style="margin:8px 0 0">Pour ralentir, le moteur fait le gros du travail. La pédale de frein règle la vitesse et arrête la voiture. En cas de danger : pédale de frein, fort !</p>
   </div>
 
   <div class="card" id="pieds"><h2 style="font-size:20px;margin-bottom:8px">Les pieds sur les pédales</h2>
@@ -167,8 +174,8 @@
       <text x="290" y="196" text-anchor="end" class="lbl" font-size="11" fill="#5A5F6B">pied droit</text>
     </svg>
     <ul class="clean" style="margin-top:8px">
-      <li><b>Pied gauche</b> : l'embrayage, et rien d'autre. Quand il ne sert pas, il se pose à gauche, pas sur la pédale.</li>
-      <li><b>Pied droit</b> : frein et accélérateur. Le talon reste posé au sol, à hauteur du frein, et le pied pivote de l'un à l'autre.</li>
+      <li><b>Pied gauche</b> : seulement l’embrayage. Quand il ne sert pas, il se repose à gauche.</li>
+      <li><b>Pied droit</b> : frein et accélérateur. Le talon reste par terre, le pied pivote.</li>
     </ul>
   </div>
 
@@ -182,22 +189,22 @@
       <circle cx="170" cy="95" r="12" fill="#16181D"/><text x="200" y="89" class="lbl" font-size="12" fill="#5A5F6B">point mort</text>
     </svg>
     <ul class="clean" style="margin-top:8px">
-      <li>La <b>marche arrière</b> change de place selon les voitures (en haut à gauche, en bas à gauche, en bas à droite) : le schéma est sur le pommeau.</li>
-      <li>Au point mort, le levier revient de lui-même dans l'axe du milieu (3-4).</li>
-      <li>Je le guide <b>sans le regarder</b>, les yeux restent sur la route.</li>
+      <li>La <b>marche arrière (R)</b> n’est pas au même endroit dans toutes les voitures. Regarde le dessin sur le levier.</li>
+      <li>Au point mort, le levier revient tout seul au milieu.</li>
+      <li>Je change de vitesse <b>sans regarder le levier</b>. Les yeux restent sur la route.</li>
     </ul>
   </div>
 
   <div class="card" id="auto"><h2 style="font-size:20px;margin-bottom:6px">Et en boîte automatique ?</h2>
     <ul class="clean">
-      <li>Pas de pédale d'embrayage : la boîte s'en occupe. Le pied gauche ne sert pas.</li>
-      <li><b>P</b> parking, voiture arrêtée seulement · <b>R</b> marche arrière · <b>N</b> neutre, comme le point mort · <b>D</b> marche avant.</li>
-      <li>Je change de position <b>pied sur le frein</b>.</li>
+      <li>Pas de pédale d’embrayage. Le pied gauche ne sert à rien.</li>
+      <li><b>P</b> = parking · <b>R</b> = marche arrière · <b>N</b> = point mort · <b>D</b> = en avant.</li>
+      <li>Pour changer de lettre : <b>pied sur le frein</b>.</li>
     </ul>
   </div>
 
-  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les pièges fréquents</h2>
-    <ul class="clean"><li>Relâcher l'embrayage d'un coup : à-coup ou calage</li><li>Bouger le pied gauche au point de patinage au lieu de doser avec le pied droit</li><li>Garder le pied sur l'embrayage en roulant : roue libre et usure</li><li>Débrayer trop tôt avant de s'arrêter : plus de frein moteur</li><li>Rouler en sous-régime : le moteur broute</li><li>Freiner jusqu'à l'arrêt sans débrayer : calage</li><li>Rétrograder à une vitesse trop élevée : le moteur s'emballe</li><li>Regarder le levier de vitesses</li></ul></div>
+  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les erreurs à éviter</h2>
+    <ul class="clean"><li>Lâcher l’embrayage d’un coup : la voiture saute ou cale</li><li>Bouger le pied gauche au point de patinage</li><li>Laisser le pied sur l’embrayage en roulant</li><li>Enfoncer l’embrayage trop tôt avant de s’arrêter</li><li>Rouler avec le moteur trop bas : il tremble</li><li>Freiner jusqu’à l’arrêt sans embrayage : on cale</li><li>Descendre une vitesse trop vite : le moteur crie et la voiture secoue</li><li>Regarder le levier</li></ul></div>
 
   <p class="footer">Fiche de révision. Elle complète les explications de ton enseignant.</p>
 </main>
@@ -242,55 +249,78 @@
   // c : embrayage (0 = pédale enfoncée / débrayé, 1 = relevée / embrayé) · g : gaz (0-1)
   // rpm : régime · v : km/h · b : rotation du disque côté boîte (tr/min équivalents) · flow : 'fwd' | 'back' | 'cut' | 'none'
   const STEPS = [
-    { id: '', k: 'Le moteur tourne', d: 4200, t: 'Le moteur tourne', s: 'Moteur démarré, voiture arrêtée : il tourne au ralenti, environ 800 tr/min. Je suis au point mort : l\'embrayage transmet, mais la boîte ne transmet rien aux roues.',
+    { id: '', k: 'Le moteur tourne', d: 4200, t: 'Le moteur tourne', s: 'La voiture est arrêtée, mais le moteur tourne doucement. Je suis au point mort : rien ne va aux roues.',
       f: (p) => ({ c: 1, g: 0, rpm: 800, v: 0, b: 800, gear: 'N', flow: 'none', ft: 'Point mort : rien ne va aux roues' }) },
-    { id: 'debrayer', k: 'Débrayer', d: 4600, t: 'Débrayer et passer la 1re', s: 'J\'enfonce la pédale d\'embrayage à fond : les deux disques s\'écartent, le moteur tourne seul. Le disque côté boîte s\'arrête : je peux passer la 1re sans craquer.',
-      f: (p) => { const c = 1 - ease(seg(p, 0, .35)); return { c, g: 0, rpm: 800, v: 0, b: 800 * c * c, gear: p > .6 ? '1' : 'N', flow: 'cut', ft: 'Pédale enfoncée : moteur et roues séparés' }; } },
-    { id: 'patinage', k: 'Point de patinage', d: 6200, t: 'Le point de patinage', s: 'Je relève doucement la pédale : les disques se touchent et frottent. Le moteur commence à entraîner la voiture, le régime baisse un peu et le bruit devient plus sourd. Le pied gauche s\'immobilise, le pied droit accélère légèrement.',
+    { id: 'relie', k: 'Tout est relié', d: 4600, t: 'Tout est relié', s: 'Une vitesse est passée et la pédale d’embrayage est en haut. Moteur, embrayage, boîte, roues : tout tourne ensemble. La voiture avance.',
+      f: (p) => ({ c: 1, g: .25, rpm: 1500, v: 12, b: 1500, gear: '1', flow: 'fwd', ft: 'Le moteur fait tourner les roues' }) },
+    { id: 'coupe', k: 'Embrayage enfoncé', d: 4600, t: 'J’enfonce l’embrayage : c’est coupé', s: 'Les 2 disques se séparent. Le moteur tourne toujours, mais plus rien ne va aux roues. C’est comme débrancher une prise.',
+      f: (p) => { const c = 1 - ease(seg(p, 0, .3)), v = lerp(12, 0, ease(seg(p, .1, 1))); return { c, g: 0, rpm: c > .5 ? lerp(800, 1500, c) : 800, v, b: v * R1, gear: '1', flow: c < .5 ? 'cut' : 'fwd', ft: c < .5 ? 'Coupé : plus rien ne passe' : 'Le moteur fait tourner les roues', fb: .3 * seg(p, .4, .7) }; } },
+    { id: 'debrayer', k: 'Embrayage enfoncé', d: 4600, t: 'J’enfonce l’embrayage', s: 'J’appuie à fond sur l’embrayage. Les 2 disques se séparent. Le moteur tourne tout seul. Je peux passer la 1re.',
+      f: (p) => { const c = 1 - ease(seg(p, 0, .35)); return { c, g: 0, rpm: 800, v: 0, b: 800 * c * c, gear: p > .6 ? '1' : 'N', flow: 'cut', ft: 'Pédale enfoncée : plus rien ne passe' }; } },
+    { id: 'patinage', k: 'Point de patinage', d: 6200, t: 'Le point de patinage', s: 'Je relève la pédale tout doucement. Les disques se touchent : la voiture commence à avancer. Le bruit du moteur change. Mon pied gauche ne bouge plus. Mon pied droit accélère un peu.',
       f: (p) => { const c = lerp(0, .5, ease(seg(p, 0, .35))), touch = seg(p, .33, 1); const g = .18 * seg(p, .4, .7);
         const v = 6 * ease(touch); const rpm = p < .33 ? 800 : (p < .45 ? lerp(800, 700, seg(p, .33, .45)) : lerp(700, 1100, seg(p, .45, .8)));
-        return { c, g, rpm, v, b: v * R1, gear: '1', flow: touch > 0 ? 'slip' : 'cut', ft: touch > 0 ? 'Les disques frottent : une partie passe' : 'Disques encore écartés' }; } },
-    { id: 'embrayer', k: 'Embrayer', d: 4400, t: 'Embrayer', s: 'Une fois la voiture lancée, je finis de relever la pédale doucement. Les disques sont serrés : moteur, boîte et roues tournent ensemble.',
-      f: (p) => { const q = ease(p), v = lerp(6, 12, q); return { c: lerp(.5, 1, q), g: lerp(.18, .25, q), rpm: lerp(1100, 12 * R1, q), v, b: v * R1, gear: '1', flow: 'fwd', ft: 'Le moteur entraîne les roues' }; } },
-    { id: 'regime', k: 'Régime moteur', d: 7600, t: 'Le régime moteur', s: 'J\'accélère : le régime monte, la voiture prend de la vitesse. Vers 2 000 – 2 500 tr/min, je passe la 2e : débrayer, changer, embrayer. À la même vitesse, en 2e, le régime redescend.',
-      f: (p) => { let c = 1, g, rpm, v, gear = '1', flow = 'fwd', ft = 'Le moteur entraîne les roues';
-        if (p < .55) { const q = ease(seg(p, 0, .55)); rpm = lerp(1500, 3000, q); v = rpm / R1; g = lerp(.25, .7, q); }
-        else { v = 24; const sh = seg(p, .55, .9); g = sh < .5 ? 0 : .35; c = sh < .3 ? 1 - seg(sh, 0, .3) : (sh < .55 ? 0 : seg(sh, .55, 1)); gear = sh > .42 ? '2' : (sh > .3 ? 'N' : '1');
-          rpm = sh < .3 ? lerp(3000, 2600, seg(sh, 0, .3)) : lerp(2600, v * R2, seg(sh, .3, 1)); if (c < .9) { flow = 'cut'; ft = 'Changement de rapport : je débraye'; } }
-        return { c, g, rpm, v, b: gear === '1' ? v * R1 : (gear === '2' ? v * R2 : rpm * c), gear, flow, ft }; } },
-    { id: 'freinmoteur', k: 'Frein moteur', d: 5400, t: 'Le frein moteur', s: 'Je lève le pied de l\'accélérateur, la 2e reste engagée, pédale d\'embrayage relevée. Ce sont maintenant les roues qui entraînent le moteur : il freine la voiture, qui ralentit toute seule. C\'est mon frein principal pour ralentir. Plus le rapport est petit, plus il freine.',
-      f: (p) => { const v = lerp(24, 13, ease(p)); return { c: 1, g: 0, rpm: v * R2, v, b: v * R2, gear: '2', flow: 'back', ft: 'Les roues entraînent le moteur : il freine' }; } },
-    { id: 'retrograder', k: 'Rétrograder', d: 10000, t: 'Ralentir et rétrograder', s: 'En 3e à 45 km/h, je lève le pied : le frein moteur agit, mais en 3e il est faible. Je freine avec la pédale pour ajuster ma vitesse, puis je rétrograde en 2e : débrayer, 2e, embrayer doucement. Le régime remonte et le frein moteur devient plus fort.',
+        return { c, g, rpm, v, b: v * R1, gear: '1', flow: touch > 0 ? 'slip' : 'cut', ft: touch > 0 ? 'Les disques se touchent : ça avance' : 'Les disques sont encore séparés' }; } },
+    { id: 'embrayer', k: 'Embrayage relâché', d: 4400, t: 'Je relâche l’embrayage', s: 'La voiture roule. Je relève la pédale jusqu’au bout, doucement. Les disques sont collés : tout tourne ensemble.',
+      f: (p) => { const q = ease(p), v = lerp(6, 12, q); return { c: lerp(.5, 1, q), g: lerp(.18, .25, q), rpm: lerp(1100, 12 * R1, q), v, b: v * R1, gear: '1', flow: 'fwd', ft: 'Le moteur fait tourner les roues' }; } },
+    { id: 'regime', k: 'J’accélère', d: 5200, t: 'Le régime moteur', s: 'J’accélère : le moteur tourne plus vite (l’aiguille monte), et la voiture va plus vite. Écoute : le bruit monte aussi.',
+      f: (p) => { const q = ease(p), rpm = lerp(1500, 2800, q), v = rpm / R1; return { c: 1, g: lerp(.25, .7, q), rpm, v, b: rpm, gear: '1', flow: 'fwd', ft: 'L’aiguille monte : le moteur tourne vite' }; } },
+    { id: 'passer2', k: 'Je passe la 2e', d: 6000, t: 'Je passe la 2e', s: 'Le moteur tourne vite : je passe la 2e. Embrayage enfoncé, 2e, je relâche. La voiture va aussi vite, mais le moteur tourne moins vite : l’aiguille redescend.',
+      f: (p) => { const v = 22.4, sh = seg(p, .1, .8); const g = sh < .5 ? 0 : .35; const c = sh < .3 ? 1 - seg(sh, 0, .3) : (sh < .55 ? 0 : seg(sh, .55, 1)); const gear = sh > .42 ? '2' : (sh > .3 ? 'N' : '1');
+        const rpm = p < .1 ? 2800 : (sh < .3 ? lerp(2800, 2400, seg(sh, 0, .3)) : lerp(2400, v * R2, seg(sh, .3, 1)));
+        return { c, g, rpm, v, b: gear === '1' ? v * R1 : (gear === '2' ? v * R2 : rpm * c), gear, flow: c < .9 ? 'cut' : 'fwd', ft: c < .9 ? 'Embrayage enfoncé : je change de vitesse' : (gear === '2' ? 'En 2e : l’aiguille redescend' : 'Le moteur tourne vite') }; } },
+    { id: 'freinmoteur', k: 'Frein moteur', d: 5400, t: 'Le frein moteur', s: 'Je lève le pied. La 2e reste passée. Maintenant, ce sont les roues qui font tourner le moteur. Le moteur retient la voiture : elle ralentit toute seule. Pour ralentir, c’est mon frein principal.',
+      f: (p) => { const v = lerp(24, 13, ease(p)); return { c: 1, g: 0, rpm: v * R2, v, b: v * R2, gear: '2', flow: 'back', ft: 'Les roues font tourner le moteur : il freine' }; } },
+    { id: 'retrograder', k: 'Descendre une vitesse', d: 10000, t: 'Ralentir et descendre une vitesse', s: 'Je roule en 3e. Je lève le pied : le moteur freine un peu. Je freine avec la pédale. Puis je passe la 2e : le moteur tourne plus vite et freine plus fort.',
       f: (p) => { let v, c = 1, g = 0, fb = 0, gear = '3', rpm, flow = 'back', ft;
-        if (p < .15) { const q = seg(p, 0, .15); v = lerp(45, 42, q); g = lerp(.3, 0, seg(q, 0, .3)); ft = 'Pied levé : frein moteur, faible en 3e'; }
-        else if (p < .42) { const q = seg(p, .15, .42); v = lerp(42, 28, ease(q)); fb = .45 * Math.min(1, q * 3); ft = 'Je freine : la pédale ajuste la vitesse'; }
-        else if (p < .64) { const q = seg(p, .42, .64); v = lerp(28, 26, q); fb = lerp(.45, 0, seg(q, 0, .4)); c = q < .25 ? 1 - seg(q, 0, .25) : (q < .5 ? 0 : seg(q, .5, 1)); gear = q < .3 ? '3' : (q < .42 ? 'N' : '2'); flow = c > .9 ? 'back' : 'cut'; ft = 'Je rétrograde : débrayer, 2e, embrayer'; }
-        else { const q = seg(p, .64, 1); v = lerp(26, 14, ease(q)); gear = '2'; ft = 'En 2e : le frein moteur est plus fort'; }
+        if (p < .15) { const q = seg(p, 0, .15); v = lerp(45, 42, q); g = lerp(.3, 0, seg(q, 0, .3)); ft = 'Pied levé : en 3e, le moteur freine peu'; }
+        else if (p < .42) { const q = seg(p, .15, .42); v = lerp(42, 28, ease(q)); fb = .45 * Math.min(1, q * 3); ft = 'Je freine avec la pédale'; }
+        else if (p < .64) { const q = seg(p, .42, .64); v = lerp(28, 26, q); fb = lerp(.45, 0, seg(q, 0, .4)); c = q < .25 ? 1 - seg(q, 0, .25) : (q < .5 ? 0 : seg(q, .5, 1)); gear = q < .3 ? '3' : (q < .42 ? 'N' : '2'); flow = c > .9 ? 'back' : 'cut'; ft = 'Je passe la 2e'; }
+        else { const q = seg(p, .64, 1); v = lerp(26, 14, ease(q)); gear = '2'; ft = 'En 2e : le moteur freine plus fort'; }
         const geared = gear === '3' ? v * R3 : (gear === '2' ? v * R2 : 800);
         rpm = c > .95 ? geared : lerp(800, geared, c);
         return { c, g, fb, rpm, v, b: gear === 'N' ? rpm * c : geared, gear, flow, ft }; } },
-    { id: 'arret', k: 'S\'arrêter', d: 7000, t: 'S\'arrêter', s: 'Pour m\'arrêter, c\'est la pédale de frein. Je freine progressivement ; quand le moteur commence à brouter, je débraye pour ne pas caler. Je garde le pied sur le frein jusqu\'à l\'arrêt complet, puis je mets le point mort.',
+    { id: 'arret', k: 'S\'arrêter', d: 7000, t: 'S’arrêter', s: 'Pour m’arrêter, c’est la pédale de frein. Je freine doucement. Quand le moteur tremble, j’enfonce l’embrayage pour ne pas caler. Arrêté : pied sur le frein, point mort.',
       f: (p) => { let v, c = 1, fb, gear = '2', flow = 'back', ft, rpm;
-        if (p < .28) { const q = seg(p, 0, .28); v = lerp(14, 11, q); fb = .4 * Math.min(1, q * 3); ft = 'Je freine progressivement'; }
-        else if (p < .38) { v = lerp(11, 10, seg(p, .28, .38)); fb = .4; c = 1 - seg(p, .28, .38); flow = 'cut'; ft = 'Le moteur broute : je débraye'; }
-        else { const q = seg(p, .38, .82); v = lerp(10, 0, ease(q)); fb = q < 1 ? .45 : .3; c = 0; flow = 'cut'; ft = v > 0 ? 'Je freine jusqu\'à l\'arrêt complet' : 'Arrêté : pied sur le frein, point mort'; if (p > .9) gear = 'N'; }
+        if (p < .28) { const q = seg(p, 0, .28); v = lerp(14, 11, q); fb = .4 * Math.min(1, q * 3); ft = 'Je freine doucement'; }
+        else if (p < .38) { v = lerp(11, 10, seg(p, .28, .38)); fb = .4; c = 1 - seg(p, .28, .38); flow = 'cut'; ft = 'Le moteur tremble : j’enfonce l’embrayage'; }
+        else { const q = seg(p, .38, .82); v = lerp(10, 0, ease(q)); fb = q < 1 ? .45 : .3; c = 0; flow = 'cut'; ft = v > 0 ? 'Je freine jusqu’à l’arrêt' : 'Arrêté : pied sur le frein, point mort'; if (p > .9) gear = 'N'; }
         rpm = c > .95 ? v * R2 : lerp(800, v * R2, c);
         return { c, g: 0, fb, rpm, v, b: gear === 'N' ? 0 : v * R2, gear, flow, ft }; } },
-    { id: 'rouelibre', k: 'Roue libre', d: 5400, t: 'La roue libre', s: 'Si j\'enfonce l\'embrayage (ou si je mets le point mort) en roulant, la chaîne est coupée. Le moteur retombe au ralenti, les roues tournent seules : plus de frein moteur. En descente, la voiture accélère. À éviter, sauf juste avant de s\'arrêter.',
-      f: (p) => { const c = 1 - ease(seg(p, 0, .2)), v = lerp(24, 22, p); return { c, g: 0, rpm: c > .5 ? v * R2 : lerp(v * R2, 800, seg(p, .1, .45)), v, b: v * R2, gear: '2', flow: 'cut', ft: 'Chaîne coupée : plus de frein moteur' }; } },
-    { id: 'calage', k: 'Calage', d: 4800, t: 'Le calage', s: 'En 1re, voiture arrêtée, je relâche l\'embrayage d\'un coup sans accélérer. Le moteur n\'a pas assez de force pour entraîner la voiture : le régime s\'effondre, la voiture fait un à-coup et le moteur s\'arrête.',
+    { id: 'rouelibre', k: 'Roue libre', d: 5400, t: 'La roue libre', s: 'J’enfonce l’embrayage en roulant (ou je mets le point mort). Plus rien ne retient la voiture : elle file. En descente, elle accélère ! À éviter, sauf juste avant de s’arrêter.',
+      f: (p) => { const c = 1 - ease(seg(p, 0, .2)), v = lerp(24, 22, p); return { c, g: 0, rpm: c > .5 ? v * R2 : lerp(v * R2, 800, seg(p, .1, .45)), v, b: v * R2, gear: '2', flow: 'cut', ft: 'Plus rien ne retient la voiture' }; } },
+    { id: 'calage', k: 'Je cale', d: 4800, t: 'Je cale', s: 'En 1re, je lâche l’embrayage d’un coup, sans accélérer. Le moteur n’a pas assez de force. La voiture saute… et le moteur s’arrête.',
       f: (p) => { const c = ease(seg(p, 0, .2)), drop = seg(p, .15, .45); const rpm = lerp(800, 0, drop); const v = p < .45 ? 3 * Math.sin(seg(p, .12, .45) * Math.PI) : 0;
-        return { c, g: 0, rpm, v, b: v * R1, gear: '1', flow: p < .45 ? 'fwd' : 'none', ft: p < .45 ? 'Embrayage relâché d\'un coup' : 'Moteur arrêté', stall: p > .45 }; } }
+        return { c, g: 0, rpm, v, b: v * R1, gear: '1', flow: p < .45 ? 'fwd' : 'none', ft: p < .45 ? 'Embrayage lâché d’un coup' : 'Moteur arrêté', stall: p > .45 }; } }
   ];
+  const STEP_BY = Object.fromEntries(STEPS.map((x) => [x.id, x]));
+  const CHAP = [
+    { id: 'pieces', t: '1. Les pièces', i: 'Comment le moteur fait tourner les roues.', steps: ['', 'relie', 'coupe'], small: true },
+    { id: 'demarrer', t: '2. Démarrer', i: 'Partir sans caler : le point de patinage.', steps: ['debrayer', 'patinage', 'embrayer', 'calage'], noBrake: true },
+    { id: 'vitesse', t: '3. Le moteur tourne vite', i: 'Le compte-tours : quand passer la vitesse suivante.', steps: ['regime', 'passer2'], noBrake: true },
+    { id: 'ralentir', t: '4. Ralentir', i: 'Le moteur qui freine, la pédale de frein, et le piège de la roue libre.', steps: ['freinmoteur', 'retrograder', 'arret', 'rouelibre'] }
+  ];
+  let ch = CHAP[0], LIST = [];
   const stepsEl = $('steps');
-  STEPS.slice(1).forEach((st, i) => { const b = document.createElement('button'); b.textContent = st.k; b.addEventListener('click', () => go(i + 1)); stepsEl.appendChild(b); });
-
+  CHAP.forEach((c, n) => { const b = document.createElement('button'); b.textContent = c.t; b.dataset.n = n; b.addEventListener('click', () => setChap(n)); $('chap').appendChild(b); });
+  $('nextChap').addEventListener('click', () => { const n = CHAP.indexOf(ch); if (n < CHAP.length - 1) setChap(n + 1); else { setChap(0); } window.scrollTo({ top: $('chap').offsetTop - 12, behavior: 'smooth' }); });
+  function setChap(n, stepId) {
+    ch = CHAP[n]; LIST = ch.steps.map((id) => STEP_BY[id]);
+    [...$('chap').children].forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.n === n)));
+    $('chapI').textContent = ch.i;
+    $('scene').setAttribute('viewBox', ch.small ? '0 0 360 200' : '0 0 360 400');
+    $('grpF').style.display = ch.noBrake ? 'none' : '';
+    stepsEl.innerHTML = ''; stepsEl.className = 'steps' + (LIST.length % 2 === 0 ? ' n2' : '');
+    LIST.forEach((st, i) => { const b = document.createElement('button'); b.textContent = st.k; b.addEventListener('click', () => go(i)); stepsEl.appendChild(b); });
+    $('nextChap').textContent = n < CHAP.length - 1 ? 'Partie suivante : ' + CHAP[n + 1].t.replace(/^\d\. /, '') + ' ›' : 'Revoir depuis le début ›';
+    go(Math.max(0, stepId ? ch.steps.indexOf(stepId) : 0));
+  }
   let idx = 0, t0 = performance.now(), paused = false, pauseAt = 0, last = performance.now();
   const ph = { e: 0, b: 0, w: 0 };
   function go(i) { idx = i; t0 = performance.now(); if (paused) pauseAt = t0; }
 
   function draw(p, dt) {
-    const st = STEPS[idx], s = st.f(Math.max(0, Math.min(1, p)));
+    const st = LIST[idx], s = st.f(Math.max(0, Math.min(1, p)));
     // rotations (1 tour visuel par seconde pour 1000 tr/min)
     if (!paused) { ph.e += s.rpm / 1000 * dt; ph.b += s.b / 1000 * dt; ph.w += s.v / 12 * dt; }
     const gap = Math.max(0, (.5 - s.c) / .5) * 18; // écart des disques
@@ -330,12 +360,12 @@
     $('stallB').setAttribute('opacity', s.stall ? 1 : 0);
     $('badgeT').textContent = st.k;
     $('capT').textContent = st.t; $('capS').textContent = st.s;
-    [...stepsEl.children].forEach((b, i) => b.setAttribute('aria-current', String(i + 1 === idx)));
+    [...stepsEl.children].forEach((b, i) => b.setAttribute('aria-current', String(i === idx)));
   }
   function loop(now) {
     const dt = Math.min(.05, (now - last) / 1000); last = now;
-    if (!paused) { let p = (now - t0) / STEPS[idx].d; if (p >= 1) { idx = (idx + 1) % STEPS.length; t0 = now; p = 0; } draw(p, dt); }
-    else draw((pauseAt - t0) / STEPS[idx].d, 0);
+    if (!paused) { let p = (now - t0) / LIST[idx].d; if (p >= 1) { idx = (idx + 1) % LIST.length; t0 = now; p = 0; } draw(p, dt); }
+    else draw((pauseAt - t0) / LIST[idx].d, 0);
     requestAnimationFrame(loop);
   }
   $('play').addEventListener('click', () => {
@@ -344,16 +374,17 @@
   });
   $('restart').addEventListener('click', () => go(0));
   function fromHash() {
-    const h = location.hash.replace('#', ''); if (!h) return;
-    const i = STEPS.findIndex((s) => s.id === h);
-    if (i > 0) go(i);
-    else if ($(h)) $(h).scrollIntoView();
+    const h = location.hash.replace('#', '');
+    const n = CHAP.findIndex((c) => c.id === h || (h && c.steps.includes(h)));
+    if (n >= 0) return setChap(n, CHAP[n].id === h ? null : h);
+    if (!h) return setChap(0);
+    setChap(0); if ($(h)) $(h).scrollIntoView();
   }
   window.addEventListener('hashchange', fromHash); fromHash();
 
   // ---- schéma fixe : 3 positions de la pédale ----
   (function three() {
-    const rows = [['Débrayé', 'pédale enfoncée', 1, 18, 'Disques écartés : rien ne passe'], ['Point de patinage', 'pédale à mi-course', .5, 0, 'Disques qui frottent : une partie passe'], ['Embrayé', 'pédale relevée', 0, -3, 'Disques serrés : tout passe']];
+    const rows = [['Pédale en bas', 'embrayage enfoncé', 1, 18, 'Disques séparés : rien ne passe'], ['Point de patinage', 'pédale à moitié', .5, 0, 'Disques qui se touchent : ça avance'], ['Pédale en haut', 'embrayage relâché', 0, -3, 'Disques collés : tout passe']];
     let h = '';
     rows.forEach(([t, sub, down, gap, txt], i) => {
       const y = 12 + i * 98, a = pedAngle(down);

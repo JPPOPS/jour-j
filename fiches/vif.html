@@ -30,9 +30,9 @@
 <body>
 <main id="app" style="gap:18px">
   <div class="row"><a class="icon-btn" href="./" id="backlink" aria-label="Retour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
-    <div><div class="small muted" style="font-weight:700">Fiche · C1.8 Regarder autour de soi et avertir</div><h1 style="font-size:28px;font-weight:800;line-height:1.1">Vérifier, Informer, Faire</h1></div></div>
+    <div><div class="small muted" style="font-weight:700">Fiche · Regarder avant de bouger</div><h1 style="font-size:28px;font-weight:800;line-height:1.1">Vérifier, Informer, Faire</h1></div></div>
 
-  <p style="margin:0;font-size:17px;line-height:1.5">Avant de te déplacer sur le côté (démarrer, changer de voie, dépasser, tourner), tu suis toujours le même ordre : <b>Vérifier</b>, puis <b>Informer</b> quand c'est sûr, puis <b>Faire</b>. Regarde l'animation étape par étape.</p>
+  <p style="margin:0;font-size:18px;line-height:1.5">Avant de bouger sur le côté, tu fais toujours <b>3 choses, dans l’ordre</b> :<br><b>1. Vérifier</b> : je regarde.<br><b>2. Informer</b> : je préviens.<br><b>3. Faire</b> : j’y vais.</p>
 
   <div class="seg" id="scen" role="group" aria-label="Choisir la situation"><button data-sc="lane" aria-pressed="true">Changement de voie</button><button data-sc="turn" aria-pressed="false">Tourner à gauche</button></div>
   <div class="stage" id="stage1" aria-label="Animation : changement de voie avec une moto qui passe des rétroviseurs à l'angle mort">
@@ -121,29 +121,29 @@
       <g id="t_stopi" opacity="0"><circle cx="330" cy="30" r="18" fill="#C2410C"/><rect x="320" y="26" width="20" height="8" rx="2" fill="#fff"/></g>
     </svg>
   </div>
-  <div class="legend2"><span><i style="background:#F2C230"></i>vision centrale</span><span><i style="background:#5CC27A"></i>vision périphérique et rétro intérieur</span><span><i style="background:#A8E0B5"></i>rétros extérieurs</span><span><i style="background:#E5484D"></i>angles morts et montants</span><span><i style="background:#9AA0A8"></i>véhicule d'en face</span></div>
+  <div class="legend2"><span><i style="background:#F2C230"></i>je regarde</span><span><i style="background:#5CC27A"></i>coin de l’œil et rétro du milieu</span><span><i style="background:#A8E0B5"></i>rétros des côtés</span><span><i style="background:#E5484D"></i>je ne vois pas</span><span><i style="background:#9AA0A8"></i>voiture d’en face</span></div>
 
   <div class="caption" id="cap" aria-live="polite"><b id="capT">Situation</b><span id="capS"></span></div>
   <div class="steps" id="steps"></div>
   <div class="ctrl"><button class="btn btn-dark" id="play" style="flex:1">⏸ Pause</button><button class="btn btn-light" id="restart" style="width:auto;padding:0 18px">Recommencer</button></div>
 
-  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les 3 temps</h2>
-    <div class="key"><span class="n">V</span><div><b>Vérifier</b> — rétroviseur intérieur, rétroviseur du côté où je vais, puis coup d'œil vers l'épaule pour l'angle mort. Si ce n'est pas libre, j'attends et je revérifie.</div></div>
-    <div class="key"><span class="n">I</span><div><b>Informer</b> — seulement quand je suis sûr de pouvoir bouger : clignotant, en laissant aux autres le temps de le voir.</div></div>
-    <div class="key"><span class="n">F</span><div><b>Faire</b> — je réalise l'action (changer de voie, démarrer, tourner…) progressivement, puis j'annule le clignotant.</div></div>
+  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les 3 étapes</h2>
+    <div class="key"><span class="n">1</span><div><b>Vérifier</b> : rétro du milieu, rétro du côté où je vais, puis coup d’œil sur l’épaule. Pas libre ? J’attends.</div></div>
+    <div class="key"><span class="n">2</span><div><b>Informer</b> : seulement quand c’est libre, je mets le clignotant.</div></div>
+    <div class="key"><span class="n">3</span><div><b>Faire</b> : je bouge doucement. Puis j’arrête le clignotant.</div></div>
   </div>
 
   <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Pourquoi tourner la tête ?</h2>
-    <p style="margin:0 0 8px;line-height:1.5">Ta <b>vision centrale</b> est étroite : elle sert à lire les détails. Ta <b>vision périphérique</b> est large : elle ne voit pas les détails, mais elle <b>capte très bien le mouvement</b>.</p>
-    <p style="margin:0;line-height:1.5">Quand un véhicule sort de la zone des rétroviseurs, il passe derrière le montant de la voiture : c'est l'<b>angle mort</b>. En tournant la tête vers l'épaule, tu fais pivoter ta vision périphérique sur cette zone : si quelque chose bouge, tu le captes tout de suite. Inutile de fixer : un coup d'œil suffit.</p>
+    <p style="margin:0 0 8px;line-height:1.5">Le <b>centre de ton œil</b> voit les détails, mais il voit petit. Le <b>coin de ton œil</b> voit flou, mais il <b>repère tout ce qui bouge</b>.</p>
+    <p style="margin:0;line-height:1.5">Les rétros ne montrent pas tout. Il reste une zone cachée : l’<b>angle mort</b>. Un petit coup d’œil sur l’épaule suffit : le coin de ton œil voit si quelque chose bouge.</p>
   </div>
 
   <div class="card"><h2 style="font-size:20px;margin-bottom:8px">Ce que voit le conducteur</h2>
     <svg id="map" viewBox="0 0 320 320" role="img" aria-label="Vue de dessus : vision centrale en jaune vers l'avant, vision périphérique en vert sur les côtés avant, angles morts en rouge sur les côtés arrière et au niveau des montants du pare-brise, rétroviseurs en vert vers l'arrière" style="width:100%;height:auto;border-radius:12px;background:#F7F5F0"></svg>
-    <p class="small muted" style="margin:8px 0 0">Schéma de principe : les zones exactes dépendent du véhicule, du réglage des rétroviseurs et de la position du conducteur.</p>
+    <p class="small muted" style="margin:8px 0 0">Les zones changent un peu selon la voiture et le réglage des rétros.</p>
   </div>
 
-  <div class="card"><h2 style="font-size:20px;margin-bottom:8px">Les angles morts en hauteur</h2>
+  <div class="card"><h2 style="font-size:20px;margin-bottom:8px">Caché devant et derrière</h2>
     <svg viewBox="0 0 320 170" role="img" aria-label="Vue de côté : zone non visible juste devant et juste derrière la voiture, au ras du sol, où un enfant ou un obstacle bas peut être caché" style="width:100%;height:auto;border-radius:12px;background:#EAF2FB">
       <rect y="140" width="320" height="30" fill="#B9B4A9"/>
       <!-- zones cachées sous la ligne de regard -->
@@ -163,14 +163,14 @@
       <text x="30" y="160" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" font-weight="700" fill="#16181D">devant</text>
       <text x="262" y="160" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" font-weight="700" fill="#16181D">derrière</text>
     </svg>
-    <p class="small muted" style="margin:8px 0 0">Juste devant et juste derrière la voiture, au ras du sol, un enfant ou un obstacle bas peut être caché. Avant de démarrer ou de reculer, fais le tour du regard, voire le tour du véhicule.</p>
+    <p class="small muted" style="margin:8px 0 0">Juste devant et juste derrière la voiture, un enfant ou un petit objet peut être caché. Avant de partir ou de reculer, regarde bien tout autour.</p>
   </div>
 
-  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Quand l'utiliser ?</h2>
-    <ul class="clean"><li>Au démarrage, en quittant le bord du trottoir</li><li>Pour changer de voie, dépasser et se rabattre</li><li>Pour tourner à droite : vélos et trottinettes qui remontent à ta droite</li><li>Pour tourner à gauche, <b>surtout après un arrêt</b> (quand tu attends que le véhicule d'en face passe) : un deux-roues ou une voiture peut être en train de te dépasser par la gauche</li><li>En sortie de giratoire</li><li>Sur une voie d'insertion</li><li>Pour s'arrêter ou se garer</li></ul></div>
+  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Quand ?</h2>
+    <ul class="clean"><li>Quand je pars du trottoir</li><li>Quand je change de voie ou que je double</li><li>Quand je tourne à droite : attention aux vélos</li><li>Quand je tourne à gauche, <b>surtout après avoir attendu</b> : quelqu’un peut me doubler</li><li>Quand je sors d’un rond-point</li><li>Quand j’entre sur une voie rapide</li><li>Quand je me gare</li></ul></div>
 
-  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les pièges fréquents</h2>
-    <ul class="clean"><li>Mettre le clignotant avant d'avoir vérifié, ou <b>après</b> avoir commencé à bouger</li><li>Oublier l'angle mort : le rétroviseur ne montre pas tout</li><li>Vérifier, attendre longtemps, puis bouger sans revérifier</li><li>Tourner le volant en même temps que la tête</li><li>Oublier l'angle mort droit avant de tourner à droite</li><li>Oublier l'angle mort gauche avant de tourner à gauche après un arrêt : pendant l'attente, quelqu'un a pu commencer à te dépasser</li></ul></div>
+  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les erreurs à éviter</h2>
+    <ul class="clean"><li>Mettre le clignotant avant de regarder, ou trop tard</li><li>Oublier l’épaule : les rétros ne voient pas tout</li><li>Regarder, attendre longtemps, puis partir sans regarder à nouveau</li><li>Tourner le volant en même temps que la tête</li><li>Oublier l’épaule droite avant de tourner à droite</li><li>Oublier l’épaule gauche quand j’ai attendu pour tourner à gauche</li></ul></div>
 
   <p class="footer">Fiche de révision. Elle complète les explications de ton enseignant.</p>
 </main>
@@ -220,7 +220,7 @@
     ['mirL', 'mirR', 'mirC', 'blindL', 'blindR', 'perL', 'perR', 'pilL', 'pilR', 'cen'].forEach((k) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', sector(Z[k][0], Z[k][1], 160)); if (MM[k]) p.setAttribute('transform', MM[k]); p.setAttribute('fill', col[k]); p.setAttribute('opacity', '.8'); g.appendChild(p); });
     svg.appendChild(g);
     svg.insertAdjacentHTML('beforeend', '<g transform="translate(160 170)"><rect x="-28" y="-20" width="7" height="9" rx="2" fill="#1F4FD1" stroke="#16181D" stroke-width="1.5"/><rect x="21" y="-20" width="7" height="9" rx="2" fill="#1F4FD1" stroke="#16181D" stroke-width="1.5"/><rect x="-22" y="-42" width="44" height="84" rx="12" fill="#1F4FD1" stroke="#16181D" stroke-width="2"/><rect x="-16" y="-26" width="32" height="16" rx="4" fill="#C9D6F7"/><circle cx="-8" cy="-5" r="6" fill="#16181D"/></g>' +
-      ['<text x="160" y="40" text-anchor="middle">Vision centrale</text>', '<text x="54" y="112" text-anchor="middle">Vision</text><text x="54" y="126" text-anchor="middle">périphérique</text>', '<text x="266" y="112" text-anchor="middle">Vision</text><text x="266" y="126" text-anchor="middle">périphérique</text>', '<text x="50" y="228" text-anchor="middle">Angle mort</text>', '<text x="270" y="228" text-anchor="middle">Angle mort</text>', '<text x="160" y="312" text-anchor="middle">Rétro intérieur</text>', '<text x="62" y="292" text-anchor="middle">Rétro gauche</text>', '<text x="258" y="292" text-anchor="middle">Rétro droit</text>'].map((t) => t.replace(/<text /g, '<text font-family="Atkinson Hyperlegible, sans-serif" font-size="13" font-weight="700" fill="#16181D" ')).join(''));
+      ['<text x="160" y="40" text-anchor="middle">Je regarde</text>', '<text x="54" y="112" text-anchor="middle">Coin</text><text x="54" y="126" text-anchor="middle">de l’œil</text>', '<text x="266" y="112" text-anchor="middle">Coin</text><text x="266" y="126" text-anchor="middle">de l’œil</text>', '<text x="50" y="228" text-anchor="middle">Angle mort</text>', '<text x="270" y="228" text-anchor="middle">Angle mort</text>', '<text x="160" y="312" text-anchor="middle">Rétro du milieu</text>', '<text x="62" y="292" text-anchor="middle">Rétro gauche</text>', '<text x="258" y="292" text-anchor="middle">Rétro droit</text>'].map((t) => t.replace(/<text /g, '<text font-family="Atkinson Hyperlegible, sans-serif" font-size="13" font-weight="700" fill="#16181D" ')).join(''));
   })();
 
   const DRV = { dx: -10, dy: -4 };
@@ -242,7 +242,7 @@
     if (inR) return 'mirR';
     return 'blind';
   }
-  const TAG = { mirCL: 'rétros intérieur et gauche', mirCR: 'rétros intérieur et droit', mirC: 'rétro intérieur', mirL: 'rétro gauche', mirR: 'rétro droit', blind: 'angle mort', per: 'vision périphérique', cen: 'vision centrale', pil: 'derrière le montant' };
+  const TAG = { mirCL: 'rétro du milieu et de gauche', mirCR: 'rétro du milieu et de droite', mirC: 'rétro du milieu', mirL: 'rétro de gauche', mirR: 'rétro de droite', blind: 'angle mort, invisible !', per: 'coin de l’œil', cen: 'je la regarde', pil: 'cachée par le montant' };
   const ZONE_EL = { mirCL: ['z_mirC', 'z_mirL'], mirCR: ['z_mirC', 'z_mirR'], mirC: ['z_mirC'], mirL: ['z_mirL'], mirR: ['z_mirR'], blind: ['z_blindL'], per: ['z_perL'], cen: ['z_cen'], pil: ['z_pilL'] };
   const ZIDS = ['z_mirC', 'z_mirL', 'z_mirR', 'z_blindL', 'z_blindR', 'z_perL', 'z_perR', 'z_pilL', 'z_pilR', 'z_cen'];
 
@@ -270,19 +270,19 @@
   // ---------- Scénario 1 : changement de voie ----------
   const CAR_Y = 300;
   const LANE = [
-    { d: 3200, t: 'Situation', k: 'Situation', s: 'Je roule sur la voie de droite et je veux passer à gauche. En jaune ce que je regarde, en vert ce que je perçois, en rouge ce que je ne vois pas.',
+    { d: 3200, t: 'Le décor', k: 'Départ', s: 'Je suis à droite. Je veux aller à gauche. Jaune : ce que je regarde. Vert : ce que je vois du coin de l’œil. Rouge : ce que je ne vois pas.',
       f: (p) => ({ moto: lerp(560, 480, p), car: 220, head: 0 }) },
-    { d: 3600, t: '1. Vérifier : les rétroviseurs', k: 'Rétros', s: 'Rétroviseur intérieur, puis rétroviseur gauche : la moto arrive, je la vois dans la zone des rétroviseurs.',
+    { d: 3600, t: '1. Je regarde mes rétros', k: 'Rétros', s: 'Rétro du milieu, puis rétro de gauche. Une moto arrive. Je la vois.',
       f: (p) => ({ moto: lerp(480, 420, p), car: 220, head: 0, focus: 1, keep: 'z_mirL' }) },
-    { d: 4200, t: 'La moto sort des rétros', k: 'Sortie rétro', s: 'La moto sort de la zone des rétroviseurs et passe derrière le montant gauche : elle entre dans l\'angle mort. Je ne la vois plus.',
+    { d: 4200, t: 'La moto disparaît !', k: 'Disparue', s: 'La moto sort de mes rétros. Elle est dans l’angle mort : la zone que je ne vois pas.',
       f: (p) => ({ moto: lerp(420, 330, ease(p)), car: 220, head: 0, focus: 1, keep: 'z_mirL' }) },
-    { d: 4200, t: '1. Vérifier : l\'angle mort', k: 'Angle mort', s: 'Coup d\'œil vers l\'épaule gauche : ma vision périphérique pivote sur l\'angle mort et capte le mouvement de la moto. Pas libre : pas de clignotant, j\'attends.',
+    { d: 4200, t: '1. Coup d’œil sur l’épaule', k: 'Épaule', s: 'Je tourne vite la tête à gauche. Le coin de mon œil voit la moto bouger. Pas libre ? Pas de clignotant. J’attends.',
       f: (p) => ({ moto: lerp(330, 318, p), car: 220, head: -90 * ease(Math.min(1, p * 2)), focus: 1, stop: p > .45 ? 1 : 0, ping: p > .45 }) },
-    { d: 3600, t: '1. Vérifier à nouveau', k: 'Libre', s: 'La moto me dépasse. Je revérifie rétroviseur et angle mort : c\'est libre, je suis sûr de pouvoir bouger.',
+    { d: 3600, t: '1. Je regarde encore', k: 'Libre', s: 'La moto est passée. Je regarde encore : rétro et épaule. C’est libre !',
       f: (p) => ({ moto: lerp(318, -60, ease(p)), car: 220, head: p < .5 ? lerp(-90, 0, ease(p * 2)) : (p < .75 ? 0 : -90 * ease((p - .75) * 4)), focus: 1, tick: p > .85 ? 1 : 0 }) },
-    { d: 2800, t: '2. Informer', k: 'Informer', s: 'Maintenant seulement, je mets le clignotant gauche, et je laisse aux autres le temps de le voir.',
+    { d: 2800, t: '2. Je préviens', k: 'Clignotant', s: 'Maintenant seulement, je mets le clignotant. Les autres savent ce que je vais faire.',
       f: (p) => ({ moto: -60, car: 220, head: lerp(-90, 0, ease(Math.min(1, p * 2))), blink: true, tick: 1 }) },
-    { d: 3400, t: '3. Faire', k: 'Faire', s: 'Je change de voie progressivement, puis j\'annule le clignotant.',
+    { d: 3400, t: '3. J’y vais', k: 'J’y vais', s: 'Je change de voie doucement. Puis j’arrête le clignotant.',
       f: (p) => ({ moto: -60, car: lerp(220, 140, ease(p)), head: 0, blink: p < .85 }) }
   ];
   function drawLane(st, p) {
@@ -306,17 +306,17 @@
     return { x: lerp(C.x, 34, (q - .6) / .4), y: C.y - R, h: -90 };
   }
   const TURN = [
-    { d: 3800, t: 'Situation', k: 'Situation', s: 'J\'ai fait mon VIF, clignotant gauche mis, et je me suis avancé au centre de l\'intersection. Je m\'arrête : la voiture d\'en face est prioritaire, je la laisse passer.',
+    { d: 3800, t: 'Le décor', k: 'Départ', s: 'Je veux tourner à gauche. Mon clignotant est mis. Je suis au milieu du carrefour. J’attends : la voiture d’en face passe d’abord.',
       f: (p) => ({ opp: lerp(-60, 600, p), moto: 700, head: 0, blink: true }) },
-    { d: 3600, t: 'Pendant l\'attente : les rétroviseurs', k: 'Rétros', s: 'J\'attends, mais je surveille mes rétroviseurs : une moto arrive derrière moi et se décale pour me dépasser par la gauche.',
+    { d: 3600, t: 'J’attends… et je surveille', k: 'Rétros', s: 'Pendant que j’attends, je regarde mes rétros. Une moto arrive derrière moi. Elle veut me doubler par la gauche.',
       f: (p) => ({ opp: 700, moto: lerp(640, 262, p), head: 0, blink: true, focus: 1, keep: 'z_mirL' }) },
-    { d: 4000, t: 'En face, c\'est libre… mais', k: 'Angle mort', s: 'La voie d\'en face est dégagée. Pourtant la moto sort des rétros et entre dans mon angle mort gauche. Si je tourne sans regarder, je lui coupe la route.',
+    { d: 4000, t: 'En face, c’est libre… mais !', k: 'Disparue', s: 'Plus personne en face. Mais la moto est dans mon angle mort. Si je tourne sans regarder : accident !',
       f: (p) => ({ opp: 700, moto: lerp(262, 195, ease(p)), head: 0, blink: true, focus: 1, keep: 'z_mirL' }) },
-    { d: 4200, t: '1. Revérifier : l\'angle mort', k: 'Coup d\'œil', s: 'Avant de tourner, coup d\'œil vers l\'épaule gauche : ma vision périphérique capte la moto. Je ne bouge pas, je la laisse passer.',
+    { d: 4200, t: '1. Coup d’œil sur l’épaule', k: 'Épaule', s: 'Avant de tourner, je regarde vite à gauche. Je vois la moto. Je ne bouge pas.',
       f: (p) => ({ opp: 700, moto: lerp(195, 188, p), head: -90 * ease(Math.min(1, p * 2)), blink: true, focus: 1, stop: p > .45 ? 1 : 0, ping: p > .45 }) },
-    { d: 3800, t: 'Revérifier encore', k: 'Libre', s: 'La moto est passée. Rétroviseur, angle mort, en face : tout est libre. Je peux tourner.',
+    { d: 3800, t: '1. Je regarde encore', k: 'Libre', s: 'La moto est partie. Rétro, épaule, en face : tout est libre.',
       f: (p) => ({ opp: 700, moto: lerp(188, -60, ease(p)), head: p < .5 ? lerp(-90, 0, ease(p * 2)) : (p < .75 ? 0 : -90 * ease((p - .75) * 4)), blink: true, focus: 1, tick: p > .85 ? 1 : 0 }) },
-    { d: 4200, t: '3. Faire', k: 'Faire', s: 'Je tourne à gauche en coupant la voie d\'en face franchement, puis je m\'assure que le clignotant est bien annulé.',
+    { d: 4200, t: '3. J’y vais', k: 'J’y vais', s: 'Je tourne à gauche, sans traîner. Puis je vérifie que le clignotant s’est arrêté.',
       f: (p) => ({ opp: 700, moto: -60, head: 0, blink: p < .8, car: turnPath(p), novision: true }) }
   ];
   function drawTurn(st, p) {
