@@ -125,7 +125,7 @@
 
   <div class="caption" id="cap" aria-live="polite"><b id="capT">Situation</b><span id="capS"></span></div>
   <div class="steps" id="steps"></div>
-  <div class="ctrl"><button class="btn btn-dark" id="play" style="flex:1">⏸ Pause</button><button class="btn btn-light" id="restart" style="width:auto;padding:0 18px">Recommencer</button></div>
+  <div class="ctrl"><button class="btn btn-light" id="prev" style="width:auto;padding:0 18px;font-size:20px" aria-label="Étape précédente">‹</button><button class="btn btn-dark" id="play" style="flex:1">⏸ Pause</button><button class="btn btn-primary" id="next" style="width:auto;padding:0 18px">Suivant ›</button></div>
 
   <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les 3 étapes</h2>
     <div class="key"><span class="n">1</span><div><b>Vérifier</b> : rétro du milieu, rétro du côté où je vais, puis coup d’œil sur l’épaule. Pas libre ? J’attends.</div></div>
@@ -354,7 +354,7 @@
     [...stepsEl.children].forEach((b, i) => b.setAttribute('aria-current', String(i + 1 === idx)));
   }
   function loop(now) {
-    if (!paused) { let p = (now - t0) / cur.steps[idx].d; if (p >= 1) { idx = (idx + 1) % cur.steps.length; t0 = now; p = 0; } draw(clamp(p)); }
+    if (!paused) { let p = (now - t0) / cur.steps[idx].d; if (p >= 1 + 1500 / cur.steps[idx].d) { t0 = now; p = 0; } draw(clamp(p)); }
     else draw(clamp((pauseAt - t0) / cur.steps[idx].d));
     requestAnimationFrame(loop);
   }
@@ -362,7 +362,8 @@
     if (paused) { t0 += performance.now() - pauseAt; paused = false; $('play').textContent = '⏸ Pause'; }
     else { paused = true; pauseAt = performance.now(); $('play').textContent = '▶ Lecture'; }
   });
-  $('restart').addEventListener('click', () => go(0));
+  $('prev').addEventListener('click', () => go(Math.max(0, idx - 1)));
+  $('next').addEventListener('click', () => { go((idx + 1) % cur.steps.length); });
   buildSteps();
   if (location.hash === '#gauche') setScen('turn');
   window.addEventListener('hashchange', () => setScen(location.hash === '#gauche' ? 'turn' : 'lane'));
