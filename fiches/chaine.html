@@ -26,6 +26,11 @@
   .two>div{border-radius:14px;padding:12px;line-height:1.45;font-size:15px}
   .lbl{font-family:'Atkinson Hyperlegible',sans-serif;font-weight:700}
   .card svg{display:block;width:100%;height:auto}
+  .shaftA{animation:shaftRun .5s linear infinite}
+  .wheelA{animation:wheelTurn 1.2s linear infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes shaftRun{to{stroke-dashoffset:-12}}
+  @keyframes wheelTurn{to{transform:rotate(-360deg)}}
+  @media (prefers-reduced-motion:reduce){.shaftA,.wheelA{animation:none}}
   .chap{display:grid;grid-template-columns:1fr 1fr;gap:6px}
   .chap button{min-height:52px;border-radius:14px;border:1px solid var(--line2);background:var(--card);font-weight:800;font-size:15px;cursor:pointer;color:var(--ink2);line-height:1.15;padding:4px 8px}
   .chap button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
@@ -40,33 +45,38 @@
   <p style="margin:0;font-size:18px;line-height:1.5">Le moteur fait tourner les roues. Mais il passe par 2 étapes : l’<b>embrayage</b> et la <b>boîte de vitesses</b>. C’est la <b>chaîne cinématique</b>. L’animation est en <b>4 parties</b> : fais-les dans l’ordre.</p>
 
   <div class="card" id="voiture"><h2 style="font-size:20px;margin-bottom:8px">Où sont les pièces dans la voiture ?</h2>
-    <svg viewBox="0 0 360 200" role="img" aria-label="Voiture vue de côté, avant à gauche : le moteur à l’avant, puis l’embrayage, la boîte de vitesses reliée au levier, et l’arbre qui fait tourner la roue avant">
-      <rect y="168" width="360" height="4" rx="2" fill="#C9C2B3"/>
-      <path d="M20 140 Q16 112 34 104 L92 92 Q118 60 150 48 L250 44 Q290 46 318 88 L338 100 Q346 120 342 140 Z" fill="#E7EBF2" stroke="#9AA0A8" stroke-width="2"/>
-      <path d="M128 90 L158 56 L214 52 L214 90 Z M222 52 L256 52 Q284 56 302 88 L222 90 Z" fill="#CFE0F5" stroke="#9AA0A8" stroke-width="1.5"/>
-      <line x1="218" y1="52" x2="218" y2="138" stroke="#C9C2B3" stroke-width="2"/>
-      <!-- chaîne cinématique (traction avant) -->
-      <rect x="34" y="104" width="50" height="34" rx="6" fill="#E8590C"/>
-      <rect x="86" y="106" width="5" height="30" rx="2" fill="#5B8DEF"/><rect x="93" y="106" width="5" height="30" rx="2" fill="#5B8DEF"/>
-      <rect x="100" y="108" width="30" height="26" rx="5" fill="#3E8E3A"/>
-      <path d="M118 108 L132 82" stroke="#3E424B" stroke-width="4" stroke-linecap="round"/><circle cx="133" cy="80" r="5" fill="#16181D"/>
-      <path d="M112 134 L82 146" stroke="#6B7280" stroke-width="6" stroke-linecap="round"/>
-      <circle cx="78" cy="148" r="24" fill="#16181D" stroke="#E8590C" stroke-width="4"/><circle cx="78" cy="148" r="11" fill="#9AA0A8"/>
-      <circle cx="284" cy="148" r="24" fill="#16181D"/><circle cx="284" cy="148" r="11" fill="#9AA0A8"/>
+    <svg viewBox="0 0 360 214" role="img" aria-label="Voiture vue de côté, avant à gauche : le moteur à l’avant, puis l’embrayage, la boîte de vitesses reliée au levier, et l’arbre de transmission qui fait tourner la roue avant">
+      <rect y="176" width="360" height="4" rx="2" fill="#C9C2B3"/>
+      <path d="M14 146 Q10 116 30 106 L92 92 Q120 58 152 46 L252 42 Q292 44 320 88 L340 102 Q350 124 346 146 Z" fill="#EEF1F6" stroke="#B9BFC8" stroke-width="2"/>
+      <path d="M132 90 L160 54 L216 50 L216 90 Z M224 50 L258 50 Q286 54 304 88 L224 90 Z" fill="#DCE7F5" stroke="#B9BFC8" stroke-width="1.5"/>
+      <!-- chaîne cinématique (traction avant), en grand -->
+      <rect x="22" y="96" width="62" height="40" rx="7" fill="#E8590C"/>
+      <rect x="87" y="96" width="7" height="40" rx="3" fill="#5B8DEF"/><rect x="97" y="96" width="7" height="40" rx="3" fill="#5B8DEF"/>
+      <rect x="108" y="98" width="46" height="36" rx="6" fill="#3E8E3A"/>
+      <path d="M136 98 L156 72" stroke="#3E424B" stroke-width="5" stroke-linecap="round"/><circle cx="158" cy="69" r="7" fill="#16181D"/>
+      <!-- arbre de transmission : de la boîte à la roue avant -->
+      <g transform="translate(76 156)"><circle r="26" fill="#16181D"/><circle r="13" fill="#9AA0A8"/><g class="wheelA" stroke="#16181D" stroke-width="3"><path d="M0 -12 V12 M-12 0 H12"/></g><circle r="4" fill="#7C3AED"/></g>
+      <line x1="148" y1="132" x2="76" y2="156" stroke="#7C3AED" stroke-width="11" stroke-linecap="round"/>
+      <line class="shaftA" x1="148" y1="132" x2="80" y2="155" stroke="#F4F1EA" stroke-width="4" stroke-dasharray="6 6" stroke-linecap="round"/>
+      <circle cx="76" cy="156" r="7" fill="#7C3AED" stroke="#F4F1EA" stroke-width="2"/>
+      <g transform="translate(288 156)"><circle r="26" fill="#16181D"/><circle r="13" fill="#9AA0A8"/></g>
       <!-- repères -->
       <g font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="13" text-anchor="middle" fill="#fff">
-        <circle cx="58" cy="22" r="11" fill="#E8590C"/><text x="58" y="27">1</text>
-        <circle cx="94" cy="22" r="11" fill="#5B8DEF"/><text x="94" y="27">2</text>
-        <circle cx="130" cy="22" r="11" fill="#3E8E3A"/><text x="130" y="27">3</text>
-        <circle cx="30" cy="186" r="11" fill="#16181D"/><text x="30" y="191">4</text>
+        <circle cx="53" cy="22" r="12" fill="#E8590C"/><text x="53" y="27">1</text>
+        <circle cx="96" cy="22" r="12" fill="#5B8DEF"/><text x="96" y="27">2</text>
+        <circle cx="131" cy="22" r="12" fill="#3E8E3A"/><text x="131" y="27">3</text>
+        <circle cx="166" cy="200" r="12" fill="#7C3AED"/><text x="166" y="205">4</text>
+        <circle cx="30" cy="200" r="12" fill="#16181D"/><text x="30" y="205">5</text>
       </g>
-      <g stroke="#9AA0A8" stroke-width="1.5" stroke-dasharray="3 3"><line x1="58" y1="33" x2="58" y2="104"/><line x1="94" y1="33" x2="94" y2="106"/><line x1="130" y1="33" x2="118" y2="108"/><line x1="41" y1="186" x2="58" y2="166"/></g>
-      <text x="346" y="186" text-anchor="end" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#5A5F6B">avant de la voiture à gauche</text>
+      <g stroke="#9AA0A8" stroke-width="1.5" stroke-dasharray="3 3"><line x1="53" y1="34" x2="53" y2="96"/><line x1="96" y1="34" x2="96" y2="96"/><line x1="131" y1="34" x2="131" y2="98"/><line x1="160" y1="190" x2="120" y2="146"/><line x1="40" y1="193" x2="58" y2="176"/></g>
+      <text x="182" y="205" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="12" fill="#7C3AED">arbre de transmission</text>
+      <text x="350" y="26" text-anchor="end" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#5A5F6B">avant de la voiture à gauche</text>
     </svg>
     <div class="key"><span class="n" style="background:#E8590C">1</span><div><b>Le moteur</b>, à l’avant, sous le capot.</div></div>
     <div class="key"><span class="n" style="background:#5B8DEF">2</span><div><b>L’embrayage</b>, collé au moteur. On le commande avec la pédale de gauche.</div></div>
     <div class="key"><span class="n" style="background:#3E8E3A">3</span><div><b>La boîte de vitesses</b>, reliée au levier.</div></div>
-    <div class="key"><span class="n" style="background:#16181D">4</span><div><b>Les roues avant</b> : un arbre (une barre qui tourne) leur apporte le mouvement.</div></div>
+    <div class="key"><span class="n" style="background:#7C3AED">4</span><div><b>L’arbre de transmission</b> : une barre qui tourne. Il apporte le mouvement de la boîte jusqu’à la roue.</div></div>
+    <div class="key"><span class="n" style="background:#16181D">5</span><div><b>Les roues avant</b> tournent : la voiture avance.</div></div>
     <p class="small muted" style="margin:8px 0 0">La plupart des voitures sont des « traction » : c’est l’avant qui tire. Sur certaines, ce sont les roues arrière.</p>
   </div>
 
