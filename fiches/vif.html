@@ -129,13 +129,39 @@
 
   <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les 3 étapes</h2>
     <div class="key"><span class="n">1</span><div><b>Vérifier</b> : rétro du milieu, rétro du côté où je vais, puis coup d’œil sur l’épaule. Pas libre ? J’attends.</div></div>
-    <div class="key"><span class="n">2</span><div><b>Informer</b> : seulement quand c’est libre, je mets le clignotant.</div></div>
+    <div class="key"><span class="n">2</span><div><b>Informer</b> : seulement quand c’est libre, je mets le clignotant. Puis <b>un dernier coup d’œil</b> à l’épaule juste avant de bouger.</div></div>
     <div class="key"><span class="n">3</span><div><b>Faire</b> : je bouge doucement. Puis j’arrête le clignotant.</div></div>
   </div>
 
   <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Pourquoi tourner la tête ?</h2>
     <p style="margin:0 0 8px;line-height:1.5">Le <b>centre de ton œil</b> voit les détails, mais il voit petit. Le <b>coin de ton œil</b> voit flou, mais il <b>repère tout ce qui bouge</b>.</p>
     <p style="margin:0;line-height:1.5">Les rétros ne montrent pas tout. Il reste une zone cachée : l’<b>angle mort</b>. Un petit coup d’œil sur l’épaule suffit : le coin de ton œil voit si quelque chose bouge.</p>
+  </div>
+
+  <div class="card" id="champ"><h2 style="font-size:20px;margin-bottom:8px">Plus je vais vite, moins je vois sur les côtés</h2>
+    <svg viewBox="0 0 322 176" role="img" aria-label="Champ de vision du conducteur : 120 degrés à 30 kilomètres-heure, 60 à 80, 45 à 100 et 30 à 130"><g><clipPath id="cv0"><rect x="2" y="0" width="76" height="150" rx="8"/></clipPath>
+      <g clip-path="url(#cv0)"><rect x="2" y="0" width="76" height="150" fill="#E5484D"/>
+      <path d="M40.0 136 L-306.4 -64.0 L386.4 -64.0 Z" fill="#7BC043"/></g>
+      <rect x="32.0" y="130" width="16" height="22" rx="5" fill="#1F4FD1" stroke="#fff" stroke-width="1.5"/>
+      <text x="40.0" y="22" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="17" fill="#16181D">120°</text>
+      <text x="40.0" y="170" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="14" fill="#16181D">30 km/h</text></g><g><clipPath id="cv1"><rect x="82" y="0" width="76" height="150" rx="8"/></clipPath>
+      <g clip-path="url(#cv1)"><rect x="82" y="0" width="76" height="150" fill="#E5484D"/>
+      <path d="M120.0 136 L-80.0 -210.4 L320.0 -210.4 Z" fill="#7BC043"/></g>
+      <rect x="112.0" y="130" width="16" height="22" rx="5" fill="#1F4FD1" stroke="#fff" stroke-width="1.5"/>
+      <text x="120.0" y="22" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="17" fill="#16181D">60°</text>
+      <text x="120.0" y="170" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="14" fill="#16181D">80 km/h</text></g><g><clipPath id="cv2"><rect x="162" y="0" width="76" height="150" rx="8"/></clipPath>
+      <g clip-path="url(#cv2)"><rect x="162" y="0" width="76" height="150" fill="#E5484D"/>
+      <path d="M200.0 136 L47.0 -233.6 L353.0 -233.6 Z" fill="#7BC043"/></g>
+      <rect x="192.0" y="130" width="16" height="22" rx="5" fill="#1F4FD1" stroke="#fff" stroke-width="1.5"/>
+      <text x="200.0" y="22" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="17" fill="#16181D">45°</text>
+      <text x="200.0" y="170" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="14" fill="#16181D">100 km/h</text></g><g><clipPath id="cv3"><rect x="242" y="0" width="76" height="150" rx="8"/></clipPath>
+      <g clip-path="url(#cv3)"><rect x="242" y="0" width="76" height="150" fill="#E5484D"/>
+      <path d="M280.0 136 L176.4 -250.4 L383.6 -250.4 Z" fill="#7BC043"/></g>
+      <rect x="272.0" y="130" width="16" height="22" rx="5" fill="#1F4FD1" stroke="#fff" stroke-width="1.5"/>
+      <text x="280.0" y="22" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="17" fill="#16181D">30°</text>
+      <text x="280.0" y="170" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="14" fill="#16181D">130 km/h</text></g></svg>
+    <p style="margin:8px 0 0;line-height:1.5">En vert, ce que je vois. En rouge, ce qui m’échappe. À 130 km/h, je ne vois presque plus les côtés : c’est l’<b>effet tunnel</b>. Raison de plus pour tourner la tête avant de bouger.</p>
+    <p class="small muted" style="margin:6px 0 0">Valeurs indicatives : elles varient un peu selon les sources.</p>
   </div>
 
   <div class="card"><h2 style="font-size:20px;margin-bottom:8px">Ce que voit le conducteur</h2>
@@ -185,6 +211,7 @@
   const $ = (id) => document.getElementById(id);
   const ease = (t) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
   const lerp = (a, b, t) => a + (b - a) * t;
+  const seg = (p, a, b) => Math.max(0, Math.min(1, (p - a) / (b - a)));
   const clamp = (v) => Math.max(0, Math.min(1, v));
 
   // Secteur angulaire (0° = vers l'avant, sens horaire) depuis (0,0)
@@ -280,8 +307,8 @@
       f: (p) => ({ moto: lerp(330, 318, p), car: 220, head: -90 * ease(Math.min(1, p * 2)), focus: 1, stop: p > .45 ? 1 : 0, ping: p > .45 }) },
     { d: 3600, t: '1. Je regarde encore', k: 'Libre', s: 'La moto est passée. Je regarde encore : rétro et épaule. C’est libre !',
       f: (p) => ({ moto: lerp(318, -60, ease(p)), car: 220, head: p < .5 ? lerp(-90, 0, ease(p * 2)) : (p < .75 ? 0 : -90 * ease((p - .75) * 4)), focus: 1, tick: p > .85 ? 1 : 0 }) },
-    { d: 2800, t: '2. Je préviens', k: 'Clignotant', s: 'Maintenant seulement, je mets le clignotant. Les autres savent ce que je vais faire.',
-      f: (p) => ({ moto: -60, car: 220, head: lerp(-90, 0, ease(Math.min(1, p * 2))), blink: true, tick: 1 }) },
+    { d: 4600, t: '2. Je préviens', k: 'Clignotant', s: 'Maintenant seulement, je mets le clignotant. Les autres savent ce que je vais faire. Juste avant de bouger : un dernier coup d’œil à l’épaule.',
+      f: (p) => ({ moto: -60, car: 220, head: p < .3 ? lerp(-90, 0, ease(p / .3)) : (p < .55 ? 0 : -90 * Math.sin(seg(p, .55, .95) * Math.PI)), blink: true, tick: 1 }) },
     { d: 3400, t: '3. J’y vais', k: 'J’y vais', s: 'Je change de voie doucement. Puis j’arrête le clignotant.',
       f: (p) => ({ moto: -60, car: lerp(220, 140, ease(p)), head: 0, blink: p < .85 }) }
   ];
@@ -314,7 +341,7 @@
       f: (p) => ({ opp: 700, moto: lerp(262, 195, ease(p)), head: 0, blink: true, focus: 1, keep: 'z_mirL' }) },
     { d: 4200, t: '1. Coup d’œil sur l’épaule', k: 'Épaule', s: 'Avant de tourner, je regarde vite à gauche. Je vois la moto. Je ne bouge pas.',
       f: (p) => ({ opp: 700, moto: lerp(195, 188, p), head: -90 * ease(Math.min(1, p * 2)), blink: true, focus: 1, stop: p > .45 ? 1 : 0, ping: p > .45 }) },
-    { d: 3800, t: '1. Je regarde encore', k: 'Libre', s: 'La moto est partie. Rétro, épaule, en face : tout est libre.',
+    { d: 3800, t: '1. Je regarde encore', k: 'Libre', s: 'La moto est partie. Rétro, épaule, en face : tout est libre. Dernier coup d’œil à l’épaule juste avant de tourner.',
       f: (p) => ({ opp: 700, moto: lerp(188, -60, ease(p)), head: p < .5 ? lerp(-90, 0, ease(p * 2)) : (p < .75 ? 0 : -90 * ease((p - .75) * 4)), blink: true, focus: 1, tick: p > .85 ? 1 : 0 }) },
     { d: 4200, t: '3. J’y vais', k: 'J’y vais', s: 'Je tourne à gauche, sans traîner. Puis je vérifie que le clignotant s’est arrêté.',
       f: (p) => ({ opp: 700, moto: -60, head: 0, blink: p < .8, car: turnPath(p), novision: true }) }

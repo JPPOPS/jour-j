@@ -176,7 +176,7 @@
     </div>
     <ul class="clean" style="margin-top:10px">
       <li>Le frein moteur sert en descente, avant un virage, avant un carrefour. Pour qu’il freine plus, je descends une vitesse.</li>
-      <li>J’enfonce l’embrayage <b>juste avant de m’arrêter</b>, quand le moteur tremble.</li>
+      <li>J’enfonce l’embrayage <b>quelques mètres avant de m’arrêter</b> (plus tôt si je roule plus vite), avant que le moteur tremble. S’il tremble déjà, c’était un peu tard.</li>
       <li>Jamais de point mort en descente.</li>
     </ul>
   </div>
@@ -185,7 +185,7 @@
     <div class="key"><span class="n" style="background:#5B8DEF">1</span><div><b>Je lève le pied</b> : le moteur commence à freiner.</div></div>
     <div class="key"><span class="n" style="background:#E5484D">2</span><div><b>Je freine</b> avec la pédale pour régler ma vitesse.</div></div>
     <div class="key"><span class="n" style="background:#3E8E3A">3</span><div><b>Je descends une vitesse</b> (je rétrograde) : embrayage, vitesse plus petite, je relâche doucement. Le moteur freine plus fort.</div></div>
-    <div class="key"><span class="n" style="background:#16181D">4</span><div><b>Pour m’arrêter</b>, c’est la pédale de frein. J’enfonce l’embrayage juste avant l’arrêt.</div></div>
+    <div class="key"><span class="n" style="background:#16181D">4</span><div><b>Pour m’arrêter</b>, c’est la pédale de frein. J’enfonce l’embrayage quelques mètres avant l’arrêt, avant que le moteur tremble.</div></div>
     <p class="small muted" style="margin:8px 0 0">Pour ralentir, le moteur fait le gros du travail. La pédale de frein règle la vitesse et arrête la voiture. En cas de danger : pédale de frein, fort !</p>
   </div>
 
@@ -233,7 +233,7 @@
   </div>
 
   <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les erreurs à éviter</h2>
-    <ul class="clean"><li>Lâcher l’embrayage d’un coup : la voiture saute ou cale</li><li>Bouger le pied gauche au point de patinage</li><li>Laisser le pied sur l’embrayage en roulant</li><li>Enfoncer l’embrayage trop tôt avant de s’arrêter</li><li>Rouler avec le moteur trop bas : il tremble</li><li>Freiner jusqu’à l’arrêt sans embrayage : on cale</li><li>Descendre une vitesse trop vite : le moteur crie et la voiture secoue</li><li>Regarder le levier</li></ul></div>
+    <ul class="clean"><li>Lâcher l’embrayage d’un coup : la voiture saute ou cale</li><li>Bouger le pied gauche au point de patinage</li><li>Laisser le pied sur l’embrayage en roulant</li><li>Enfoncer l’embrayage trop tôt avant de s’arrêter (roue libre), ou trop tard (le moteur tremble)</li><li>Rouler avec le moteur trop bas : il tremble</li><li>Freiner jusqu’à l’arrêt sans embrayage : on cale</li><li>Descendre une vitesse trop vite : le moteur crie et la voiture secoue</li><li>Regarder le levier</li></ul></div>
 
   <p class="footer">Fiche de révision. Elle complète les explications de ton enseignant.</p>
 </main>
@@ -332,11 +332,11 @@
         const geared = gear === '3' ? v * R3 : (gear === '2' ? v * R2 : 800);
         rpm = c > .95 ? geared : lerp(800, geared, c);
         return { c, g, fb, rpm, v, b: gear === 'N' ? rpm * c : geared, gear, flow, ft }; } },
-    { id: 'arret', k: 'S\'arrêter', d: 7000, t: 'S’arrêter', s: 'Pour m’arrêter, c’est la pédale de frein. Je freine doucement. Quand le moteur tremble, j’enfonce l’embrayage pour ne pas caler. Arrêté : pied sur le frein, point mort.',
+    { id: 'arret', k: 'S\'arrêter', d: 7000, t: 'S’arrêter', s: 'Pour m’arrêter, c’est la pédale de frein. Je freine doucement. Quelques mètres avant l’arrêt, j’enfonce l’embrayage, avant que le moteur tremble. S’il tremble déjà, c’était un peu tard. Arrêté : pied sur le frein, point mort.',
       f: (p) => { let v, c = 1, fb, gear = '2', flow = 'back', ft, rpm;
-        if (p < .28) { const q = seg(p, 0, .28); v = lerp(14, 11, q); fb = .4 * Math.min(1, q * 3); ft = 'Je freine doucement'; }
-        else if (p < .38) { v = lerp(11, 10, seg(p, .28, .38)); fb = .4; c = 1 - seg(p, .28, .38); flow = 'cut'; ft = 'Le moteur tremble : j’enfonce l’embrayage'; }
-        else { const q = seg(p, .38, .82); v = lerp(10, 0, ease(q)); fb = q < 1 ? .45 : .3; c = 0; flow = 'cut'; ft = v > 0 ? 'Je freine jusqu’à l’arrêt' : 'Arrêté : pied sur le frein, point mort'; if (p > .9) gear = 'N'; }
+        if (p < .3) { const q = seg(p, 0, .3); v = lerp(16, 12.5, q); fb = .4 * Math.min(1, q * 3); ft = 'Je freine doucement'; }
+        else if (p < .4) { v = lerp(12.5, 11.5, seg(p, .3, .4)); fb = .4; c = 1 - seg(p, .3, .4); flow = 'cut'; ft = 'Quelques mètres avant : j’enfonce l’embrayage'; }
+        else { const q = seg(p, .4, .82); v = lerp(11.5, 0, ease(q)); fb = .45; c = 0; flow = 'cut'; ft = v > 0 ? 'Je freine jusqu’à l’arrêt' : 'Arrêté : pied sur le frein, point mort'; if (p > .9) gear = 'N'; }
         rpm = c > .95 ? v * R2 : lerp(800, v * R2, c);
         return { c, g: 0, fb, rpm, v, b: gear === 'N' ? 0 : v * R2, gear, flow, ft }; } },
     { id: 'rouelibre', k: 'Roue libre', d: 5400, t: 'La roue libre', s: 'J’enfonce l’embrayage en roulant (ou je mets le point mort). Plus rien ne retient la voiture : elle file. En descente, elle accélère ! À éviter, sauf juste avant de s’arrêter.',

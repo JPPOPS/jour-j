@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Le volant — Fiche</title>
+<meta name="theme-color" content="#F4F1EA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fiches.css">
+<style>
+  .stage{background:#2B2F36;border-radius:20px;overflow:hidden;position:relative}
+  .stage svg{display:block;width:100%;height:auto}
+  .steps{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .steps button{min-height:44px;border-radius:12px;border:1px solid var(--line2);background:var(--card);font-weight:700;font-size:13px;cursor:pointer;color:var(--ink2);padding:0 4px;line-height:1.1}
+  .steps button[aria-current="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .steps.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .caption{min-height:110px;font-size:17px;line-height:1.45}
+  .caption b{font-family:var(--display);font-size:20px;display:block;margin-bottom:2px}
+  .ctrl{display:flex;gap:10px;align-items:center}
+  .key{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--soft)}
+  .key:last-child{border-bottom:0}
+  .key .n{flex-shrink:0;width:36px;height:36px;border-radius:18px;color:#fff;font-family:var(--display);font-weight:800;display:flex;align-items:center;justify-content:center}
+  ul.clean{margin:0;padding-left:20px;line-height:1.55}
+  ul.clean li{margin:4px 0}
+  .three{display:grid;grid-template-columns:1fr;gap:8px}
+  .three>div{border-radius:14px;padding:12px;line-height:1.45;font-size:15px}
+  .lbl{font-family:'Atkinson Hyperlegible',sans-serif;font-weight:700}
+  .chap{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .chap button{min-height:52px;border-radius:14px;border:1px solid var(--line2);background:var(--card);font-weight:800;font-size:15px;cursor:pointer;color:var(--ink2);line-height:1.15;padding:4px 8px}
+  .chap button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+</style>
+</head>
+<body>
+<main id="app" style="gap:18px">
+  <div class="row"><a class="icon-btn" href="./" id="backlink" aria-label="Toutes les fiches"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <div><div class="small muted" style="font-weight:700">Fiche · Tenir et tourner le volant</div><h1 style="font-size:28px;font-weight:800;line-height:1.1">Le volant</h1></div></div>
+
+  <p style="margin:0;font-size:18px;line-height:1.5"><b>La voiture va là où tu regardes.</b> Tes yeux montrent le chemin, ton cerveau guide tes mains, tes mains tournent le volant. L’animation est en <b>4 parties</b> : fais-les dans l’ordre.</p>
+
+  <div class="chap" id="chap" role="group" aria-label="Choisir une partie"></div>
+  <p id="chapI" style="margin:-6px 0 0;font-size:16px;line-height:1.4;color:var(--ink2)"></p>
+
+  <div class="stage" aria-label="Animation : la route vue de dessus avec la cible du regard, et le volant avec les mains">
+    <svg id="scene" viewBox="0 0 360 430" role="img" aria-labelledby="capT">
+      <defs><marker id="ahG" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#3E8E3A"/></marker>
+        <marker id="ahR" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#E5484D"/></marker>
+        <clipPath id="topclip"><rect x="0" y="0" width="360" height="226"/></clipPath></defs>
+      <!-- haut : la route vue de dessus -->
+      <g clip-path="url(#topclip)">
+        <rect width="360" height="226" fill="#46601C"/>
+        <g id="roadG"></g>
+        <g id="obst" opacity="0"><path d="M222 86 l10 -24 l10 24 Z" fill="#F08A24"/><rect x="219" y="84" width="26" height="5" rx="2" fill="#F4F1EA"/></g>
+        <g id="carG"><rect x="-11" y="-19" width="22" height="38" rx="6" fill="#1F4FD1" stroke="#F4F1EA" stroke-width="2"/><rect x="-8" y="-12" width="16" height="8" rx="2" fill="#C9D6F7"/></g>
+        <g id="gaze"><line id="gazeL" stroke="#F2C230" stroke-width="2" stroke-dasharray="4 4" opacity=".8"/><g id="tgt"><circle r="11" fill="none" stroke="#F2C230" stroke-width="3"/><circle r="3.5" fill="#F2C230"/><path d="M-17 0 H-12 M12 0 H17 M0 -17 V-12 M0 12 V17" stroke="#F2C230" stroke-width="3"/></g></g>
+        <!-- la chaîne du regard -->
+        <g id="chainG" opacity="0"></g>
+        <!-- la voiture vue de dessus avec ses roues (tours de volant) -->
+        <g id="wheelsG" opacity="0" transform="translate(180 120)">
+          <rect x="-34" y="-62" width="68" height="124" rx="16" fill="#1F4FD1" stroke="#F4F1EA" stroke-width="2"/>
+          <rect x="-24" y="-40" width="48" height="20" rx="5" fill="#C9D6F7"/>
+          <g id="fwL" transform="translate(-40 -36)"><rect x="-6" y="-14" width="12" height="28" rx="4" fill="#16181D" stroke="#F4F1EA" stroke-width="1.5"/></g>
+          <g id="fwR" transform="translate(40 -36)"><rect x="-6" y="-14" width="12" height="28" rx="4" fill="#16181D" stroke="#F4F1EA" stroke-width="1.5"/></g>
+          <rect x="-46" y="22" width="12" height="28" rx="4" fill="#16181D" stroke="#F4F1EA" stroke-width="1.5"/><rect x="34" y="22" width="12" height="28" rx="4" fill="#16181D" stroke="#F4F1EA" stroke-width="1.5"/>
+        </g>
+        <g id="bigX" opacity="0"><circle cx="180" cy="110" r="46" fill="#E5484D"/><path d="M160 90 L200 130 M200 90 L160 130" stroke="#fff" stroke-width="12" stroke-linecap="round"/></g>
+        <text id="topT" x="180" y="219" text-anchor="middle" class="lbl" font-size="14" fill="#F4F1EA"></text>
+      </g>
+      <line x1="0" y1="227" x2="360" y2="227" stroke="#16181D" stroke-width="3"/>
+      <!-- bas : le volant vu par le conducteur -->
+      <g id="clock" opacity="0" class="lbl" font-size="14" fill="#9AA0A8" text-anchor="middle">
+        <text x="180" y="256">12</text><text x="276" y="335">3</text><text x="180" y="418">6</text><text x="84" y="335">9</text>
+        <text x="228" y="268" font-size="11">1</text><text x="262" y="296" font-size="11">2</text><text x="98" y="296" font-size="11">10</text><text x="132" y="268" font-size="11">11</text>
+      </g>
+      <g id="wheel" transform="translate(180 330)">
+        <circle r="72" fill="none" stroke="#16181D" stroke-width="16"/>
+        <circle r="72" fill="none" stroke="#3E424B" stroke-width="10"/>
+        <g fill="#3E424B"><rect x="-70" y="-6" width="44" height="12" rx="4"/><rect x="26" y="-6" width="44" height="12" rx="4"/><rect x="-6" y="24" width="12" height="44" rx="4"/></g>
+        <circle r="28" fill="#2B2F36" stroke="#3E424B" stroke-width="6"/>
+        <rect x="-4" y="-80" width="8" height="16" rx="2" fill="#E5484D"/>
+      </g>
+      <path id="arrowP" fill="none" stroke-width="6" stroke-linecap="round" opacity="0"/>
+      <g id="handL"></g><g id="handR"></g>
+      <text id="tours" x="345" y="420" text-anchor="end" class="lbl" font-size="14" fill="#F4F1EA"></text>
+      <g><rect x="12" y="12" width="196" height="30" rx="15" fill="#F4F1EA"/><text id="badgeT" x="110" y="32" text-anchor="middle" class="lbl" font-size="14" fill="#16181D"></text></g>
+    </svg>
+  </div>
+
+  <div class="caption" id="cap" aria-live="polite"><b id="capT"></b><span id="capS"></span></div>
+  <div class="steps" id="steps"></div>
+  <div class="ctrl"><button class="btn btn-light" id="prev" style="width:auto;padding:0 18px;font-size:20px" aria-label="Étape précédente">‹</button><button class="btn btn-dark" id="play" style="flex:1">⏸ Pause</button><button class="btn btn-primary" id="next" style="width:auto;padding:0 18px">Suivant ›</button></div>
+  <button class="btn btn-primary" id="nextChap"></button>
+
+  <div class="card" id="regard"><h2 style="font-size:20px;margin-bottom:6px">Le regard d’abord</h2>
+    <div class="key"><span class="n" style="background:#F2C230;color:#16181D">1</span><div><b>Les yeux</b> regardent là où je veux aller.</div></div>
+    <div class="key"><span class="n" style="background:#E5484D">2</span><div><b>Le cerveau</b> calcule le chemin.</div></div>
+    <div class="key"><span class="n" style="background:#E8A07A">3</span><div><b>Les mains</b> tournent le volant, toutes seules.</div></div>
+    <div class="key"><span class="n" style="background:#1F4FD1">4</span><div><b>La voiture</b> va là où je regarde.</div></div>
+    <ul class="clean" style="margin-top:8px">
+      <li><b>Regarde loin devant.</b> Regard trop près = la voiture zigzague.</li>
+      <li>Plus tu vas vite, plus ton champ de vision se rétrécit (environ 120° à 30 km/h, 30° à 130 km/h) : regarde loin.</li>
+      <li>Pour aller à droite, <b>regarde d’abord à droite</b>. Pour aller à gauche, regarde d’abord à gauche.</li>
+      <li>Les yeux sont attirés par le danger. <b>Regarde la solution, pas le problème</b> : un coup d’œil sur l’obstacle, puis le regard revient sur le passage libre.</li>
+    </ul>
+  </div>
+
+  <div class="card" id="mains"><h2 style="font-size:20px;margin-bottom:6px">Tenir le volant</h2>
+    <ul class="clean">
+      <li>Imagine une horloge : mains à <b>9 h 15</b>, ou à 10 h 10.</li>
+      <li>Les doigts atteignent le clignotant et les essuie-glaces sans lâcher le volant.</li>
+      <li><b>Ne serre pas</b> : les mains restent souples.</li>
+      <li>Les mains <b>ne descendent pas sous le milieu</b> du volant.</li>
+      <li><b>Pas de geste brusque.</b></li>
+      <li>Environ 1 tour et demi d’un côté = la butée. D’une butée à l’autre : environ 3 tours. Pour redresser : environ 1 tour et demi. Ça dépend un peu de la voiture.</li>
+    </ul>
+  </div>
+
+  <div class="card" id="tourner"><h2 style="font-size:20px;margin-bottom:8px">Courbe, virage, tournant</h2>
+    <div class="three">
+      <div style="background:#EEF3E2"><b>Courbe</b> : ça tourne un peu.<br>Les mains <b>restent en place</b>. Je tourne un peu le volant. Je regarde la sortie.</div>
+      <div style="background:#E3E9FB"><b>Virage</b> : ça tourne plus.<br><b>Tiré-glissé</b> : la main du côté où ça tourne monte à midi et <b>tire</b>. À midi seulement le temps de tirer, jamais pour conduire (l’airbag sort du centre du volant). L’autre main glisse. Une seule main travaille.</div>
+      <div style="background:#FDF0E2"><b>Tournant</b> : ça tourne beaucoup (carrefour).<br><b>Chevauchement</b> : les deux mains travaillent. Une main tire, l’autre passe par-dessus et prend le relais : <b>une main chasse l’autre</b>.</div>
+    </div>
+    <p style="margin:10px 0 0;line-height:1.5"><b>La règle :</b> la main qui monte est toujours celle <b>du côté où ça tourne</b>. Un volant, ça se <b>tire</b> : du haut vers le bas.</p>
+  </div>
+
+  <div class="card" id="retour"><h2 style="font-size:20px;margin-bottom:6px">Le retour du volant</h2>
+    <p style="margin:0;line-height:1.5">À la sortie du virage, je desserre un peu les mains et <b>j’accompagne</b> le volant : il glisse dans mes paumes et revient tout droit. Ça marche grâce à la vitesse : très lentement, il revient peu, alors je le ramène moi-même. <b>Je ne le lâche jamais.</b></p>
+  </div>
+
+  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les erreurs à éviter</h2>
+    <ul class="clean"><li>Regarder juste devant le capot</li><li>Fixer l’obstacle au lieu du passage</li><li>Serrer le volant</li><li><b>Pousser</b> le volant (du bas vers le haut) au lieu de le tirer</li><li>Monter la mauvaise main</li><li><b>Lâcher une main</b> quand ça va tout droit : les deux mains restent sur le volant</li><li><b>Mettre les mains à l’intérieur du volant</b> : si une roue tape le trottoir, le volant tourne d’un coup et peut casser le poignet</li><li>Lâcher le volant pendant le retour</li></ul></div>
+
+  <p class="footer">Fiche de révision. Elle complète les explications de ton enseignant.</p>
+</main>
+<script>
+(function () {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  (function backlink() { // retour : liste des fiches ; ouverte depuis l'outil de l'enseignant (?o=1) : page précédente
+    const bl = $('backlink');
+    if (new URLSearchParams(location.search).has('o')) bl.addEventListener('click', function (e) { if (history.length > 1) { e.preventDefault(); history.back(); } });
+  })();
+  const ease = (t) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const seg = (p, a, b) => Math.max(0, Math.min(1, (p - a) / (b - a)));
+  const NS = 'http://www.w3.org/2000/svg';
+
+  // ---------- routes (vue de dessus) ----------
+  const ROADS = {
+    straight: { d: 'M180 236 L180 -64' },
+    curve: { d: 'M150 236 L150 190 C150 120 175 70 260 -10' },
+    virage: { d: 'M130 236 L130 150 Q130 70 210 70 L420 70' },
+    tournant: { d: 'M150 236 L150 112 Q150 84 178 84 L420 84', cross: true }
+  };
+  const PATHS = {};
+  Object.entries(ROADS).forEach(([k, r]) => {
+    const g = document.createElementNS(NS, 'g'); g.setAttribute('id', 'road_' + k); g.setAttribute('opacity', 0);
+    g.innerHTML = (r.cross ? '<rect x="110" y="44" width="80" height="230" fill="#3A3F47"/><rect x="-10" y="44" width="380" height="80" fill="#3A3F47"/>' : '') +
+      `<path d="${r.d}" stroke="#3A3F47" stroke-width="${r.cross ? 0 : 74}" fill="none"/><path d="${r.d}" stroke="#F4F1EA" stroke-width="3" stroke-dasharray="14 12" fill="none" opacity="${r.cross ? 0 : .8}"/>`;
+    $('roadG').appendChild(g);
+    const p = document.createElementNS(NS, 'path'); p.setAttribute('d', r.d); PATHS[k] = { el: p, len: 0 };
+    $('roadG').appendChild(p); p.setAttribute('stroke', 'none'); p.setAttribute('fill', 'none');
+  });
+  Object.values(PATHS).forEach((x) => { x.len = x.el.getTotalLength(); });
+  const at = (k, s) => { const P = PATHS[k], l = Math.max(0, Math.min(P.len, s * P.len)), a = P.el.getPointAtLength(l), b = P.el.getPointAtLength(Math.min(P.len, l + 1)), c = P.el.getPointAtLength(Math.max(0, l - 1)); return { x: a.x, y: a.y, h: Math.atan2(b.x - c.x, -(b.y - c.y)) * 180 / Math.PI }; };
+
+  // ---------- chaîne du regard (dessins simples) ----------
+  const ICONS = [
+    ['Yeux', '<ellipse rx="22" ry="14" fill="#F4F1EA"/><circle r="9" fill="#3E8E3A"/><circle r="4" fill="#16181D"/>', '#F2C230'],
+    ['Cerveau', '<path d="M-20 6 Q-26 -10 -12 -16 Q-6 -26 6 -20 Q20 -24 22 -8 Q30 4 16 12 Q8 20 -4 14 Q-16 18 -20 6 Z" fill="#F2A3A3"/><path d="M-10 -6 Q-2 -12 4 -4 M2 6 Q10 0 14 6" stroke="#C25B5B" stroke-width="2" fill="none"/>', '#E5484D'],
+    ['Mains', '<rect x="-24" y="-14" width="18" height="26" rx="8" fill="#E8B48F"/><rect x="6" y="-14" width="18" height="26" rx="8" fill="#E8B48F"/>', '#E8A07A'],
+    ['Volant', '<circle r="18" fill="none" stroke="#9AA0A8" stroke-width="6"/><rect x="-18" y="-3" width="36" height="6" fill="#9AA0A8"/><rect x="-3" y="0" width="6" height="18" fill="#9AA0A8"/>', '#9AA0A8'],
+    ['Trajectoire', '<path d="M-12 18 Q-8 -6 14 -16" stroke="#F4F1EA" stroke-width="4" fill="none" stroke-dasharray="5 4"/><circle cx="14" cy="-16" r="6" fill="#F2C230"/>', '#1F4FD1']
+  ];
+  $('chainG').innerHTML = ICONS.map(([t, svg, c], i) => `<g id="ic${i}" transform="translate(${36 + i * 72} 100)"><circle r="31" fill="#2B2F36" stroke="${c}" stroke-width="3"/>${svg}<text y="52" text-anchor="middle" class="lbl" font-size="12" fill="#F4F1EA">${t}</text></g>`).join('') +
+    [0, 1, 2, 3].map((i) => `<path id="ia${i}" d="M${70 + i * 72} 100 h6" stroke="#F2C230" stroke-width="4" marker-end="url(#ahG)"/>`).join('');
+
+  // ---------- mains ----------
+  const W = { x: 180, y: 330, r: 72 };
+  const rim = (a, r) => [W.x + Math.sin(a * Math.PI / 180) * (r || W.r), W.y - Math.cos(a * Math.PI / 180) * (r || W.r)];
+  function hand(el, h, side) {
+    if (!h) { el.innerHTML = ''; return; }
+    const [x, y] = rim(h.a, h.r), bad = h.m === 'bad', glide = h.m === 'glide' || h.m === 'free';
+    const fill = bad ? '#F5B5B5' : '#E8B48F', stroke = bad ? '#E5484D' : '#16181D';
+    // la main enveloppe la jante : paume vers le centre, pouce vers le haut
+    el.innerHTML = `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${h.a.toFixed(1)})" opacity="${h.m === 'free' ? .45 : (glide ? .7 : 1)}">
+      <rect x="-15" y="-13" width="30" height="26" rx="11" fill="${fill}" stroke="${stroke}" stroke-width="${bad ? 3 : 2}" ${glide ? 'stroke-dasharray="4 3"' : ''}/>
+      <ellipse cx="${side === 'L' ? 13 : -13}" cy="-10" rx="5" ry="8" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/></g>`;
+  }
+  function arrow(a1, a2, ok) {
+    const el = $('arrowP'); if (a1 == null) { el.setAttribute('opacity', 0); return; }
+    const r = W.r + 24, [x1, y1] = rim(a1, r), [x2, y2] = rim(a2, r), sweep = a2 > a1 ? 1 : 0, large = Math.abs(a2 - a1) > 180 ? 1 : 0;
+    el.setAttribute('d', `M${x1.toFixed(1)} ${y1.toFixed(1)} A${r} ${r} 0 ${large} ${sweep} ${x2.toFixed(1)} ${y2.toFixed(1)}`);
+    el.setAttribute('stroke', ok ? '#3E8E3A' : '#E5484D'); el.setAttribute('marker-end', ok ? 'url(#ahG)' : 'url(#ahR)'); el.setAttribute('opacity', 1);
+  }
+  const G = (a, m) => ({ a, m: m || 'grip' });
+
+  // ---------- les étapes ----------
+  // road : clé de ROADS · s : avancée sur la route · look : distance du regard (0..1) ou 'obst' · th : angle du volant (°) · L / R : mains
+  const STEPS = [
+    { id: 'chaine', k: 'La chaîne', d: 6000, t: 'La voiture va là où tu regardes', s: 'Tes yeux regardent où aller. Ton cerveau calcule. Tes mains tournent le volant. La voiture suit ton regard.',
+      f: (p) => ({ chain: p, th: 0, L: G(-90), R: G(90), top: '' }) },
+    { id: 'loin', k: 'Regarder loin', d: 5000, t: 'Tout droit : je regarde loin', s: 'Mon regard est loin devant, au bout de la route. Mes mains bougent à peine : la voiture reste bien droite.',
+      f: (p) => ({ road: 'straight', s: lerp(.15, .4, p), look: .5, th: Math.sin(p * 9) * 2, L: G(-90), R: G(90), top: 'Regard loin : la voiture va droit' }) },
+    { id: 'pres', k: 'Regard trop près', d: 5000, t: 'Le piège : regarder trop près', s: 'Je regarde juste devant le capot. Je corrige sans arrêt : la voiture zigzague.',
+      f: (p) => ({ road: 'straight', s: lerp(.15, .4, p), look: .1, wob: Math.sin(p * 18) * 16, th: Math.cos(p * 18) * 25, L: G(-90), R: G(90), top: 'Regard trop près : ça zigzague', bad: true }) },
+    { id: 'solution', k: 'Regarder la solution', d: 7000, t: 'Regarde la solution, pas le problème', s: 'Un obstacle ! Si je le fixe, la voiture va droit dessus. Je le vois d’un coup d’œil, puis je regarde le passage libre : la voiture passe.',
+      f: (p) => { const bad = p < .45; const off = bad ? 26 * ease(seg(p, .1, .45)) : lerp(26, -30, ease(seg(p, .45, .75))) * (p > .75 ? 1 - seg(p, .85, 1) * 0 : 1);
+        return { road: 'straight', s: lerp(.12, .5, p), look: bad ? 'obst' : 'free', wob: off, th: bad ? 20 * seg(p, .1, .3) : -25 * Math.sin(seg(p, .45, .8) * Math.PI), L: G(-90), R: G(90), obst: true, top: bad ? 'Je fixe l’obstacle : j’y vais !' : 'Je regarde le passage : je passe', bad }; } },
+
+    { id: '915', k: '9 h 15', d: 4000, t: 'Les mains à 9 h 15', s: 'Imagine une horloge. Main gauche sur le 9, main droite sur le 3. Mains souples : je ne serre pas. Mes doigts atteignent le clignotant et les essuie-glaces.',
+      f: (p) => ({ clock: 1, th: 0, L: G(-90), R: G(90), top: '', road: 'straight', s: .22, look: .5 }) },
+    { id: '1010', k: '10 h 10', d: 4000, t: 'Ou à 10 h 10', s: 'Mains un peu plus haut, sur le 10 et le 2 : c’est permis aussi. Les mains ne descendent jamais sous le milieu du volant.',
+      f: (p) => ({ clock: 1, th: 0, L: G(-60), R: G(60), top: '', road: 'straight', s: .22, look: .5 }) },
+    { id: 'tours', k: 'Les tours de volant', d: 9000, t: 'Combien de tours ?', s: 'Environ 1 tour et demi d’un côté : les roues sont tournées à fond, c’est la butée. D’une butée à l’autre : environ 3 tours. Ça dépend un peu de la voiture.',
+      f: (p) => { let th; if (p < .25) th = 540 * ease(seg(p, 0, .25)); else if (p < .35) th = 540; else if (p < .5) th = 540 * (1 - ease(seg(p, .35, .5))); else if (p < .75) th = -540 * ease(seg(p, .5, .75)); else if (p < .85) th = -540; else th = -540 * (1 - ease(seg(p, .85, 1)));
+        return { wheels: th, th, L: null, R: null, top: Math.abs(th) > 535 ? 'Butée !' : (Math.abs(th) < 5 ? 'Roues droites' : 'Les roues tournent') }; } },
+
+    { id: 'courbe', k: 'Courbe', d: 6000, t: 'Courbe : les mains ne bougent pas', s: 'Ça tourne un peu. Mains en place à 9 h 15. Je tourne légèrement le volant du côté où ça tourne. Je regarde loin, à la sortie de la courbe.',
+      f: (p) => { const th = 22 * Math.sin(seg(p, .15, .85) * Math.PI); return { road: 'curve', s: lerp(.12, .85, p), look: 1, th, L: G(-90 + th), R: G(90 + th), top: 'Je regarde la sortie' }; } },
+    { id: 'virage', k: 'Virage : tiré-glissé', d: 8000, t: 'Virage : le tiré-glissé', s: 'Ça tourne plus. La main du côté où ça tourne (ici la droite) monte à midi, juste le temps de tirer le volant vers le bas. L’autre main glisse. Je regarde la sortie du virage.',
+      f: (p) => { let th = 0, R, L = G(-90, 'glide'); if (p < .2) { R = { a: lerp(90, 0, ease(seg(p, 0, .2))), m: 'free' }; L = G(-90); } else { th = 100 * ease(seg(p, .25, .7)); R = G(th); }
+        return { road: 'virage', s: lerp(.12, .75, ease(seg(p, .1, 1))), look: 1, th, L, R, arrow: p > .25 && p < .72 ? [Math.max(0, th - 40), th + 20, true] : null, top: p < .2 ? 'La main droite monte à midi' : 'Elle tire, l’autre glisse' }; } },
+    { id: 'tournant', k: 'Tournant : chevauchement', d: 10000, t: 'Tournant : le chevauchement', s: 'Ça tourne beaucoup, comme à un carrefour. Les deux mains travaillent : la main droite tire, la gauche passe par-dessus et prend le relais. Une main chasse l’autre.',
+      f: (p) => { let th, R, L, arr = null;
+        if (p < .1) { th = 0; R = { a: lerp(90, 0, ease(seg(p, 0, .1))), m: 'free' }; L = G(-90); }
+        else if (p < .38) { const q = ease(seg(p, .1, .35)); th = 110 * q; R = G(th); L = { a: lerp(-90, -15, q), m: 'free' }; arr = [Math.max(0, th - 40), th + 15, true]; }
+        else if (p < .44) { th = 110; R = G(110); L = { a: lerp(-15, 0, seg(p, .38, .44)), m: 'free' }; }
+        else if (p < .7) { const q = ease(seg(p, .44, .68)); th = 110 + 110 * q; L = G(th - 110); R = { a: lerp(110, 10, q), m: 'free' }; arr = [Math.max(0, th - 150), th - 95, true]; }
+        else if (p < .92) { const q = ease(seg(p, .7, .9)); th = 220 + 100 * q; R = G(th - 220 + 10 > 100 ? 100 : (th - 220) + 0); R = G(lerp(0, 100, q)); L = { a: lerp(110, 30, q), m: 'free' }; arr = [Math.max(0, lerp(0, 100, q) - 40), lerp(0, 100, q) + 15, true]; }
+        else { th = 320; R = G(100); L = { a: 30, m: 'free' }; }
+        return { road: 'tournant', s: lerp(.1, .62, ease(seg(p, .05, 1))), look: 1, th, L, R, arrow: arr, top: 'Une main chasse l’autre', turns: true }; } },
+    { id: 'retour', k: 'Le retour du volant', d: 7000, t: 'Le retour du volant', s: 'Je sors du tournant. Je desserre un peu les mains et j’accompagne le volant : il glisse dans mes paumes et revient tout droit. Je ne le lâche jamais.',
+      f: (p) => { const th = 320 * (1 - ease(seg(p, .1, .85))); return { road: 'tournant', s: lerp(.62, 1, ease(p)), look: 1, th, L: G(-90, 'glide'), R: G(90, 'glide'), top: 'Je l’accompagne, je ne lâche pas', turns: true }; } },
+
+    { id: 'pousser', k: 'Ne pas pousser', d: 5000, t: 'Tirer, pas pousser !', s: 'Tirer, c’est du haut vers le bas : le bras descend tout seul. Pousser, c’est du bas vers le haut : on ne le fait pas.',
+      f: (p) => { const ok = p < .5; return ok ? { th: 60 * ease(seg(p, .05, .4)), R: G(60 * ease(seg(p, .05, .4))), L: G(-90, 'glide'), arrow: [0, 80, true], top: 'Tirer : oui', road: 'straight', s: .22, look: .5 }
+        : { th: -50 * ease(seg(p, .55, .9)), R: { a: 150 - 50 * ease(seg(p, .55, .9)), m: 'bad' }, L: G(-90, 'glide'), arrow: [150, 80, false], top: 'Pousser : non !', x: true }; } },
+    { id: 'unemain', k: 'Une seule main', d: 6000, t: 'Jamais une seule main en ligne droite', s: 'Même tout droit, je garde les deux mains sur le volant. Avec une seule main, si je dois éviter quelque chose d’un coup, je ne peux pas tourner assez vite ni assez fort.',
+      f: (p) => { const off = p > .25 ? Math.sin(seg(p, .25, 1) * Math.PI * 3) * 14 * (1 - seg(p, .8, 1)) : 0; const away = ease(seg(p, 0, .2));
+        return { road: 'straight', s: lerp(.15, .45, p), look: .5, wob: off, th: off * 1.5, L: G(-90 + off * 1.5), R: { a: lerp(90, 135, away), r: lerp(72, 118, away), m: 'bad' }, top: p > .25 ? 'Une main : la voiture tient mal sa ligne' : 'Je lâche une main…', bad: p > .25 }; } },
+    { id: 'interieur', k: 'Mains dedans : danger', d: 6000, t: 'Jamais les mains à l’intérieur', s: 'Si une roue tape le trottoir, le volant tourne d’un coup tout seul. Avec les mains à l’intérieur, le poignet peut casser. Les mains restent sur le tour du volant.',
+      f: (p) => { const kick = p > .5 ? -110 * Math.min(1, seg(p, .5, .58) * 1) : 0; return { th: kick, L: { a: -90 + kick, r: 40, m: 'bad' }, R: { a: 90 + kick, r: 40, m: 'bad' }, top: p > .5 ? 'Choc : le volant tourne d’un coup !' : 'Mains dedans = danger', x: p > .5 }; } }
+  ];
+  const BY = Object.fromEntries(STEPS.map((x) => [x.id, x]));
+  const CHAP = [
+    { id: 'regard', t: '1. Le regard', i: 'La voiture va là où tu regardes.', steps: ['chaine', 'loin', 'pres', 'solution'] },
+    { id: 'mains', t: '2. Les mains', i: 'Où poser les mains, et combien de tours fait le volant.', steps: ['915', '1010', 'tours'] },
+    { id: 'tourner', t: '3. Tourner', i: 'Courbe, virage, tournant : une technique pour chacun.', steps: ['courbe', 'virage', 'tournant', 'retour'] },
+    { id: 'pieges', t: '4. Les pièges', i: 'Trois gestes à ne jamais faire.', steps: ['pousser', 'unemain', 'interieur'] }
+  ];
+
+  let ch = CHAP[0], LIST = [], idx = 0, t0 = performance.now(), paused = false, pauseAt = 0;
+  const stepsEl = $('steps');
+  CHAP.forEach((c, n) => { const b = document.createElement('button'); b.textContent = c.t; b.dataset.n = n; b.addEventListener('click', () => setChap(n)); $('chap').appendChild(b); });
+  function setChap(n, stepId) {
+    ch = CHAP[n]; LIST = ch.steps.map((id) => BY[id]);
+    [...$('chap').children].forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.n === n)));
+    $('chapI').textContent = ch.i;
+    stepsEl.innerHTML = ''; stepsEl.className = 'steps' + (LIST.length === 3 ? ' n3' : '');
+    LIST.forEach((st, i) => { const b = document.createElement('button'); b.textContent = st.k; b.addEventListener('click', () => go(i)); stepsEl.appendChild(b); });
+    $('nextChap').textContent = n < CHAP.length - 1 ? 'Partie suivante : ' + CHAP[n + 1].t.replace(/^\d\. /, '') + ' ›' : 'Revoir depuis le début ›';
+    go(Math.max(0, stepId ? ch.steps.indexOf(stepId) : 0));
+  }
+  function go(i) { idx = i; t0 = performance.now(); if (paused) pauseAt = t0; }
+  $('nextChap').addEventListener('click', () => { const n = CHAP.indexOf(ch); setChap(n < CHAP.length - 1 ? n + 1 : 0); window.scrollTo({ top: $('chap').offsetTop - 12, behavior: 'smooth' }); });
+
+  let dash = 0;
+  function draw(p) {
+    const st = LIST[idx], s = st.f(Math.max(0, Math.min(1, p)));
+    // route
+    Object.keys(ROADS).forEach((k) => $('road_' + k).setAttribute('opacity', s.road === k ? 1 : 0));
+    const showCar = !!s.road;
+    $('carG').setAttribute('opacity', showCar ? 1 : 0); $('gaze').setAttribute('opacity', showCar ? 1 : 0);
+    $('obst').setAttribute('opacity', s.obst ? 1 : 0);
+    if (showCar) {
+      const c = at(s.road, s.s), off = s.wob || 0, cx = c.x + off * Math.cos(c.h * Math.PI / 180), cy = c.y + off * Math.sin(c.h * Math.PI / 180);
+      const hd = c.h + (s.wob ? (s.th || 0) * .25 : 0);
+      $('carG').setAttribute('transform', `translate(${cx.toFixed(1)} ${cy.toFixed(1)}) rotate(${hd.toFixed(1)})`);
+      let tx, ty;
+      if (s.look === 'obst') { tx = 232; ty = 76; } else if (s.look === 'free') { tx = 150; ty = 40; }
+      else { const g = at(s.road, Math.min(1, s.s + (s.look === 1 ? .4 : s.look))); tx = g.x; ty = g.y; if (s.look === 1) { const e = at(s.road, Math.min(.98, s.s + .45)); tx = e.x; ty = e.y; } }
+      tx = Math.max(16, Math.min(344, tx)); ty = Math.max(tx < 225 ? 60 : 18, Math.min(200, ty));
+      $('tgt').setAttribute('transform', `translate(${tx.toFixed(1)} ${ty.toFixed(1)})`);
+      const gl = $('gazeL'); gl.setAttribute('x1', cx.toFixed(1)); gl.setAttribute('y1', cy.toFixed(1)); gl.setAttribute('x2', tx.toFixed(1)); gl.setAttribute('y2', ty.toFixed(1));
+      $('tgt').querySelectorAll('circle,path').forEach((e) => { e.setAttribute(e.tagName === 'circle' && e.getAttribute('fill') !== 'none' ? 'fill' : 'stroke', s.bad ? '#E5484D' : '#F2C230'); });
+      gl.setAttribute('stroke', s.bad ? '#E5484D' : '#F2C230');
+    }
+    // chaîne du regard
+    $('chainG').setAttribute('opacity', s.chain != null ? 1 : 0);
+    if (s.chain != null) for (let i = 0; i < 5; i++) { const on = s.chain >= i * .18; $('ic' + i).setAttribute('opacity', on ? 1 : .25); if (i < 4) $('ia' + i).setAttribute('opacity', s.chain >= (i + 1) * .18 ? 1 : 0); }
+    // roues vues de dessus
+    $('wheelsG').setAttribute('opacity', s.wheels != null ? 1 : 0);
+    if (s.wheels != null) { const a = s.wheels / 540 * 35; $('fwL').setAttribute('transform', `translate(-40 -36) rotate(${a.toFixed(1)})`); $('fwR').setAttribute('transform', `translate(40 -36) rotate(${a.toFixed(1)})`); }
+    $('bigX').setAttribute('opacity', s.x ? 1 : 0);
+    $('topT').textContent = s.top || '';
+    $('topT').setAttribute('fill', s.bad || s.x ? '#FFB4B4' : '#F4F1EA');
+    // volant et mains
+    $('wheel').setAttribute('transform', `translate(${W.x} ${W.y}) rotate(${(s.th || 0).toFixed(1)})`);
+    $('clock').setAttribute('opacity', s.clock ? 1 : 0);
+    hand($('handL'), s.L, 'L'); hand($('handR'), s.R, 'R');
+    if (s.arrow) arrow(s.arrow[0], s.arrow[1], s.arrow[2]); else arrow(null);
+    const tr = (s.th || 0) / 360;
+    $('tours').textContent = (s.wheels != null || s.turns) ? (Math.abs(tr) < .05 ? '0 tour' : (Math.abs(tr) > 1.48 ? '1,5 tour : butée' : Math.abs(tr).toFixed(1).replace('.', ',') + ' tour')) : '';
+    $('badgeT').textContent = st.k;
+    $('capT').textContent = st.t; $('capS').textContent = st.s;
+    [...stepsEl.children].forEach((b, i) => b.setAttribute('aria-current', String(i === idx)));
+  }
+  function loop(now) {
+    if (!paused) { let p = (now - t0) / LIST[idx].d; if (p >= 1 + 1500 / LIST[idx].d) { t0 = now; p = 0; } draw(p); }
+    else draw((pauseAt - t0) / LIST[idx].d);
+    requestAnimationFrame(loop);
+  }
+  $('play').addEventListener('click', () => {
+    if (paused) { t0 += performance.now() - pauseAt; paused = false; $('play').textContent = '⏸ Pause'; }
+    else { paused = true; pauseAt = performance.now(); $('play').textContent = '▶ Lecture'; }
+  });
+  $('prev').addEventListener('click', () => go(Math.max(0, idx - 1)));
+  $('next').addEventListener('click', () => { if (idx < LIST.length - 1) go(idx + 1); else $('nextChap').click(); });
+  function fromHash() {
+    const h = location.hash.replace('#', '');
+    const n = CHAP.findIndex((c) => c.id === h || (h && c.steps.includes(h)));
+    if (n >= 0) { setChap(n, CHAP[n].id === h ? null : h); if (CHAP[n].id === h && $(h) && h !== 'regard' && h !== 'mains' && h !== 'tourner') $(h).scrollIntoView(); return; }
+    setChap(0); if (h && $(h)) $(h).scrollIntoView();
+  }
+  window.addEventListener('hashchange', fromHash); fromHash();
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { paused = true; pauseAt = performance.now(); $('play').textContent = '▶ Lecture'; }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
