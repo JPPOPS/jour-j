@@ -124,7 +124,7 @@
       <g id="uC" transform="translate(58 326)"></g>
       <g id="grpF"><g class="lbl" font-size="12" fill="#F4F1EA" text-anchor="middle"><text x="180" y="224">Frein</text><text x="180" y="238" font-weight="400" opacity=".8">pied droit</text></g><g id="uF" transform="translate(176 326)"></g></g>
       <g id="uA" transform="translate(294 326)"></g>
-      <text x="62" y="346" text-anchor="middle" class="lbl" font-size="11" fill="#FFD43B">jaune : point de patinage</text>
+      <text x="8" y="346" text-anchor="start" class="lbl" font-size="11" fill="#FFD43B">jaune : point de patinage</text>
       <line x1="12" y1="356" x2="348" y2="356" stroke="#3E424B" stroke-width="2"/>
       <!-- compte-tours -->
       <g transform="translate(130 432) scale(.82)">
@@ -137,6 +137,7 @@
       <text x="130" y="466" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#F4F1EA" opacity=".8">tours par minute</text>
       <text id="spdT" x="276" y="430" text-anchor="middle" class="lbl" font-size="26" fill="#F4F1EA">0 km/h</text>
       <text x="276" y="452" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="12" fill="#F4F1EA" opacity=".8">vitesse</text>
+      <g id="pauseB" opacity="0"><rect x="8" y="244" width="112" height="24" rx="12" fill="#FFD43B"/><text x="64" y="261" text-anchor="middle" class="lbl" font-size="13" fill="#16181D">⏸ PAUSE</text></g>
       <g id="stallB" opacity="0"><rect x="134" y="142" width="92" height="28" rx="14" fill="#E5484D"/><text x="180" y="161" text-anchor="middle" class="lbl" font-size="14" fill="#fff">Calé !</text></g>
       <g><rect x="12" y="12" width="190" height="30" rx="15" fill="#F4F1EA"/><text id="badgeT" x="107" y="32" text-anchor="middle" class="lbl" font-size="14" fill="#16181D"></text></g>
     </svg>
@@ -298,6 +299,9 @@
   // ---- les étapes ----
   // c : embrayage (0 = pédale enfoncée / débrayé, 1 = relevée / embrayé) · g : gaz (0-1)
   // rpm : régime · v : km/h · b : rotation du disque côté boîte (tr/min équivalents) · flow : 'fwd' | 'back' | 'cut' | 'none'
+  // remontée de l'embrayage avec pause quand les disques se touchent (le frein moteur arrive)
+  const releaseWithPause = (q) => q < .3 ? .5 * ease(q / .3) : (q < .65 ? .5 : .5 + .5 * ease(seg(q, .65, .9)));
+  const pauseLevel = (q) => q < .3 ? 0 : (q < .65 ? seg(q, .3, .6) : 1);
   const STEPS = [
     { id: '', k: 'Le moteur tourne', d: 4200, t: 'Le moteur tourne', s: 'La voiture est arrêtée, mais le moteur tourne doucement. Je suis au point mort : rien ne va aux roues.',
       f: (p) => ({ c: 1, g: 0, rpm: 800, v: 0, b: 800, gear: 'N', flow: 'none', ft: 'Point mort : rien ne va aux roues' }) },
@@ -315,22 +319,26 @@
       f: (p) => { const q = ease(p), v = lerp(6, 12, q); return { c: lerp(.5, 1, q), g: lerp(.18, .25, q), rpm: lerp(1100, 12 * R1, q), v, b: v * R1, gear: '1', flow: 'fwd', ft: 'Le moteur fait tourner les roues' }; } },
     { id: 'regime', k: 'J’accélère', d: 5200, t: 'Le régime moteur', s: 'J’accélère : le moteur tourne plus vite (l’aiguille monte), et la voiture va plus vite. Écoute : le bruit monte aussi.',
       f: (p) => { const q = ease(p), rpm = lerp(1500, 2800, q), v = rpm / R1; return { c: 1, g: lerp(.25, .7, q), rpm, v, b: rpm, gear: '1', flow: 'fwd', ft: 'L’aiguille monte : le moteur tourne vite' }; } },
-    { id: 'passer2', k: 'Je passe la 2e', d: 6000, t: 'Je passe la 2e', s: 'Le moteur tourne vite : je passe la 2e. Embrayage enfoncé, 2e, je relâche. La voiture va aussi vite, mais le moteur tourne moins vite : l’aiguille redescend.',
-      f: (p) => { const v = 22.4, sh = seg(p, .1, .8); const g = sh < .5 ? 0 : .35; const c = sh < .3 ? 1 - seg(sh, 0, .3) : (sh < .55 ? 0 : seg(sh, .55, 1)); const gear = sh > .38 ? '2' : '1';
-        const rpm = p < .1 ? 2800 : (sh < .3 ? lerp(2800, 2400, seg(sh, 0, .3)) : lerp(2400, v * R2, seg(sh, .3, 1)));
-        return { c, g, rpm, v, b: gear === '1' ? v * R1 : (gear === '2' ? v * R2 : rpm * c), gear, flow: c < .9 ? 'cut' : 'fwd', ft: c < .9 ? 'Embrayage enfoncé : je change de vitesse' : (gear === '2' ? 'En 2e : l’aiguille redescend' : 'Le moteur tourne vite') }; } },
+    { id: 'passer2', k: 'Je passe la 2e', d: 8000, t: 'Je passe la 2e', s: 'Le moteur tourne vite : embrayage enfoncé, 2e. Je remonte l’embrayage avec une pause quand les disques se touchent : le moteur s’accroche aux roues. Puis je finis de relâcher en accélérant : l’aiguille est plus basse qu’en 1re.',
+      f: (p) => { const v = 22.4; let c, g = 0, gear, rpm, flow, ft, pause = false, emb;
+        if (p < .2) { c = 1 - ease(seg(p, 0, .2)); gear = '1'; rpm = lerp(2800, 2400, seg(p, 0, .2)); flow = c > .9 ? 'fwd' : 'cut'; ft = 'Embrayage enfoncé'; }
+        else if (p < .35) { c = 0; gear = seg(p, .2, .35) > .5 ? '2' : '1'; rpm = lerp(2400, 1300, seg(p, .2, .35)); flow = 'cut'; ft = 'Je passe la 2e'; }
+        else if (p < .45) { c = .5 * ease(seg(p, .35, .45)); gear = '2'; rpm = 1300; flow = 'cut'; ft = 'Je relâche doucement…'; }
+        else if (p < .7) { const q = seg(p, .45, .7); c = lerp(.5, .56, q); gear = '2'; rpm = lerp(1300, v * R2, ease(seg(q, 0, .5))); flow = 'back'; emb = seg(q, 0, .3); pause = true; ft = 'Pause : le moteur s’accroche aux roues'; }
+        else { const q = seg(p, .7, .95); c = lerp(.56, 1, ease(q)); g = .35 * seg(q, 0, .6); gear = '2'; rpm = v * R2; flow = g > .08 ? 'fwd' : 'back'; ft = 'En 2e : l’aiguille est plus basse'; }
+        return { c, g, rpm, v, b: gear === '1' ? v * R1 : v * R2, gear, flow, ft, pause, emb }; } },
     { id: 'freinmoteur', k: 'Frein moteur', d: 7000, t: 'Le frein moteur', s: 'J’accélère en 2e : le moteur fait avancer la voiture. Puis je lève le pied de l’accélérateur. Tout de suite, le moteur retient les roues (anneau bleu) : la voiture ralentit toute seule, sans toucher au frein.',
       f: (p) => { if (p < .3) { const v = 24; return { c: 1, g: .45, rpm: v * R2, v, b: v * R2, gear: '2', flow: 'fwd', ft: 'J’accélère : le moteur fait avancer' }; }
         const q = seg(p, .3, 1), v = lerp(24, 12, ease(q)), g = .45 * (1 - seg(p, .3, .36));
         return { c: 1, g, rpm: v * R2, v, b: v * R2, gear: '2', flow: 'back', emb: seg(p, .3, .38), ft: 'Pied levé : le moteur retient les roues' }; } },
-    { id: 'retrograder', k: 'Descendre une vitesse', d: 10000, t: 'Ralentir et descendre une vitesse', s: 'Je roule en 3e. D’abord je freine : les feux stop s’allument. Je garde le frein pendant que je passe la 2e. Le moteur tourne plus vite et freine plus fort. À la bonne vitesse, je relâche le frein.',
-      f: (p) => { let v, c = 1, g = 0, fb, gear = '3', rpm, flow = 'back', ft;
-        if (p < .3) { const q = seg(p, 0, .3); v = lerp(45, 33, ease(q)); g = .3 * (1 - seg(q, 0, .2)); fb = .45 * seg(q, .15, .35); ft = 'D’abord je freine'; }
-        else if (p < .62) { const q = seg(p, .3, .62); v = lerp(33, 29, q); fb = .45; c = q < .25 ? 1 - seg(q, 0, .25) : (q < .5 ? 0 : seg(q, .5, 1)); gear = q < .3 ? '3' : (q < .42 ? 'N' : '2'); flow = c > .9 ? 'back' : 'cut'; ft = 'Frein gardé : je passe la 2e'; }
-        else { const q = seg(p, .62, 1); v = lerp(29, 18, ease(q)); gear = '2'; fb = .45 * (1 - seg(q, .25, .5)); ft = fb > .04 ? 'Frein + moteur qui freine plus fort' : 'Bonne vitesse : je relâche le frein'; }
-        const geared = gear === '3' ? v * R3 : (gear === '2' ? v * R2 : 800);
-        rpm = c > .95 ? geared : lerp(800, geared, c);
-        return { c, g, fb, rpm, v, b: gear === 'N' ? rpm * c : geared, gear, flow, ft }; } },
+    { id: 'retrograder', k: 'Descendre une vitesse', d: 12000, t: 'Ralentir et descendre une vitesse', s: 'Je roule en 3e. D’abord je freine : feux stop. Je garde le frein, embrayage, 2e. Je remonte l’embrayage avec une pause quand les disques se touchent : le moteur s’accroche aux roues et le frein moteur s’active. À la bonne vitesse, je relâche le frein.',
+      f: (p) => { let v, c = 1, g = 0, fb = .45, gear = '3', rpm, flow = 'back', ft, pause = false, emb;
+        if (p < .22) { const q = seg(p, 0, .22); v = lerp(45, 33, ease(q)); g = .3 * (1 - seg(q, 0, .2)); fb = .45 * seg(q, .15, .35); ft = 'D’abord je freine'; rpm = v * R3; }
+        else if (p < .42) { const q = seg(p, .22, .42); v = lerp(33, 30, q); c = q < .35 ? 1 - seg(q, 0, .35) : 0; gear = q < .55 ? '3' : (q < .75 ? 'N' : '2'); flow = c > .9 ? 'back' : 'cut'; ft = 'Frein gardé : embrayage, 2e'; rpm = c > .5 ? v * R3 : 800; }
+        else if (p < .5) { v = 29.5; c = .5 * ease(seg(p, .42, .5)); gear = '2'; flow = 'cut'; ft = 'Je relâche doucement…'; rpm = 800; }
+        else if (p < .72) { const q = seg(p, .5, .72); v = lerp(29.5, 26, q); c = lerp(.5, .56, q); gear = '2'; rpm = lerp(800, v * R2, ease(seg(q, 0, .45))); emb = seg(q, 0, .3); pause = true; ft = 'Pause : le moteur s’accroche, frein moteur !'; }
+        else { const q = seg(p, .72, 1); v = lerp(26, 18, ease(q)); c = lerp(.56, 1, ease(seg(q, 0, .3))); gear = '2'; fb = .45 * (1 - seg(q, .35, .6)); rpm = v * R2; ft = fb > .04 ? 'Frein + frein moteur' : 'Bonne vitesse : je relâche le frein'; }
+        return { c, g, fb, rpm, v, b: gear === 'N' ? 0 : (gear === '2' ? v * R2 : v * R3), gear, flow, ft, pause, emb }; } },
     { id: 'arret', k: 'S\'arrêter', d: 7000, t: 'S’arrêter', s: 'Pour m’arrêter, c’est la pédale de frein. Je freine doucement. Quelques mètres avant l’arrêt, j’enfonce l’embrayage, avant que le moteur tremble. S’il tremble déjà, c’était un peu tard. Arrêté : pied sur le frein, point mort.',
       f: (p) => { let v, c = 1, fb, gear = '2', flow = 'back', ft, rpm;
         if (p < .3) { const q = seg(p, 0, .3); v = lerp(16, 12.5, q); fb = .4 * Math.min(1, q * 3); ft = 'Je freine doucement'; }
@@ -411,6 +419,7 @@
     $('rpmT').textContent = String(Math.round(s.rpm / 50) * 50);
     $('spdT').textContent = Math.round(s.v) + ' km/h';
     $('stallB').setAttribute('opacity', s.stall ? 1 : 0);
+    $('pauseB').setAttribute('opacity', s.pause ? (Math.floor(performance.now() / 400) % 2 ? 1 : .55) : 0);
     $('badgeT').textContent = st.k;
     $('capT').textContent = st.t; $('capS').textContent = st.s;
     [...stepsEl.children].forEach((b, i) => b.setAttribute('aria-current', String(i === idx)));

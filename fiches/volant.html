@@ -50,7 +50,7 @@
       <g clip-path="url(#topclip)">
         <rect width="360" height="226" fill="#46601C"/>
         <g id="roadG"></g>
-        <g id="obst" opacity="0"><path d="M222 86 l10 -24 l10 24 Z" fill="#F08A24"/><rect x="219" y="84" width="26" height="5" rx="2" fill="#F4F1EA"/></g>
+        <g id="obst" opacity="0"><path d="M188 86 l10 -24 l10 24 Z" fill="#F08A24"/><rect x="185" y="84" width="26" height="5" rx="2" fill="#F4F1EA"/></g>
         <g id="carG"><rect x="-11" y="-19" width="22" height="38" rx="6" fill="#1F4FD1" stroke="#F4F1EA" stroke-width="2"/><rect x="-8" y="-12" width="16" height="8" rx="2" fill="#C9D6F7"/></g>
         <g id="gaze"><line id="gazeL" stroke="#F2C230" stroke-width="2" stroke-dasharray="4 4" opacity=".8"/><g id="tgt"><circle r="11" fill="none" stroke="#F2C230" stroke-width="3"/><circle r="3.5" fill="#F2C230"/><path d="M-17 0 H-12 M12 0 H17 M0 -17 V-12 M0 12 V17" stroke="#F2C230" stroke-width="3"/></g></g>
         <!-- la chaîne du regard -->
@@ -156,13 +156,15 @@
   const PATHS = {};
   Object.entries(ROADS).forEach(([k, r]) => {
     const g = document.createElementNS(NS, 'g'); g.setAttribute('id', 'road_' + k); g.setAttribute('opacity', 0);
-    g.innerHTML = (r.cross ? '<rect x="110" y="44" width="80" height="230" fill="#3A3F47"/><rect x="-10" y="44" width="380" height="80" fill="#3A3F47"/>' : '') +
+    g.innerHTML = (r.cross ? '<rect x="110" y="44" width="80" height="230" fill="#3A3F47"/><rect x="-10" y="44" width="380" height="80" fill="#3A3F47"/><path d="M150 274 V128 M194 84 H370 M106 84 H-10 M150 40 V-10" stroke="#F4F1EA" stroke-width="3" stroke-dasharray="14 12" opacity=".8"/>' : '') +
       `<path d="${r.d}" stroke="#3A3F47" stroke-width="${r.cross ? 0 : 74}" fill="none"/><path d="${r.d}" stroke="#F4F1EA" stroke-width="3" stroke-dasharray="14 12" fill="none" opacity="${r.cross ? 0 : .8}"/>`;
     $('roadG').appendChild(g);
     const p = document.createElementNS(NS, 'path'); p.setAttribute('d', r.d); PATHS[k] = { el: p, len: 0 };
     $('roadG').appendChild(p); p.setAttribute('stroke', 'none'); p.setAttribute('fill', 'none');
   });
   Object.values(PATHS).forEach((x) => { x.len = x.el.getTotalLength(); });
+  const LANE = 18;
+  const atL = (k, s) => { const c = at(k, s), r = c.h * Math.PI / 180; return { x: c.x + LANE * Math.cos(r), y: c.y + LANE * Math.sin(r), h: c.h }; };
   const at = (k, s) => { const P = PATHS[k], l = Math.max(0, Math.min(P.len, s * P.len)), a = P.el.getPointAtLength(l), b = P.el.getPointAtLength(Math.min(P.len, l + 1)), c = P.el.getPointAtLength(Math.max(0, l - 1)); return { x: a.x, y: a.y, h: Math.atan2(b.x - c.x, -(b.y - c.y)) * 180 / Math.PI }; };
 
   // ---------- chaîne du regard (dessins simples) ----------
@@ -206,8 +208,8 @@
     { id: 'pres', k: 'Regard trop près', d: 5000, t: 'Le piège : regarder trop près', s: 'Je regarde juste devant le capot. Je corrige sans arrêt : la voiture zigzague.',
       f: (p) => ({ road: 'straight', s: lerp(.15, .4, p), look: .1, wob: Math.sin(p * 18) * 16, th: Math.cos(p * 18) * 25, L: G(-90), R: G(90), top: 'Regard trop près : ça zigzague', bad: true }) },
     { id: 'solution', k: 'Regarder la solution', d: 7000, t: 'Regarde la solution, pas le problème', s: 'Un obstacle ! Si je le fixe, la voiture va droit dessus. Je le vois d’un coup d’œil, puis je regarde le passage libre : la voiture passe.',
-      f: (p) => { const bad = p < .45; const off = bad ? 26 * ease(seg(p, .1, .45)) : lerp(26, -30, ease(seg(p, .45, .75))) * (p > .75 ? 1 - seg(p, .85, 1) * 0 : 1);
-        return { road: 'straight', s: lerp(.12, .5, p), look: bad ? 'obst' : 'free', wob: off, th: bad ? 20 * seg(p, .1, .3) : -25 * Math.sin(seg(p, .45, .8) * Math.PI), L: G(-90), R: G(90), obst: true, top: bad ? 'Je fixe l’obstacle : j’y vais !' : 'Je regarde le passage : je passe', bad }; } },
+      f: (p) => { const bad = p < .45; const off = bad ? 0 : -36 * ease(seg(p, .45, .75));
+        return { road: 'straight', s: lerp(.12, .5, p), look: bad ? 'obst' : 'free', wob: off, th: bad ? 0 : -25 * Math.sin(seg(p, .45, .8) * Math.PI), L: G(-90), R: G(90), obst: true, top: bad ? 'Je fixe l’obstacle : j’y vais !' : 'Je regarde le passage : je passe', bad }; } },
 
     { id: '915', k: '9 h 15', d: 4000, t: 'Les mains à 9 h 15', s: 'Imagine une horloge. Main gauche sur le 9, main droite sur le 3. Mains souples : je ne serre pas. Mes doigts atteignent le clignotant et les essuie-glaces.',
       f: (p) => ({ clock: 1, th: 0, L: G(-90), R: G(90), top: '', road: 'straight', s: .22, look: .5 }) },
@@ -275,12 +277,12 @@
     $('carG').setAttribute('opacity', showCar ? 1 : 0); $('gaze').setAttribute('opacity', showCar ? 1 : 0);
     $('obst').setAttribute('opacity', s.obst ? 1 : 0);
     if (showCar) {
-      const c = at(s.road, s.s), off = s.wob || 0, cx = c.x + off * Math.cos(c.h * Math.PI / 180), cy = c.y + off * Math.sin(c.h * Math.PI / 180);
+      const c = atL(s.road, s.s), off = s.wob || 0, cx = c.x + off * Math.cos(c.h * Math.PI / 180), cy = c.y + off * Math.sin(c.h * Math.PI / 180);
       const hd = c.h + (s.wob ? (s.th || 0) * .25 : 0);
       $('carG').setAttribute('transform', `translate(${cx.toFixed(1)} ${cy.toFixed(1)}) rotate(${hd.toFixed(1)})`);
       let tx, ty;
-      if (s.look === 'obst') { tx = 232; ty = 76; } else if (s.look === 'free') { tx = 150; ty = 40; }
-      else { const g = at(s.road, Math.min(1, s.s + (s.look === 1 ? .4 : s.look))); tx = g.x; ty = g.y; if (s.look === 1) { const e = at(s.road, Math.min(.98, s.s + .45)); tx = e.x; ty = e.y; } }
+      if (s.look === 'obst') { tx = 198; ty = 76; } else if (s.look === 'free') { tx = 160; ty = 62; }
+      else { const g = atL(s.road, Math.min(1, s.s + (s.look === 1 ? .4 : s.look))); tx = g.x; ty = g.y; if (s.look === 1) { const e = atL(s.road, Math.min(.98, s.s + .45)); tx = e.x; ty = e.y; } }
       tx = Math.max(16, Math.min(344, tx)); ty = Math.max(tx < 225 ? 60 : 18, Math.min(200, ty));
       $('tgt').setAttribute('transform', `translate(${tx.toFixed(1)} ${ty.toFixed(1)})`);
       const gl = $('gazeL'); gl.setAttribute('x1', cx.toFixed(1)); gl.setAttribute('y1', cy.toFixed(1)); gl.setAttribute('x2', tx.toFixed(1)); gl.setAttribute('y2', ty.toFixed(1));

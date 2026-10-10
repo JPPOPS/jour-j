@@ -107,6 +107,7 @@
       <g class="lbl" font-size="11" fill="#F4F1EA"><text x="12" y="472">Embrayage</text><text x="12" y="484" font-weight="400" opacity=".7">enfoncé ↑</text><text x="12" y="522">Accélérateur</text><text x="12" y="534" font-weight="400" opacity=".7">appuyé ↑</text></g>
       <g id="tl"></g>
       <line id="tlCur" y1="450" y2="548" stroke="#F4F1EA" stroke-width="2"/>
+      <g id="pauseB" opacity="0"><rect x="8" y="244" width="112" height="24" rx="12" fill="#FFD43B"/><text x="64" y="261" text-anchor="middle" class="lbl" font-size="13" fill="#16181D">⏸ PAUSE</text></g>
       <g id="stallB" opacity="0"><rect x="134" y="142" width="92" height="28" rx="14" fill="#E5484D"/><text x="180" y="161" text-anchor="middle" class="lbl" font-size="14" fill="#fff">Calé !</text></g>
       <g><rect x="12" y="12" width="190" height="30" rx="15" fill="#F4F1EA"/><text id="badgeT" x="107" y="32" text-anchor="middle" class="lbl" font-size="14" fill="#16181D"></text></g>
     </svg>
@@ -247,9 +248,12 @@
     { id: 'passe2', k: '3. Je passe la 2e', d: 5000, t: '3. Je passe la 2e', s: 'L’embrayage reste enfoncé. Main en cuillère tournée vers moi : je tire vers moi et je descends tout droit de la 1re à la 2e. C’est le même couloir, pas besoin de repasser par le point mort. Côté boîte, le disque ralentit pour s’adapter à la 2e.',
       f: (p) => { const t = ease(seg(p, .1, .8)), v = lerp(18.6, 18, p), gear = t < .5 ? '1' : '2'; const b = lerp(v * R1, v * R2, ease(seg(t, .3, .8)));
         return { c: 0, g: 0, rpm: lerp(1500, 1100, p), v, b, gear, lev: { from: '1', to: '2', t }, flow: 'cut', ft: gear === '2' ? '2e passée, embrayage toujours enfoncé' : 'Le levier descend tout droit' }; } },
-    { id: 'embraye2', k: '4. Je relâche doucement', d: 5500, t: '4. Je relâche l’embrayage doucement et j’accélère un peu', s: 'Le pied gauche remonte doucement, le pied droit accélère un peu en même temps. Les disques se touchent puis se collent : le moteur fait de nouveau avancer la voiture, en 2e.',
-      f: (p) => { const c = ease(seg(p, .05, .75)), g = .3 * seg(p, .2, .7), v = lerp(18, 19.5, seg(p, .3, 1)), synced = v * R2; const rpm = c < .5 ? lerp(1100, 1000, p) : lerp(1000, synced, seg(c, .5, 1));
-        return { c, g, rpm, v, b: v * R2, gear: '2', lev: '2', flow: c < .45 ? 'cut' : (c < .95 ? 'slip' : 'fwd'), ft: c < .45 ? 'Je relâche doucement…' : (c < .95 ? 'Les disques se touchent' : 'Collé : le moteur pousse en 2e') }; } },
+    { id: 'embraye2', k: '4. Je relâche… pause', d: 8000, t: '4. Je relâche l’embrayage, avec une pause', s: 'Le pied gauche remonte doucement jusqu’au moment où les disques se touchent. Là, je fais une pause : le moteur s’accroche aux roues, je le sens retenir la voiture (anneau bleu). Puis je finis de relâcher en accélérant un peu : le moteur pousse en 2e.',
+      f: (p) => { let c, g = 0, v, rpm, flow, ft, pause = false, emb;
+        if (p < .22) { c = .5 * ease(seg(p, 0, .22)); v = lerp(18, 17.8, seg(p, 0, .22)); rpm = 1050; flow = 'cut'; ft = 'Je relâche doucement…'; }
+        else if (p < .55) { const q = seg(p, .22, .55); c = lerp(.5, .56, q); v = lerp(17.8, 17, q); rpm = lerp(1050, v * R2, ease(seg(q, 0, .5))); flow = 'back'; emb = seg(q, 0, .3); pause = true; ft = 'Pause : le moteur s’accroche aux roues'; }
+        else { const q = seg(p, .55, .9); c = lerp(.56, 1, ease(q)); g = .3 * seg(q, 0, .6); v = lerp(17, 19.5, q); rpm = v * R2; flow = g > .08 ? 'fwd' : 'back'; ft = g > .08 ? 'J’accélère : le moteur pousse en 2e' : 'Je finis de relâcher'; }
+        return { c, g, rpm, v, b: v * R2, gear: '2', lev: '2', flow, ft, pause, emb }; } },
     { id: 'en2', k: '5. En 2e', d: 5000, t: 'En 2e : le moteur est plus calme', s: 'À la même vitesse, le moteur tourne moins vite qu’en 1re : l’aiguille est redescendue. J’accélère à nouveau, et je referai les mêmes gestes pour la 3e.',
       f: (p) => { const q = ease(p), rpm = lerp(19.5 * R2, 2200, q), v = rpm / R2; return { c: 1, g: lerp(.3, .6, q), rpm, v, b: rpm, gear: '2', lev: '2', flow: 'fwd', ft: 'En 2e, la voiture va plus vite' }; } },
     { id: 'dunCoup', k: 'Embrayage lâché d’un coup', d: 4500, t: 'Erreur : lâcher l’embrayage d’un coup', s: 'Si je lâche la pédale d’un coup, les disques se collent brutalement : la voiture fait un à-coup, les passagers sont secoués.',
@@ -351,6 +355,7 @@
     $('rpmT').textContent = String(Math.round(s.rpm / 50) * 50);
     $('spdT').textContent = Math.round(s.v) + ' km/h';
     $('stallB').setAttribute('opacity', s.stall ? 1 : 0);
+    $('pauseB').setAttribute('opacity', s.pause ? (Math.floor(performance.now() / 400) % 2 ? 1 : .55) : 0);
     $('badgeT').textContent = st.k;
     $('capT').textContent = st.t; $('capS').textContent = st.s;
     [...stepsEl.children].forEach((b, i) => b.setAttribute('aria-current', String(i === idx)));
