@@ -1,8 +1,8 @@
 // Cache hors-ligne. Change VERSION à chaque mise à jour pour que les téléphones récupèrent les nouveaux fichiers.
-const VERSION = 'jourj-v15';
+const VERSION = 'jourj-v21';
 const FILES = [
   './', 'index.html', 'app.css', 'app.js', 'data/questions.json', 'manifest.webmanifest',
-  'mentions-legales.html', 'fiches/', 'fiches/index.html', 'fiches/fiches.css', 'fiches/fiches.js', 'fiches/vif.html', 'fiches/chaine.html', 'fiches/volant.html', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'
+  'mentions-legales.html', 'fiches/', 'fiches/index.html', 'fiches/fiches.css', 'fiches/fiches.js', 'fiches/vif.html', 'fiches/chaine.html', 'fiches/volant.html', 'fiches/vitesses.html', 'fiches/retro.html', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', (e) => {

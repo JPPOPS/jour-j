@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Monter les vitesses — Fiche</title>
+<meta name="theme-color" content="#F4F1EA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fiches.css">
+<style>
+  .stage{background:#2B2F36;border-radius:20px;overflow:hidden;position:relative}
+  .stage svg{display:block;width:100%;height:auto}
+  .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .steps button{min-height:44px;border-radius:12px;border:1px solid var(--line2);background:var(--card);font-weight:700;font-size:13px;cursor:pointer;color:var(--ink2);padding:0 4px;line-height:1.1}
+  .steps button[aria-current="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .caption{min-height:120px;font-size:17px;line-height:1.45}
+  .caption b{font-family:var(--display);font-size:20px;display:block;margin-bottom:2px}
+  .ctrl{display:flex;gap:10px;align-items:center}
+  .key{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--soft)}
+  .key:last-child{border-bottom:0}
+  .key .n{flex-shrink:0;width:36px;height:36px;border-radius:18px;color:#fff;font-family:var(--display);font-weight:800;display:flex;align-items:center;justify-content:center}
+  ul.clean{margin:0;padding-left:20px;line-height:1.55}
+  ul.clean li{margin:4px 0}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .two>div{border-radius:14px;padding:12px;line-height:1.45;font-size:15px}
+  .lbl{font-family:'Atkinson Hyperlegible',sans-serif;font-weight:700}
+  .card svg{display:block;width:100%;height:auto}
+  .shaftA{animation:shaftRun .5s linear infinite}
+  .wheelA{animation:wheelTurn 1.2s linear infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes shaftRun{to{stroke-dashoffset:-12}}
+  @keyframes wheelTurn{to{transform:rotate(-360deg)}}
+  @media (prefers-reduced-motion:reduce){.shaftA,.wheelA{animation:none}}
+  .chap{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .chap button{min-height:52px;border-radius:14px;border:1px solid var(--line2);background:var(--card);font-weight:800;font-size:15px;cursor:pointer;color:var(--ink2);line-height:1.15;padding:4px 8px}
+  .chap button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+  .steps.n2{grid-template-columns:1fr 1fr}
+</style>
+</head>
+<body>
+<main id="app" style="gap:18px">
+  <div class="row"><a class="icon-btn" href="./" id="backlink" aria-label="Retour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <div><div class="small muted" style="font-weight:700">Fiche · Utiliser la boîte de vitesses</div><h1 style="font-size:28px;font-weight:800;line-height:1.1">Monter les vitesses</h1></div></div>
+
+  <p style="margin:0;font-size:18px;line-height:1.5">Passer de la 1re à la 2e, c’est <b>4 gestes</b> qui s’enchaînent. Regarde ce que font les pieds, le levier, et ce qui se passe entre le moteur et les roues. En bas, la bande montre <b>quand j’appuie et quand je relâche</b>.</p>
+
+  <div class="chap" id="chap" role="group" aria-label="Choisir une partie"></div>
+  <p id="chapI" style="margin:-6px 0 0;font-size:16px;line-height:1.4;color:var(--ink2)"></p>
+  <div class="stage" aria-label="Animation : moteur, embrayage, boîte de vitesses et roue, avec la pédale d'embrayage, l'accélérateur et le compte-tours">
+    <svg id="scene" viewBox="0 0 360 556" role="img" aria-labelledby="capT">
+      <defs>
+        <pattern id="stripe" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><rect width="6" height="12" fill="#F4F1EA" opacity=".55"/></pattern>
+        <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="context-stroke"/></marker>
+      </defs>
+      <!-- étiquettes -->
+      <g class="lbl" font-size="12" fill="#F4F1EA" text-anchor="middle">
+        <text x="52" y="54">1 Moteur</text><text x="150" y="54">2 Embrayage</text><text x="222" y="54">3 Boîte</text><text x="306" y="54">4 Roue</text>
+      </g>
+      <!-- arbres (les rayures défilent = ça tourne) -->
+      <g id="sh1"><rect x="92" y="90" width="44" height="12" fill="#9AA0A8"/><rect id="sh1s" x="80" y="90" width="68" height="12" fill="url(#stripe)" clip-path="url(#c1)"/></g>
+      <clipPath id="c1"><rect x="92" y="90" width="44" height="12"/></clipPath>
+      <g id="sh2"><rect id="sh2r" x="156" y="90" width="38" height="12" fill="#9AA0A8"/><rect id="sh2s" x="144" y="90" width="62" height="12" fill="url(#stripe)" clip-path="url(#c2)"/></g>
+      <clipPath id="c2"><rect id="c2r" x="156" y="90" width="38" height="12"/></clipPath>
+      <g id="sh3"><rect x="250" y="90" width="20" height="12" fill="#9AA0A8"/><rect id="sh3s" x="238" y="90" width="44" height="12" fill="url(#stripe)" clip-path="url(#c3)"/></g>
+      <clipPath id="c3"><rect x="250" y="90" width="20" height="12"/></clipPath>
+      <!-- moteur -->
+      <rect x="12" y="66" width="80" height="60" rx="10" fill="#E8590C"/>
+      <g transform="translate(52 96)"><circle r="20" fill="#B8460A"/><g id="fanE"><rect x="-3" y="-18" width="6" height="36" rx="3" fill="#FFE2CC"/><rect x="-18" y="-3" width="36" height="6" rx="3" fill="#FFE2CC"/></g><circle r="5" fill="#E8590C"/></g>
+      <!-- embrayage : disque côté moteur + disque côté boîte -->
+      <g id="discA"><rect x="134" y="66" width="10" height="60" rx="4" fill="#5B8DEF"/><rect id="discAs" x="134" y="40" width="10" height="112" fill="url(#stripe)" clip-path="url(#cA)"/></g>
+      <clipPath id="cA"><rect x="134" y="66" width="10" height="60" rx="4"/></clipPath>
+      <g id="discB"><rect x="0" y="66" width="10" height="60" rx="4" fill="#5B8DEF"/><rect id="discBs" x="0" y="40" width="10" height="112" fill="url(#stripe)" clip-path="url(#cB)"/></g>
+      <clipPath id="cB"><rect id="cBr" x="0" y="66" width="10" height="60" rx="4"/></clipPath>
+      <g id="spark" opacity="0"><path d="M144 76 l6 -8 M144 96 l8 0 M144 116 l6 8" stroke="#FFD43B" stroke-width="3" stroke-linecap="round"/></g>
+      <!-- boîte -->
+      <rect x="194" y="70" width="56" height="52" rx="8" fill="#3E8E3A"/>
+      <g transform="translate(212 96)"><g id="gear"><circle r="11" fill="#A9DBA6"/><g fill="#A9DBA6"><rect x="-3" y="-16" width="6" height="32"/><rect x="-16" y="-3" width="32" height="6"/><rect x="-3" y="-16" width="6" height="32" transform="rotate(45)"/><rect x="-3" y="-16" width="6" height="32" transform="rotate(-45)"/></g><circle r="4" fill="#3E8E3A"/></g></g>
+      <rect x="226" y="84" width="20" height="24" rx="5" fill="#F4F1EA"/><text id="gearT" x="236" y="102" text-anchor="middle" class="lbl" font-size="16" fill="#16181D">N</text>
+      <!-- roue -->
+      <g transform="translate(306 96)"><circle id="emb" r="42" fill="none" stroke="#5B8DEF" stroke-width="5" stroke-dasharray="10 6" opacity="0"/><circle r="38" fill="#16181D" stroke="#9AA0A8" stroke-width="3"/><circle r="22" fill="#5A5F6B"/><g id="wheel" stroke="#D9DCE0" stroke-width="4" stroke-linecap="round"><path d="M0 -20 V20 M-20 0 H20 M-14 -14 L14 14 M-14 14 L14 -14"/></g><circle r="5" fill="#D9DCE0"/><path id="brk" d="M-21 -21 A30 30 0 0 1 21 -21" stroke="#E5484D" stroke-width="9" fill="none" stroke-linecap="round" opacity="0"/></g>
+      <!-- sens de l'entraînement -->
+      <g id="flow" opacity="0"><line id="flowL" x1="30" y1="156" x2="330" y2="156" stroke="#FFB020" stroke-width="5" stroke-linecap="round" marker-end="url(#ah)"/></g>
+      <g id="cut" opacity="0"><circle cx="150" cy="156" r="11" fill="#E5484D"/><path d="M144 150 l12 12 M156 150 l-12 12" stroke="#fff" stroke-width="3" stroke-linecap="round"/></g>
+      <text id="flowT" x="180" y="186" text-anchor="middle" class="lbl" font-size="13" fill="#F4F1EA"></text>
+      <line x1="12" y1="204" x2="348" y2="204" stroke="#3E424B" stroke-width="2"/>
+      <!-- pédales, levier, compte-tours, bande des appuis -->
+      <g class="lbl" font-size="12" fill="#F4F1EA" text-anchor="middle"><text x="66" y="224">Embrayage</text><text x="66" y="238" font-weight="400" opacity=".8">pied gauche</text><text x="182" y="224">Accélérateur</text><text x="182" y="238" font-weight="400" opacity=".8">pied droit</text><text x="300" y="224">Levier</text></g>
+      <g id="uC" transform="translate(62 318)"></g>
+      <g id="grpF" style="display:none"><g id="uF"></g></g>
+      <g id="uA" transform="translate(178 318)"></g>
+      <g transform="translate(300 286)">
+        <g stroke="#5A5F6B" stroke-width="7" stroke-linecap="round" fill="none"><path d="M-24 -26 V26 M0 -26 V26 M24 -26 V26 M-24 0 H24"/></g>
+        <g class="lbl" font-size="12" fill="#D9DCE0" text-anchor="middle"><text x="-24" y="-32">1</text><text x="0" y="-32">3</text><text x="24" y="-32">5</text><text x="-24" y="42">2</text><text x="0" y="42">4</text><text x="24" y="42">6</text></g>
+        <circle id="knob" r="9" fill="#F4F1EA" stroke="#16181D" stroke-width="2"/>
+      </g>
+      <line x1="12" y1="346" x2="348" y2="346" stroke="#3E424B" stroke-width="2"/>
+      <g transform="translate(96 410) scale(.7)">
+        <path id="arcs" fill="none"/>
+        <g id="ticks"></g>
+        <g id="needle"><path d="M-3 0 L0 -58 L3 0 Z" fill="#E5484D"/></g><circle r="7" fill="#F4F1EA"/>
+        <text y="30" text-anchor="middle" class="lbl" font-size="22" fill="#F4F1EA" id="rpmT">800</text>
+      </g>
+      <text x="22" y="364" class="lbl" font-size="12" fill="#F4F1EA">Compte-tours</text>
+      <text id="spdT" x="262" y="396" text-anchor="middle" class="lbl" font-size="26" fill="#F4F1EA">0 km/h</text>
+      <text x="262" y="416" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="12" fill="#F4F1EA" opacity=".8">vitesse</text>
+      <line x1="12" y1="440" x2="348" y2="440" stroke="#3E424B" stroke-width="2"/>
+      <g class="lbl" font-size="11" fill="#F4F1EA"><text x="12" y="472">Embrayage</text><text x="12" y="484" font-weight="400" opacity=".7">enfoncé ↑</text><text x="12" y="522">Accélérateur</text><text x="12" y="534" font-weight="400" opacity=".7">appuyé ↑</text></g>
+      <g id="tl"></g>
+      <line id="tlCur" y1="450" y2="548" stroke="#F4F1EA" stroke-width="2"/>
+      <g id="stallB" opacity="0"><rect x="134" y="142" width="92" height="28" rx="14" fill="#E5484D"/><text x="180" y="161" text-anchor="middle" class="lbl" font-size="14" fill="#fff">Calé !</text></g>
+      <g><rect x="12" y="12" width="190" height="30" rx="15" fill="#F4F1EA"/><text id="badgeT" x="107" y="32" text-anchor="middle" class="lbl" font-size="14" fill="#16181D"></text></g>
+    </svg>
+  </div>
+
+  <div class="caption" id="cap" aria-live="polite"><b id="capT"></b><span id="capS"></span></div>
+  <div class="steps" id="steps"></div>
+  <div class="ctrl"><button class="btn btn-light" id="prev" style="width:auto;padding:0 18px;font-size:20px" aria-label="Étape précédente">‹</button><button class="btn btn-dark" id="play" style="flex:1">⏸ Pause</button><button class="btn btn-primary" id="next" style="width:auto;padding:0 18px">Suivant ›</button></div>
+  <button class="btn btn-primary" id="nextChap"></button>
+
+  <div class="card" id="gestes"><h2 style="font-size:20px;margin-bottom:6px">Les 4 gestes pour monter une vitesse</h2>
+    <div class="key"><span class="n" style="background:#3E8E3A">1</span><div><b>J’accélère</b> dans la vitesse où je suis, jusqu’au bon régime (vers 2 000 à 2 500 tours en essence, 1 500 à 2 000 en diesel).</div></div>
+    <div class="key"><span class="n" style="background:#5B8DEF">2</span><div><b>En même temps</b> : je lève le pied droit et j’enfonce l’embrayage à fond. Le moteur et les roues sont séparés.</div></div>
+    <div class="key"><span class="n" style="background:#16181D">3</span><div><b>Je passe la vitesse suivante</b>, sans regarder le levier, sans le saisir à pleine main (voir « La main sur le levier »).</div></div>
+    <div class="key"><span class="n" style="background:#E8590C">4</span><div><b>Je relâche l’embrayage doucement</b> et j’accélère un peu en même temps. Les disques se recollent : le moteur fait à nouveau avancer la voiture.</div></div>
+  </div>
+
+  <div class="card" id="plages"><h2 style="font-size:20px;margin-bottom:8px">Quand changer de vitesse ? (sur notre Clio 5)</h2>
+    <svg viewBox="0 0 328 112" role="img" aria-label="Vitesses de passage sur la Clio 5 : de la 1re à la 2e vers 15 à 20 km/h, de la 2e à la 3e vers 30 à 35, de la 3e à la 4e vers 55 à 60, de la 4e à la 5e vers 75 à 80, de la 5e à la 6e vers 95 à 100 km/h">
+      <text x="14" y="22" font-family="Atkinson Hyperlegible, sans-serif" font-size="12" font-weight="700" fill="#16181D">Vitesse de la voiture (km/h) — en jaune : je change</text>
+      <rect x="51.5" y="30" width="12.5" height="54" fill="#F2C230" opacity=".35"/><rect x="89.0" y="30" width="12.5" height="54" fill="#F2C230" opacity=".35"/><rect x="151.5" y="30" width="12.5" height="54" fill="#F2C230" opacity=".35"/><rect x="201.5" y="30" width="12.5" height="54" fill="#F2C230" opacity=".35"/><rect x="251.5" y="30" width="12.5" height="54" fill="#F2C230" opacity=".35"/><rect x="14.0" y="40" width="41.8" height="34" rx="6" fill="#E8590C"/><text x="34.9" y="63" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="15" fill="#fff">1</text><rect x="57.8" y="40" width="35.5" height="34" rx="6" fill="#F08A24"/><text x="75.5" y="63" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="15" fill="#fff">2</text><rect x="95.2" y="40" width="60.5" height="34" rx="6" fill="#3E8E3A"/><text x="125.5" y="63" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="15" fill="#fff">3</text><rect x="157.8" y="40" width="48.0" height="34" rx="6" fill="#1F4FD1"/><text x="181.8" y="63" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="15" fill="#fff">4</text><rect x="207.8" y="40" width="48.0" height="34" rx="6" fill="#6D28D9"/><text x="231.8" y="63" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="15" fill="#fff">5</text><rect x="257.8" y="40" width="54.2" height="34" rx="6" fill="#16181D"/><text x="284.9" y="63" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="15" fill="#fff">6</text><text x="14.0" y="102" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#5A5F6B">0</text><text x="64.0" y="102" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#5A5F6B">20</text><text x="101.5" y="102" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#5A5F6B">35</text><text x="164.0" y="102" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#5A5F6B">60</text><text x="214.0" y="102" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#5A5F6B">80</text><text x="264.0" y="102" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#5A5F6B">100</text><text x="314.0" y="102" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#5A5F6B">120</text>
+    </svg>
+    <table style="width:100%;border-collapse:collapse;margin-top:8px;font-size:15px">
+      <tr style="border-bottom:1px solid var(--soft)"><td style="padding:6px 0"><b>1 → 2</b></td><td style="text-align:right">15 à 20 km/h</td></tr>
+      <tr style="border-bottom:1px solid var(--soft)"><td style="padding:6px 0"><b>2 → 3</b></td><td style="text-align:right">30 à 35 km/h</td></tr>
+      <tr style="border-bottom:1px solid var(--soft)"><td style="padding:6px 0"><b>3 → 4</b></td><td style="text-align:right">55 à 60 km/h</td></tr>
+      <tr style="border-bottom:1px solid var(--soft)"><td style="padding:6px 0"><b>4 → 5</b></td><td style="text-align:right">75 à 80 km/h</td></tr>
+      <tr><td style="padding:6px 0"><b>5 → 6</b></td><td style="text-align:right">95 à 100 km/h</td></tr>
+    </table>
+    <p class="small muted" style="margin:8px 0 0">Repères pour la Clio 5 de l’auto-école. Sur une autre voiture, ça change un peu : l’oreille et le compte-tours aident aussi.</p>
+  </div>
+
+  <div class="card" id="main"><h2 style="font-size:20px;margin-bottom:8px">La main sur le levier</h2>
+    <svg viewBox="0 0 330 260" role="img" aria-label="Grille de la boîte vue de dessus : 1 et 2 à gauche, main en cuillère tournée vers le conducteur ; 3 et 4 au milieu, main posée au-dessus ; 5 et 6 à droite, main en cuillère tournée vers le passager. Un ressort ramène le levier au milieu.">
+      <rect x="20" y="20" width="90" height="200" rx="14" fill="#E3E9FB"/><rect x="120" y="20" width="90" height="200" rx="14" fill="#EEF3E2"/><rect x="220" y="20" width="90" height="200" rx="14" fill="#FDF0E2"/>
+      <g stroke="#3E424B" stroke-width="9" stroke-linecap="round" fill="none"><path d="M65 55 V185 M165 55 V185 M265 55 V185 M65 120 H265"/></g>
+      <g font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="16" fill="#16181D" text-anchor="middle"><text x="65" y="46">1</text><text x="165" y="46">3</text><text x="265" y="46">5</text><text x="65" y="208">2</text><text x="165" y="208">4</text><text x="265" y="208">6</text></g>
+      <circle cx="165" cy="120" r="10" fill="#16181D"/>
+      <path d="M140 132 l6 -8 l6 8 l6 -8 l6 8" stroke="#E8590C" stroke-width="2.5" fill="none" transform="translate(-60 0)"/>
+      <path d="M180 132 l6 -8 l6 8 l6 -8 l6 8" stroke="#E8590C" stroke-width="2.5" fill="none" transform="translate(40 0)"/>
+      <g transform="translate(42 120) rotate(90)"><path d="M-13 -10 Q-16 6 -6 13 Q6 16 12 6 L12 -12 Q0 -18 -13 -10 Z" fill="#E8B48F" stroke="#16181D" stroke-width="1.5"/><path d="M-13 -10 Q-22 -6 -20 4" stroke="#16181D" stroke-width="1.5" fill="none"/></g><g transform="translate(165 92) rotate(0)"><path d="M-13 -10 Q-16 6 -6 13 Q6 16 12 6 L12 -12 Q0 -18 -13 -10 Z" fill="#E8B48F" stroke="#16181D" stroke-width="1.5"/><path d="M-13 -10 Q-22 -6 -20 4" stroke="#16181D" stroke-width="1.5" fill="none"/></g><g transform="translate(288 120) rotate(-90)"><path d="M-13 -10 Q-16 6 -6 13 Q6 16 12 6 L12 -12 Q0 -18 -13 -10 Z" fill="#E8B48F" stroke="#16181D" stroke-width="1.5"/><path d="M-13 -10 Q-22 -6 -20 4" stroke="#16181D" stroke-width="1.5" fill="none"/></g>
+      <g font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#3E424B" text-anchor="middle"><text x="65" y="240">cuillère vers moi</text><text x="165" y="240">main au-dessus</text><text x="265" y="240">cuillère vers le mono</text></g>
+      <text x="165" y="156" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="10" fill="#E8590C" font-weight="700">ressort</text>
+    </svg>
+    <p style="margin:8px 0 6px;line-height:1.5">Un <b>ressort</b> ramène toujours le levier au milieu, dans le couloir de la 3e et de la 4e. Pour aller en 1-2, je tire contre le ressort, vers moi. Pour aller en 5-6, je pousse contre le ressort, vers le moniteur. Pour la 3 et la 4, je laisse le ressort faire le travail.</p>
+    <div class="key"><span class="n" style="background:#1F4FD1">1</span><div><b>Main en cuillère tournée vers moi.</b> Je tire vers moi et je monte en même temps.</div></div>
+    <div class="key"><span class="n" style="background:#1F4FD1">2</span><div><b>Main en cuillère tournée vers moi.</b> Je tire vers moi et je descends en même temps.</div></div>
+    <div class="key"><span class="n" style="background:#3E8E3A">3</span><div><b>Main posée au-dessus du levier.</b> Je pousse avec la paume : le ressort me ramène au point mort, je continue tout droit.</div></div>
+    <div class="key"><span class="n" style="background:#3E8E3A">4</span><div><b>Paume au-dessus, bien à plat</b> (ni vers moi, ni vers le moniteur). Je tire vers l’arrière du bout des doigts.</div></div>
+    <div class="key"><span class="n" style="background:#E8590C">5</span><div><b>Main en cuillère tournée vers le moniteur.</b> Je pousse vers lui et je monte en même temps.</div></div>
+    <div class="key"><span class="n" style="background:#E8590C">6</span><div><b>Main en cuillère tournée vers le moniteur.</b> Je pousse vers lui et je descends en même temps.</div></div>
+    <p style="margin:8px 0 0;line-height:1.5"><b>Jamais le levier à pleine main</b> : en le serrant, je sens moins bien les couloirs. Moins de sensations = moins de précision.</p>
+  </div>
+
+  <div class="card" id="pourquoi"><h2 style="font-size:20px;margin-bottom:6px">Pourquoi le moteur tourne moins vite après ?</h2>
+    <p style="margin:0;line-height:1.5">Chaque vitesse est comme un braquet de vélo. En 1re, le moteur tourne vite pour avancer doucement : beaucoup de force. En 2e, à la même vitesse, il tourne <b>moins vite</b> : l’aiguille redescend. C’est pour ça qu’on monte les vitesses : le moteur reste calme pendant que la voiture va plus vite.</p>
+  </div>
+
+  <div class="card" id="grille"><h2 style="font-size:20px;margin-bottom:6px">Le même geste pour chaque vitesse</h2>
+    <ul class="clean">
+      <li><b>1 ↔ 2</b> et <b>5 ↔ 6</b> : même couloir, tout droit, sans repasser par le point mort.</li>
+      <li><b>2 → 3</b> et <b>4 → 5</b> : je change de couloir.</li>
+      <li>La place de la marche arrière change selon les voitures : regarde le dessin sur le levier.</li>
+    </ul>
+  </div>
+
+  <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Les erreurs à éviter</h2>
+    <ul class="clean"><li>Lâcher l’embrayage d’un coup : la voiture saute</li><li>Accélérer embrayage enfoncé : le moteur s’emballe pour rien</li><li>Changer de vitesse sans enfoncer l’embrayage : ça craque</li><li>Garder le pied sur l’accélérateur en enfonçant l’embrayage</li><li>Regarder le levier</li><li>Saisir le levier à pleine main : moins de précision</li><li>Monter trop tôt : le moteur tremble</li><li>Monter trop tard : le moteur crie</li></ul></div>
+
+  <p class="footer">Fiche de révision. Elle complète les explications de ton enseignant.</p>
+</main>
+<script>
+(function () {
+  'use strict';
+  (function backlink() { // retour : liste des fiches ; ouverte depuis l'outil de l'enseignant (?o=1) : page précédente
+    const bl = document.getElementById('backlink');
+    bl.href = './'; bl.setAttribute('aria-label', 'Toutes les fiches');
+    if (new URLSearchParams(location.search).has('o')) bl.addEventListener('click', function (e) { if (history.length > 1) { e.preventDefault(); history.back(); } });
+  })();
+  const $ = (id) => document.getElementById(id);
+  const ease = (t) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const seg = (p, a, b) => Math.max(0, Math.min(1, (p - a) / (b - a)));
+  const R1 = 125, R2 = 65, R3 = 45; // tr/min par km/h en 1re, 2e, 3e
+
+  // ---- compte-tours : arcs et graduations (0 à 6000 tr/min sur 240°) ----
+  const ang = (rpm) => -120 + Math.min(rpm, 6000) / 6000 * 240;
+  function arc(a1, a2, r) {
+    const p = (a) => [Math.sin(a * Math.PI / 180) * r, -Math.cos(a * Math.PI / 180) * r];
+    const [x1, y1] = p(a1), [x2, y2] = p(a2);
+    return `M${x1.toFixed(1)} ${y1.toFixed(1)} A${r} ${r} 0 ${a2 - a1 > 180 ? 1 : 0} 1 ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+  }
+  (function gauge() {
+    const zones = [[0, 1000, '#FFB020'], [1000, 2500, '#3E8E3A'], [2500, 4500, '#5A5F6B'], [4500, 6000, '#E5484D']];
+    $('arcs').outerHTML = zones.map(([a, b, c]) => `<path d="${arc(ang(a), ang(b), 60)}" stroke="${c}" stroke-width="9" fill="none"/>`).join('');
+    let t = '';
+    for (let k = 0; k <= 6; k++) { const a = ang(k * 1000) * Math.PI / 180; t += `<text x="${(Math.sin(a) * 44).toFixed(1)}" y="${(-Math.cos(a) * 44 + 4).toFixed(1)}" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" font-weight="700" fill="#F4F1EA">${k}</text>`; }
+    $('ticks').innerHTML = t;
+  })();
+
+  // ---- pédales : angle relevée / enfoncée ----
+  // Pédale vue de côté (conducteur à droite, avant de la voiture à gauche) : articulée au plancher,
+  // le talon posé au sol, le pied appuie sur le patin. d = 0 pédale en haut, 1 pédale enfoncée.
+  const PU = { P: [-18, 0], L: 30, up: 18, down: -45, F: 62 }; // F : talon → plante du pied
+  const padAt = (d) => { const a = lerp(PU.up, PU.down, d) * Math.PI / 180; return { a, x: PU.P[0] + Math.sin(a) * (PU.L + 4), y: PU.P[1] - Math.cos(a) * (PU.L + 4) }; };
+  const SHOE = 'M6 0 L-56 0 Q-62 -1 -60 -7 Q-56 -12 -46 -14 L-28 -17 Q-18 -27 -6 -26 Q6 -24 7 -12 Z';
+  function unitSVG(id, pad, dark) {
+    const fl = dark ? '#F4F1EA' : '#16181D', arm = dark ? '#D9DCE0' : '#5A5F6B', tr = dark ? '#6B7280' : '#C9C2B3';
+    let path = ''; for (let k = 0; k <= 10; k++) { const q = padAt(k / 10); path += (k ? 'L' : 'M') + q.x.toFixed(1) + ' ' + q.y.toFixed(1); }
+    let pp = ''; for (let k = 0; k <= 6; k++) { const q = padAt(.38 + .24 * k / 6); pp += (k ? 'L' : 'M') + q.x.toFixed(1) + ' ' + q.y.toFixed(1); }
+    return `<path d="M-48 -50 Q-42 -6 -22 0 L60 0" stroke="${fl}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      ${id === 'C' ? `<path d="${pp}" stroke="#FFD43B" stroke-width="9" fill="none" stroke-linecap="round" opacity=".6"/>` : ''}
+      <path d="${path}" stroke="${tr}" stroke-width="2" fill="none" stroke-dasharray="3 4"/>
+      <g id="${id}arm"><rect x="-2.5" y="-${PU.L}" width="5" height="${PU.L}" rx="2.5" fill="${arm}"/><rect x="-12" y="-${PU.L + 6}" width="24" height="7" rx="3" fill="${pad}"/></g>
+      <circle cx="${PU.P[0]}" cy="${PU.P[1]}" r="4" fill="${arm}"/>
+      <g id="${id}foot"><path d="${SHOE}" fill="${dark ? '#B8BEC6' : '#9AA0A8'}"/><path d="M7 0 L-58 0" stroke="${dark ? '#16181D' : '#3E424B'}" stroke-width="4" stroke-linecap="round"/></g>`;
+  }
+  function setPedal(id, d, root) {
+    const r = root || document, q = padAt(Math.max(0, Math.min(1, d)));
+    r.querySelector('#' + id + 'arm').setAttribute('transform', `translate(${PU.P[0]} ${PU.P[1]}) rotate(${(q.a * 180 / Math.PI).toFixed(1)})`);
+    // le talon reste au sol, la plante du pied sur le patin
+    const py = q.y - 2, dy = -3 - py, hx = q.x + Math.sqrt(Math.max(0, PU.F * PU.F - dy * dy));
+    const phi = Math.atan2(py + 3, q.x - hx) * 180 / Math.PI - 180;
+    r.querySelector('#' + id + 'foot').setAttribute('transform', `translate(${hx.toFixed(1)} -3) rotate(${phi.toFixed(1)}) scale(${(PU.F / 46).toFixed(3)})`);
+  }
+  $('uC').innerHTML = unitSVG('C', '#5B8DEF', true);
+  $('uF').innerHTML = unitSVG('F', '#E5484D', true);
+  $('uA').innerHTML = unitSVG('A', '#F4F1EA', true);
+
+  // ---- les étapes ----
+  // c : embrayage (0 = pédale enfoncée / débrayé, 1 = relevée / embrayé) · g : gaz (0-1)
+  // rpm : régime · v : km/h · b : rotation du disque côté boîte (tr/min équivalents) · flow : 'fwd' | 'back' | 'cut' | 'none'
+  const STEPS = [
+    { id: 'accel1', k: '1. J’accélère', d: 5000, t: '1. J’accélère en 1re', s: 'Pied droit sur l’accélérateur : le moteur tourne de plus en plus vite et la voiture prend de la vitesse. Vers 15 – 20 km/h sur notre Clio (2 000 – 2 500 tours), c’est le moment de passer la 2e.',
+      f: (p) => { const q = ease(p), rpm = lerp(1200, 2400, q), v = rpm / R1; return { c: 1, g: lerp(.2, .65, q), rpm, v, b: rpm, gear: '1', lev: '1', flow: 'fwd', ft: 'Le moteur fait avancer la voiture' }; } },
+    { id: 'debraye', k: '2. Pied levé + embrayage', d: 4500, t: '2. Je lève le pied droit et j’enfonce l’embrayage', s: 'Les deux en même temps : le pied droit se lève, le pied gauche enfonce l’embrayage à fond. Les disques se séparent : le moteur ne pousse plus, la voiture continue sur son élan.',
+      f: (p) => { const q = ease(seg(p, 0, .45)), v = lerp(19.2, 18.6, p), rpm = lerp(2400, 1500, ease(seg(p, .2, 1))); return { c: 1 - q, g: .65 * (1 - q), rpm, v, b: v * R1, gear: '1', lev: '1', flow: q > .5 ? 'cut' : 'fwd', ft: q > .5 ? 'Coupé : la voiture roule sur son élan' : 'Pied droit levé, pied gauche enfoncé' }; } },
+    { id: 'passe2', k: '3. Je passe la 2e', d: 5000, t: '3. Je passe la 2e', s: 'L’embrayage reste enfoncé. Main en cuillère tournée vers moi : je tire vers moi et je descends tout droit de la 1re à la 2e. C’est le même couloir, pas besoin de repasser par le point mort. Côté boîte, le disque ralentit pour s’adapter à la 2e.',
+      f: (p) => { const t = ease(seg(p, .1, .8)), v = lerp(18.6, 18, p), gear = t < .5 ? '1' : '2'; const b = lerp(v * R1, v * R2, ease(seg(t, .3, .8)));
+        return { c: 0, g: 0, rpm: lerp(1500, 1100, p), v, b, gear, lev: { from: '1', to: '2', t }, flow: 'cut', ft: gear === '2' ? '2e passée, embrayage toujours enfoncé' : 'Le levier descend tout droit' }; } },
+    { id: 'embraye2', k: '4. Je relâche doucement', d: 5500, t: '4. Je relâche l’embrayage doucement et j’accélère un peu', s: 'Le pied gauche remonte doucement, le pied droit accélère un peu en même temps. Les disques se touchent puis se collent : le moteur fait de nouveau avancer la voiture, en 2e.',
+      f: (p) => { const c = ease(seg(p, .05, .75)), g = .3 * seg(p, .2, .7), v = lerp(18, 19.5, seg(p, .3, 1)), synced = v * R2; const rpm = c < .5 ? lerp(1100, 1000, p) : lerp(1000, synced, seg(c, .5, 1));
+        return { c, g, rpm, v, b: v * R2, gear: '2', lev: '2', flow: c < .45 ? 'cut' : (c < .95 ? 'slip' : 'fwd'), ft: c < .45 ? 'Je relâche doucement…' : (c < .95 ? 'Les disques se touchent' : 'Collé : le moteur pousse en 2e') }; } },
+    { id: 'en2', k: '5. En 2e', d: 5000, t: 'En 2e : le moteur est plus calme', s: 'À la même vitesse, le moteur tourne moins vite qu’en 1re : l’aiguille est redescendue. J’accélère à nouveau, et je referai les mêmes gestes pour la 3e.',
+      f: (p) => { const q = ease(p), rpm = lerp(19.5 * R2, 2200, q), v = rpm / R2; return { c: 1, g: lerp(.3, .6, q), rpm, v, b: rpm, gear: '2', lev: '2', flow: 'fwd', ft: 'En 2e, la voiture va plus vite' }; } },
+    { id: 'dunCoup', k: 'Embrayage lâché d’un coup', d: 4500, t: 'Erreur : lâcher l’embrayage d’un coup', s: 'Si je lâche la pédale d’un coup, les disques se collent brutalement : la voiture fait un à-coup, les passagers sont secoués.',
+      f: (p) => { const c = p < .2 ? 0 : Math.min(1, seg(p, .2, .26)); const jolt = p > .22 && p < .45 ? Math.sin(seg(p, .22, .45) * Math.PI * 4) * 3 : 0; const v = 18 + jolt;
+        return { c, g: 0, rpm: c < .5 ? 1100 : v * R2, v, b: v * R2, gear: '2', lev: '2', flow: c > .5 ? 'fwd' : 'cut', ft: p > .22 ? 'À-coup : la voiture saute !' : 'Je lâche d’un coup…', bad: p > .22 }; } },
+    { id: 'gazdebraye', k: 'Gaz embrayage enfoncé', d: 4500, t: 'Erreur : accélérer embrayage enfoncé', s: 'Si j’appuie sur l’accélérateur pendant que l’embrayage est enfoncé, le moteur s’emballe dans le vide : beaucoup de bruit, et la voiture n’avance pas plus vite.',
+      f: (p) => { const g = .8 * Math.sin(seg(p, .1, .9) * Math.PI), v = lerp(18.6, 18, p); return { c: 0, g, rpm: 1100 + 3200 * g, v, b: v * R1, gear: '1', lev: '1', flow: 'cut', ft: 'Le moteur s’emballe pour rien', bad: g > .3 }; } }
+  ];
+  const STEP_BY = Object.fromEntries(STEPS.map((x) => [x.id, x]));
+  const CHAP = [
+    { id: 'monter', t: '1. De la 1re à la 2e', i: 'Les 4 gestes, un par un. Avance avec Suivant ›.', steps: ['accel1', 'debraye', 'passe2', 'embraye2', 'en2'], noBrake: true },
+    { id: 'erreurs', t: '2. Les erreurs', i: 'Ce qui se passe quand le geste est mal fait.', steps: ['dunCoup', 'gazdebraye'], noBrake: true }
+  ];
+  let ch = CHAP[0], LIST = [];
+  const stepsEl = $('steps');
+  CHAP.forEach((c, n) => { const b = document.createElement('button'); b.textContent = c.t; b.dataset.n = n; b.addEventListener('click', () => setChap(n)); $('chap').appendChild(b); });
+  $('nextChap').addEventListener('click', () => { const n = CHAP.indexOf(ch); if (n < CHAP.length - 1) setChap(n + 1); else { setChap(0); } window.scrollTo({ top: $('chap').offsetTop - 12, behavior: 'smooth' }); });
+  function setChap(n, stepId) {
+    ch = CHAP[n]; LIST = ch.steps.map((id) => STEP_BY[id]);
+    [...$('chap').children].forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.n === n)));
+    $('chapI').textContent = ch.i;
+    $('scene').setAttribute('viewBox', '0 0 360 556');
+    $('grpF').style.display = ch.noBrake ? 'none' : '';
+    stepsEl.innerHTML = ''; stepsEl.className = 'steps' + (LIST.length % 2 === 0 ? ' n2' : '');
+    LIST.forEach((st, i) => { const b = document.createElement('button'); b.textContent = st.k; b.addEventListener('click', () => go(i)); stepsEl.appendChild(b); });
+    $('nextChap').textContent = n < CHAP.length - 1 ? 'Partie suivante : ' + CHAP[n + 1].t.replace(/^\d\. /, '') + ' ›' : 'Revoir depuis le début ›';
+    buildTL();
+    go(Math.max(0, stepId ? ch.steps.indexOf(stepId) : 0));
+  }
+  // bande des appuis : embrayage enfoncé (bleu) et accélérateur appuyé (blanc), sur toute la partie
+  const TLX = 92, TLW = 254;
+  let TLTOT = 1, TLOFF = [0];
+  function buildTL() {
+    TLTOT = LIST.reduce((a, x) => a + x.d, 0); TLOFF = []; let acc = 0; LIST.forEach((x) => { TLOFF.push(acc); acc += x.d; });
+    const lane = (key, y0, h, col) => {
+      let d = `M${TLX} ${y0}`;
+      LIST.forEach((st, i) => { for (let k = 0; k <= 24; k++) { const p = k / 24, v = st.f(p), val = key === 'c' ? 1 - v.c : v.g; const x = TLX + (TLOFF[i] + p * st.d) / TLTOT * TLW; d += ` L${x.toFixed(1)} ${(y0 - val * h).toFixed(1)}`; } });
+      return `<rect x="${TLX}" y="${y0 - h}" width="${TLW}" height="${h}" fill="#3A3F47"/><path d="${d} L${TLX + TLW} ${y0} Z" fill="${col}" opacity=".85"/>`;
+    };
+    let h = lane('c', 494, 34, '#5B8DEF') + lane('g', 544, 34, '#F4F1EA');
+    LIST.forEach((st, i) => { const x = TLX + TLOFF[i] / TLTOT * TLW; if (i) h += `<line x1="${x.toFixed(1)}" y1="452" x2="${x.toFixed(1)}" y2="546" stroke="#16181D" stroke-width="2"/>`; h += `<text x="${(x + st.d / TLTOT * TLW / 2).toFixed(1)}" y="452" text-anchor="middle" class="lbl" font-size="10" fill="#9AA0A8">${i + 1}</text>`; });
+    $('tl').innerHTML = h;
+  }
+  const LEV = { N: [0, 0], 1: [-24, -26], 2: [-24, 26], 3: [0, -26], 4: [0, 26], 5: [24, -26], 6: [24, 26] };
+  function levPos(l) {
+    if (typeof l === 'string') return LEV[l];
+    const A = LEV[l.from], B = LEV[l.to], pts = [A, [A[0], 0], [B[0], 0], B];
+    const lens = [1, 2, 3].map((i) => Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1])), tot = lens.reduce((a, b) => a + b, 0) || 1;
+    let d = l.t * tot;
+    for (let i = 1; i < 4; i++) { if (d <= lens[i - 1] || i === 3) { const r = lens[i - 1] ? Math.min(1, d / lens[i - 1]) : 1; return [lerp(pts[i - 1][0], pts[i][0], r), lerp(pts[i - 1][1], pts[i][1], r)]; } d -= lens[i - 1]; }
+    return B;
+  }
+
+  let idx = 0, t0 = performance.now(), paused = false, pauseAt = 0, last = performance.now();
+  const ph = { e: 0, b: 0, w: 0 };
+  function go(i) { idx = i; t0 = performance.now(); if (paused) pauseAt = t0; }
+
+  function draw(p, dt) {
+    const st = LIST[idx], s = st.f(Math.max(0, Math.min(1, p)));
+    // rotations (1 tour visuel par seconde pour 1000 tr/min)
+    if (!paused) { ph.e += s.rpm / 1000 * dt; ph.b += s.b / 1000 * dt; ph.w += s.v / 12 * dt; }
+    const gap = Math.max(0, (.5 - s.c) / .5) * 18; // écart des disques
+    const xB = 144 + gap;
+    $('discB').setAttribute('transform', `translate(${xB} 0)`);
+    $('cBr').setAttribute('x', 0);
+    $('sh2r').setAttribute('x', xB + 10); $('sh2r').setAttribute('width', 194 - xB - 10);
+    $('c2r').setAttribute('x', xB + 10); $('c2r').setAttribute('width', 194 - xB - 10);
+    $('fanE').setAttribute('transform', `rotate(${(ph.e * 360) % 360})`);
+    $('gear').setAttribute('transform', `rotate(${(ph.b * 360) % 360})`);
+    $('wheel').setAttribute('transform', `rotate(${(ph.w * 360) % 360})`);
+    $('sh1s').setAttribute('x', 80 + (ph.e * 12) % 12);
+    $('discAs').setAttribute('y', 40 + (ph.e * 14) % 14);
+    $('discBs').setAttribute('y', 40 + (ph.b * 14) % 14);
+    $('sh2s').setAttribute('x', 144 + gap + (ph.b * 12) % 12);
+    $('sh3s').setAttribute('x', 238 + (ph.w * 24) % 12);
+    $('gearT').textContent = s.gear;
+    const slip = s.flow === 'slip' && s.c > .45 && Math.abs(s.rpm - s.b) > 60;
+    $('spark').setAttribute('opacity', slip && Math.floor(performance.now() / 120) % 2 ? 1 : 0);
+    // sens d'entraînement
+    const fl = $('flowL');
+    if (s.flow === 'fwd' || s.flow === 'slip') { $('flow').setAttribute('opacity', 1); fl.setAttribute('x1', 30); fl.setAttribute('x2', 330); fl.setAttribute('stroke', '#FFB020'); }
+    else if (s.flow === 'back') { $('flow').setAttribute('opacity', 1); fl.setAttribute('x1', 330); fl.setAttribute('x2', 30); fl.setAttribute('stroke', '#5B8DEF'); }
+    else $('flow').setAttribute('opacity', 0);
+    $('cut').setAttribute('opacity', s.flow === 'cut' ? 1 : 0);
+    if (s.flow === 'none' && s.gear === 'N') { $('cut').setAttribute('opacity', 1); $('cut').setAttribute('transform', 'translate(72 0)'); } else $('cut').setAttribute('transform', '');
+    $('flowT').textContent = s.ft || '';
+    $('flowT').setAttribute('fill', s.bad ? '#FFB4B4' : '#F4F1EA');
+    const kp = levPos(s.lev || 'N'); $('knob').setAttribute('cx', kp[0]); $('knob').setAttribute('cy', kp[1]);
+    const tcx = TLX + (TLOFF[idx] + Math.min(1, Math.max(0, p)) * st.d) / TLTOT * TLW; $('tlCur').setAttribute('x1', tcx.toFixed(1)); $('tlCur').setAttribute('x2', tcx.toFixed(1));
+    // pédales et compte-tours
+    setPedal('C', 1 - s.c); setPedal('A', s.g); setPedal('F', s.fb || 0);
+    $('brk').setAttribute('opacity', Math.min(1, (s.fb || 0) * 2));
+    // frein moteur : les roues entraînent le moteur (vitesse passée, pied levé) → anneau bleu, plus fort sur un petit rapport
+    const emb = s.flow === 'back' ? (s.gear === '1' || s.gear === '2' ? 1 : .5) : 0;
+    $('emb').setAttribute('opacity', emb * (s.emb == null ? 1 : s.emb));
+    $('emb').setAttribute('transform', `rotate(${(-ph.w * 120) % 360})`);
+    const shake = s.rpm > 0 && s.rpm < 750 ? Math.sin(performance.now() / 30) * 3 : 0;
+    $('needle').setAttribute('transform', `rotate(${ang(Math.max(0, s.rpm)) + shake})`);
+    $('rpmT').textContent = String(Math.round(s.rpm / 50) * 50);
+    $('spdT').textContent = Math.round(s.v) + ' km/h';
+    $('stallB').setAttribute('opacity', s.stall ? 1 : 0);
+    $('badgeT').textContent = st.k;
+    $('capT').textContent = st.t; $('capS').textContent = st.s;
+    [...stepsEl.children].forEach((b, i) => b.setAttribute('aria-current', String(i === idx)));
+  }
+  function loop(now) {
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    if (!paused) { let p = (now - t0) / LIST[idx].d; if (p >= 1 + 1500 / LIST[idx].d) { t0 = now; p = 0; } draw(p, dt); }
+    else draw((pauseAt - t0) / LIST[idx].d, 0);
+    requestAnimationFrame(loop);
+  }
+  $('play').addEventListener('click', () => {
+    if (paused) { t0 += performance.now() - pauseAt; paused = false; $('play').textContent = '⏸ Pause'; }
+    else { paused = true; pauseAt = performance.now(); $('play').textContent = '▶ Lecture'; }
+  });
+  $('prev').addEventListener('click', () => go(Math.max(0, idx - 1)));
+  $('next').addEventListener('click', () => { if (idx < LIST.length - 1) go(idx + 1); else $('nextChap').click(); });
+  function fromHash() {
+    const h = location.hash.replace('#', '');
+    const n = CHAP.findIndex((c) => c.id === h || (h && c.steps.includes(h)));
+    if (n >= 0) return setChap(n, CHAP[n].id === h ? null : h);
+    if (!h) return setChap(0);
+    setChap(0); if ($(h)) $(h).scrollIntoView();
+  }
+  window.addEventListener('hashchange', fromHash); fromHash();
+
+  // ---- schéma fixe : 3 positions de la pédale ----
+
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { paused = true; pauseAt = performance.now(); $('play').textContent = '▶ Lecture'; }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

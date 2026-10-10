@@ -175,18 +175,18 @@
       <div style="background:#FDE8E8"><b>Roue libre</b><br>Embrayage enfoncé ou point mort, <b>en roulant</b>.<br>Plus rien ne retient : <b>la voiture file</b>.<br>En descente, elle accélère !</div>
     </div>
     <ul class="clean" style="margin-top:10px">
-      <li>Le frein moteur sert en descente, avant un virage, avant un carrefour. Pour qu’il freine plus, je descends une vitesse.</li>
+      <li>Le frein moteur sert en descente, avant un virage, avant un carrefour. Pour qu’il freine plus, je descends une vitesse, en freinant d’abord (voir « Ralentir et s’arrêter »).</li>
       <li>J’enfonce l’embrayage <b>quelques mètres avant de m’arrêter</b> (plus tôt si je roule plus vite), avant que le moteur tremble. S’il tremble déjà, c’était un peu tard.</li>
       <li>Jamais de point mort en descente.</li>
     </ul>
   </div>
 
   <div class="card" id="ralentir"><h2 style="font-size:20px;margin-bottom:6px">Ralentir et s’arrêter</h2>
-    <div class="key"><span class="n" style="background:#5B8DEF">1</span><div><b>Je lève le pied</b> : le moteur commence à freiner.</div></div>
-    <div class="key"><span class="n" style="background:#E5484D">2</span><div><b>Je freine</b> avec la pédale pour régler ma vitesse.</div></div>
-    <div class="key"><span class="n" style="background:#3E8E3A">3</span><div><b>Je descends une vitesse</b> (je rétrograde) : embrayage, vitesse plus petite, je relâche doucement. Le moteur freine plus fort.</div></div>
+    <div class="key"><span class="n" style="background:#E5484D">1</span><div><b>D’abord je freine</b> : le pied droit passe sur le frein. Les feux stop préviennent ceux qui me suivent.</div></div>
+    <div class="key"><span class="n" style="background:#E5484D">2</span><div><b>Je garde le frein</b> et je descends une vitesse : embrayage, vitesse plus petite, je relâche doucement.</div></div>
+    <div class="key"><span class="n" style="background:#3E8E3A">3</span><div><b>Le moteur freine plus fort</b>. À la bonne vitesse pour le danger ou l’arrêt, je relâche le frein.</div></div>
     <div class="key"><span class="n" style="background:#16181D">4</span><div><b>Pour m’arrêter</b>, c’est la pédale de frein. J’enfonce l’embrayage quelques mètres avant l’arrêt, avant que le moteur tremble.</div></div>
-    <p class="small muted" style="margin:8px 0 0">Pour ralentir, le moteur fait le gros du travail. La pédale de frein règle la vitesse et arrête la voiture. En cas de danger : pédale de frein, fort !</p>
+    <p class="small muted" style="margin:8px 0 0">Vitesse déjà bonne ? Un appui très léger sur le frein pour les feux stop, puis je rétrograde : le frein moteur ralentit. En cas de danger : pédale de frein, fort ! Le détail des gestes : fiche <a href="retro.html">Descendre les vitesses</a>.</p>
   </div>
 
   <div class="card" id="pieds"><h2 style="font-size:20px;margin-bottom:8px">Les pieds sur les pédales</h2>
@@ -316,19 +316,18 @@
     { id: 'regime', k: 'J’accélère', d: 5200, t: 'Le régime moteur', s: 'J’accélère : le moteur tourne plus vite (l’aiguille monte), et la voiture va plus vite. Écoute : le bruit monte aussi.',
       f: (p) => { const q = ease(p), rpm = lerp(1500, 2800, q), v = rpm / R1; return { c: 1, g: lerp(.25, .7, q), rpm, v, b: rpm, gear: '1', flow: 'fwd', ft: 'L’aiguille monte : le moteur tourne vite' }; } },
     { id: 'passer2', k: 'Je passe la 2e', d: 6000, t: 'Je passe la 2e', s: 'Le moteur tourne vite : je passe la 2e. Embrayage enfoncé, 2e, je relâche. La voiture va aussi vite, mais le moteur tourne moins vite : l’aiguille redescend.',
-      f: (p) => { const v = 22.4, sh = seg(p, .1, .8); const g = sh < .5 ? 0 : .35; const c = sh < .3 ? 1 - seg(sh, 0, .3) : (sh < .55 ? 0 : seg(sh, .55, 1)); const gear = sh > .42 ? '2' : (sh > .3 ? 'N' : '1');
+      f: (p) => { const v = 22.4, sh = seg(p, .1, .8); const g = sh < .5 ? 0 : .35; const c = sh < .3 ? 1 - seg(sh, 0, .3) : (sh < .55 ? 0 : seg(sh, .55, 1)); const gear = sh > .38 ? '2' : '1';
         const rpm = p < .1 ? 2800 : (sh < .3 ? lerp(2800, 2400, seg(sh, 0, .3)) : lerp(2400, v * R2, seg(sh, .3, 1)));
         return { c, g, rpm, v, b: gear === '1' ? v * R1 : (gear === '2' ? v * R2 : rpm * c), gear, flow: c < .9 ? 'cut' : 'fwd', ft: c < .9 ? 'Embrayage enfoncé : je change de vitesse' : (gear === '2' ? 'En 2e : l’aiguille redescend' : 'Le moteur tourne vite') }; } },
     { id: 'freinmoteur', k: 'Frein moteur', d: 7000, t: 'Le frein moteur', s: 'J’accélère en 2e : le moteur fait avancer la voiture. Puis je lève le pied de l’accélérateur. Tout de suite, le moteur retient les roues (anneau bleu) : la voiture ralentit toute seule, sans toucher au frein.',
       f: (p) => { if (p < .3) { const v = 24; return { c: 1, g: .45, rpm: v * R2, v, b: v * R2, gear: '2', flow: 'fwd', ft: 'J’accélère : le moteur fait avancer' }; }
         const q = seg(p, .3, 1), v = lerp(24, 12, ease(q)), g = .45 * (1 - seg(p, .3, .36));
         return { c: 1, g, rpm: v * R2, v, b: v * R2, gear: '2', flow: 'back', emb: seg(p, .3, .38), ft: 'Pied levé : le moteur retient les roues' }; } },
-    { id: 'retrograder', k: 'Descendre une vitesse', d: 10000, t: 'Ralentir et descendre une vitesse', s: 'Je roule en 3e. Je lève le pied : le moteur freine un peu. Je freine avec la pédale. Puis je passe la 2e : le moteur tourne plus vite et freine plus fort.',
-      f: (p) => { let v, c = 1, g = 0, fb = 0, gear = '3', rpm, flow = 'back', ft;
-        if (p < .15) { const q = seg(p, 0, .15); v = lerp(45, 42, q); g = lerp(.3, 0, seg(q, 0, .3)); ft = 'Pied levé : en 3e, le moteur freine peu'; }
-        else if (p < .42) { const q = seg(p, .15, .42); v = lerp(42, 28, ease(q)); fb = .45 * Math.min(1, q * 3); ft = 'Je freine avec la pédale'; }
-        else if (p < .64) { const q = seg(p, .42, .64); v = lerp(28, 26, q); fb = lerp(.45, 0, seg(q, 0, .4)); c = q < .25 ? 1 - seg(q, 0, .25) : (q < .5 ? 0 : seg(q, .5, 1)); gear = q < .3 ? '3' : (q < .42 ? 'N' : '2'); flow = c > .9 ? 'back' : 'cut'; ft = 'Je passe la 2e'; }
-        else { const q = seg(p, .64, 1); v = lerp(26, 14, ease(q)); gear = '2'; ft = 'En 2e : le moteur freine plus fort'; }
+    { id: 'retrograder', k: 'Descendre une vitesse', d: 10000, t: 'Ralentir et descendre une vitesse', s: 'Je roule en 3e. D’abord je freine : les feux stop s’allument. Je garde le frein pendant que je passe la 2e. Le moteur tourne plus vite et freine plus fort. À la bonne vitesse, je relâche le frein.',
+      f: (p) => { let v, c = 1, g = 0, fb, gear = '3', rpm, flow = 'back', ft;
+        if (p < .3) { const q = seg(p, 0, .3); v = lerp(45, 33, ease(q)); g = .3 * (1 - seg(q, 0, .2)); fb = .45 * seg(q, .15, .35); ft = 'D’abord je freine'; }
+        else if (p < .62) { const q = seg(p, .3, .62); v = lerp(33, 29, q); fb = .45; c = q < .25 ? 1 - seg(q, 0, .25) : (q < .5 ? 0 : seg(q, .5, 1)); gear = q < .3 ? '3' : (q < .42 ? 'N' : '2'); flow = c > .9 ? 'back' : 'cut'; ft = 'Frein gardé : je passe la 2e'; }
+        else { const q = seg(p, .62, 1); v = lerp(29, 18, ease(q)); gear = '2'; fb = .45 * (1 - seg(q, .25, .5)); ft = fb > .04 ? 'Frein + moteur qui freine plus fort' : 'Bonne vitesse : je relâche le frein'; }
         const geared = gear === '3' ? v * R3 : (gear === '2' ? v * R2 : 800);
         rpm = c > .95 ? geared : lerp(800, geared, c);
         return { c, g, fb, rpm, v, b: gear === 'N' ? rpm * c : geared, gear, flow, ft }; } },
